@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React from 'react'
-import { Link } from 'react-router'
 import Sidebar from './Sidebar'
 import VideoAdd from '../components/VideoAdd'
 
@@ -62,12 +61,15 @@ class Index extends React.Component {
     const currentVideoStorage = this.state.videoStorage
 
     return (
-      <main>
-        <h1><Link to="/">Video Archives</Link></h1>
-        <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
-        <VideoAdd onSubmitVideo={this.addVideo} />
-        {this.props.children}
-      </main>
+      <div className="row">
+        <div className="col-sm-3">
+          <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
+        </div>
+        <div className="col-sm-9">
+          <VideoAdd className="col-sm-9" onSubmitVideo={this.addVideo} />
+          {this.props.children}
+        </div>
+      </div>
     )
   }
 }

@@ -37,6 +37,8 @@ class VideoSidebar extends React.Component {
 
     return (
       <nav style={navStyle}>
+        <h1><Link to="/">Video Archives</Link></h1>
+
         <ul>
           {this.props.boardsList.map(item => {
             return (<li key={item}><Link to={`${item}`}>{item}</Link></li>)})
