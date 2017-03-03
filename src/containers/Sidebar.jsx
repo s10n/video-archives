@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const propTypes = {
   boardsList: React.PropTypes.array.isRequired,
@@ -37,7 +38,9 @@ class VideoSidebar extends React.Component {
     return (
       <nav style={navStyle}>
         <ul>
-          {this.props.boardsList.map(item => {return (<li key={item}><a href>{item}</a></li>)})}
+          {this.props.boardsList.map(item => {
+            return (<li key={item}><Link to={`${item}`}>{item}</Link></li>)})
+          }
         </ul>
 
         <input

@@ -1,9 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
-
-import VideoSidebar from './VideoSidebar'
-import VideoAdd from './VideoAdd'
-import VideoList from './VideoList'
+import { Link } from 'react-router'
+import Sidebar from './Sidebar'
+import VideoAdd from '../components/VideoAdd'
 
 class Index extends React.Component {
   constructor(props) {
@@ -64,10 +63,10 @@ class Index extends React.Component {
 
     return (
       <main>
-        <VideoSidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
+        <h1><Link to="/">Video Archives</Link></h1>
+        <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
         <VideoAdd onSubmitVideo={this.addVideo} />
-        <VideoList videoList={currentVideoStorage.videos} />
-        {/*<pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>*/}
+        {this.props.children}
       </main>
     )
   }

@@ -19,7 +19,6 @@ class VideoList extends React.Component {
 
     return (
       <section>
-        <hr />
         <h1>Video list</h1>
         {mapToComponent(this.props.videoList)}
       </section>
