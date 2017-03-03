@@ -80,6 +80,7 @@ class BoardRead extends React.Component {
 
           <div className="col-sm-4">
             <input
+              className="form-control"
               onChange={event => this.setState({ newListName: event.target.value })}
               onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
               value={this.state.newListName}

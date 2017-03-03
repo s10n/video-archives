@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import Sidebar from './Sidebar'
 import VideoAdd from '../components/VideoAdd'
+import '../App.css'
 
 class Index extends React.Component {
   constructor(props) {
@@ -61,16 +62,18 @@ class Index extends React.Component {
     const currentVideoStorage = this.state.videoStorage
 
     return (
-      <div className="row">
-        <div className="col-sm-3">
-          <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
-        </div>
-        <div className="col-sm-9">
-          <main>
-            <VideoAdd className="col-sm-9" onSubmitVideo={this.addVideo} />
-            {this.props.children}
-          </main>
-          <pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>
+      <div className="container-fluid" style={{ marginTop: '15px' }}>
+        <div className="row">
+          <div className="col-sm-3">
+            <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
+          </div>
+          <div className="col-sm-9">
+            <main>
+              {this.props.children}
+              <VideoAdd onSubmitVideo={this.addVideo} />
+            </main>
+            {/*<pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>*/}
+          </div>
         </div>
       </div>
     )

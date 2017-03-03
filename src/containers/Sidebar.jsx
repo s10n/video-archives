@@ -31,26 +31,23 @@ class VideoSidebar extends React.Component {
   }
 
   render() {
-    const navStyle = {
-      backgroundColor: 'hsl(0, 0%, 95%)',
-      marginBottom: '5px',
-      padding: '15px'
-    }
-
     return (
-      <nav style={navStyle}>
-        <h1><Link to="/">Video Archives</Link></h1>
-
-        <ul>
-          {this.props.boardsList.map(item => {
-            return (<li key={item.name}><Link to={`${item.name}`}>{item.name}</Link></li>)})
-          }
-        </ul>
+      <nav>
+        <div className="list-group">
+          {this.props.boardsList.map(item => {return (
+            <Link
+              className="list-group-item list-group-item-action"
+              to={`${item.name}`}
+              key={item.name}>{item.name}</Link>
+          )})}
+        </div>
 
         <input
+          className="form-control"
           onChange={event => this.setState({ newBoardName: event.target.value })}
           onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-          value={this.state.newBoardName} />
+          value={this.state.newBoardName}
+          placeholder="Create new board" />
       </nav>
     )
   }
