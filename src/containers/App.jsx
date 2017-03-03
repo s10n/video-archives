@@ -66,8 +66,10 @@ class Index extends React.Component {
           <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
         </div>
         <div className="col-sm-9">
-          <VideoAdd className="col-sm-9" onSubmitVideo={this.addVideo} />
-          {this.props.children}
+          <main>
+            <VideoAdd className="col-sm-9" onSubmitVideo={this.addVideo} />
+            {this.props.children}
+          </main>
           <pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>
         </div>
       </div>
