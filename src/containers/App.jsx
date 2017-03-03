@@ -30,10 +30,10 @@ class Index extends React.Component {
   addBoard(name) {
     const currentVideoStorage = this.state.videoStorage
 
-    if (currentVideoStorage.boards.indexOf(name) === -1) {
+    if (!_.find(currentVideoStorage.boards, o => {return o.name === name})) {
       this.setState({
         videoStorage: {
-          boards: [ ...currentVideoStorage.boards, name ],
+          boards: [ ...currentVideoStorage.boards, { name: name, lists: [] } ],
           videos: currentVideoStorage.videos
         }
       })

@@ -26,6 +26,8 @@ class VideoSidebar extends React.Component {
     } else {
       console.log('Board name is required')
     }
+
+    this.setState({ newBoardName: '' })
   }
 
   render() {
@@ -41,7 +43,7 @@ class VideoSidebar extends React.Component {
 
         <ul>
           {this.props.boardsList.map(item => {
-            return (<li key={item}><Link to={`${item}`}>{item}</Link></li>)})
+            return (<li key={item.name}><Link to={`${item.name}`}>{item.name}</Link></li>)})
           }
         </ul>
 
