@@ -29,7 +29,6 @@ class Index extends React.Component {
     return (
       <section>
         <VideoList videoList={currentVideoStorage.videos} />
-        {/*<pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>*/}
       </section>
     )
   }

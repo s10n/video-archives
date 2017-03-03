@@ -68,6 +68,7 @@ class Index extends React.Component {
         <div className="col-sm-9">
           <VideoAdd className="col-sm-9" onSubmitVideo={this.addVideo} />
           {this.props.children}
+          <pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>
         </div>
       </div>
     )
