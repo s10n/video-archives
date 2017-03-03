@@ -35,9 +35,9 @@ class VideoItem extends React.Component {
     return (
       <header>
         <img src={videoSnippet.thumbnails.high.url} role="presentation" height="60" /> {/* Resolution issue */}
-        <strong>{videoSnippet.title}</strong>
-        <span> / Category: {categoryTitle.ko_KR} / List: {this.props.video.listName}</span>
-        <date> / {publishedAt.toLocaleString('en-US')} </date>
+        <h3 style={{ fontSize: '1rem' }}>{videoSnippet.title}</h3>
+        <date>{publishedAt.toLocaleString('en-US')} </date>
+        <span className="sr-only">{categoryTitle.ko_KR}</span>
       </header>
     )
   }

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import VideoList from '../components/VideoList'
 
 class BoardRead extends React.Component {
   // TODO: Remove repeated videoStorage
@@ -68,12 +69,23 @@ class BoardRead extends React.Component {
       <section>
         <h1>{this.props.params.boardName}</h1>
 
-        <input
-          onChange={event => this.setState({ newListName: event.target.value })}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-          value={this.state.newListName} />
+        <section className="row">
+          {currentBoard.lists.map(list => {
+            return (
+              <div className="col-sm-4" key={list}>
+                <VideoList listName={list} videoList={currentVideoStorage.videos} />
+              </div>
+            )
+          })}
 
-        <ul>{currentBoard.lists.map(list => {return (<li key={list}>{list}</li>)})}</ul>
+          <div className="col-sm-4">
+            <input
+              onChange={event => this.setState({ newListName: event.target.value })}
+              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+              value={this.state.newListName}
+              placeholder="Add a list" />
+          </div>
+        </section>
       </section>
     )
   }
