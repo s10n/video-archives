@@ -5,7 +5,7 @@ import VideoSidebar from './VideoSidebar'
 import VideoAdd from './VideoAdd'
 import VideoList from './VideoList'
 
-class Video extends React.Component {
+class Index extends React.Component {
   constructor(props) {
     super(props)
     this.state = { videoStorage: { boards: [], videos: [] } }
@@ -73,4 +73,4 @@ class Video extends React.Component {
   }
 }
 
-export default Video
+export default Index
