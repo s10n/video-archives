@@ -1,11 +1,9 @@
 import _ from 'lodash'
 import React from 'react'
+import Sidebar from './Sidebar'
+import VideoAdd from '../components/VideoAdd'
 
-import VideoSidebar from './VideoSidebar'
-import VideoAdd from './VideoAdd'
-import VideoList from './VideoList'
-
-class Video extends React.Component {
+class Index extends React.Component {
   constructor(props) {
     super(props)
     this.state = { videoStorage: { boards: [], videos: [] } }
@@ -32,10 +30,10 @@ class Video extends React.Component {
   addBoard(name) {
     const currentVideoStorage = this.state.videoStorage
 
-    if (currentVideoStorage.boards.indexOf(name) === -1) {
+    if (!_.find(currentVideoStorage.boards, o => {return o.name === name})) {
       this.setState({
         videoStorage: {
-          boards: [ ...currentVideoStorage.boards, name ],
+          boards: [ ...currentVideoStorage.boards, { name: name, lists: [] } ],
           videos: currentVideoStorage.videos
         }
       })
@@ -63,14 +61,18 @@ class Video extends React.Component {
     const currentVideoStorage = this.state.videoStorage
 
     return (
-      <main>
-        <VideoSidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
-        <VideoAdd onSubmitVideo={this.addVideo} />
-        <VideoList videoList={currentVideoStorage.videos} />
-        {/*<pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>*/}
-      </main>
+      <div className="row">
+        <div className="col-sm-3">
+          <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
+        </div>
+        <div className="col-sm-9">
+          <VideoAdd className="col-sm-9" onSubmitVideo={this.addVideo} />
+          {this.props.children}
+          <pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>
+        </div>
+      </div>
     )
   }
 }
 
-export default Video
+export default Index

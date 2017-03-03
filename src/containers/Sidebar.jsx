@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const propTypes = {
   boardsList: React.PropTypes.array.isRequired,
@@ -25,6 +26,8 @@ class VideoSidebar extends React.Component {
     } else {
       console.log('Board name is required')
     }
+
+    this.setState({ newBoardName: '' })
   }
 
   render() {
@@ -36,8 +39,12 @@ class VideoSidebar extends React.Component {
 
     return (
       <nav style={navStyle}>
+        <h1><Link to="/">Video Archives</Link></h1>
+
         <ul>
-          {this.props.boardsList.map(item => {return (<li key={item}><a href>{item}</a></li>)})}
+          {this.props.boardsList.map(item => {
+            return (<li key={item.name}><Link to={`${item.name}`}>{item.name}</Link></li>)})
+          }
         </ul>
 
         <input
