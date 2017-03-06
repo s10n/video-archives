@@ -1,78 +1,46 @@
-import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchStorage, pushStorage } from '../actions/index'
 import Sidebar from './Sidebar'
 import VideoAdd from '../components/VideoAdd'
 import '../App.css'
 
+const propTypes = {
+  videoStorage: React.PropTypes.object.isRequired,
+  fetchStorage: React.PropTypes.func.isRequired,
+  pushStorage: React.PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  videoStorage: {},
+  fetchStorage: () => console.log('fetchStorage not defined'),
+  pushStorage: () => console.log('pushStorage not defined')
+}
+
 class Index extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { videoStorage: { boards: [], videos: [] } }
-    this.addBoard = this.addBoard.bind(this)
-    this.addVideo = this.addVideo.bind(this)
-  }
-
   componentWillMount() {
-    const localVideoStorage = localStorage.videoStorage
-
-    if (localVideoStorage) {
-      this.setState({ videoStorage: JSON.parse(localVideoStorage) })
-    }
+    this.props.fetchStorage()
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const currentVideoStorage = this.state.videoStorage
-
-    if (JSON.stringify(prevState.videoStorage) !== JSON.stringify(currentVideoStorage)) {
-      localStorage.videoStorage = JSON.stringify(currentVideoStorage)
-    }
-  }
-
-  addBoard(name) {
-    const currentVideoStorage = this.state.videoStorage
-
-    if (!_.find(currentVideoStorage.boards, o => {return o.name === name})) {
-      this.setState({
-        videoStorage: {
-          boards: [ ...currentVideoStorage.boards, { name: name, lists: [] } ],
-          videos: currentVideoStorage.videos
-        }
-      })
-    } else {
-      console.log('FAIL: Board exists')
-    }
-  }
-
-  addVideo(video) {
-    const currentVideoStorage = this.state.videoStorage
-
-    if (!_.find(currentVideoStorage.videos, o => {return o.videoData.id === video.videoData.id})) {
-      this.setState({
-        videoStorage: {
-          boards: currentVideoStorage.boards,
-          videos: [ ...currentVideoStorage.videos, video ]
-        }
-      })
-    } else {
-      console.log('FAIL: Video exists')
-    }
+  componentDidUpdate(prevProps) {
+    this.props.pushStorage(this.props.videoStorage, prevProps.videoStorage)
   }
 
   render() {
-    const currentVideoStorage = this.state.videoStorage
+    const currentVideoStorage = this.props.videoStorage
 
     return (
       <div className="container-fluid" style={{ marginTop: '15px' }}>
         <div className="row">
           <div className="col-sm-3">
-            <Sidebar boardsList={currentVideoStorage.boards} onSubmitBoard={this.addBoard} />
+            <Sidebar boardsList={currentVideoStorage.boards} />
           </div>
           <div className="col-sm-9">
             <main>
               {this.props.children}
-              <VideoAdd onSubmitVideo={this.addVideo} />
+              <VideoAdd />
             </main>
-            {/*<pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>*/}
+            <pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>
           </div>
         </div>
       </div>
@@ -80,4 +48,11 @@ class Index extends React.Component {
   }
 }
 
-export default Index
+function mapStateToProps(state) {
+  return { videoStorage: state.videoStorage }
+}
+
+Index.propTypes = propTypes
+Index.defaultProps = defaultProps
+
+export default connect(mapStateToProps, { fetchStorage, pushStorage })(Index)

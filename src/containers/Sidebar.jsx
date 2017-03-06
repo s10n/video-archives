@@ -1,14 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import { addBoard } from '../actions/index'
 
 const propTypes = {
   boardsList: React.PropTypes.array.isRequired,
-  onSubmitBoard: React.PropTypes.func.isRequired
+  addBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   boardsList: [],
-  onSubmitBoard: () => console.error('onSubmitBoard not defined')
+  addBoard: () => console.error('addBoard not defined')
 }
 
 class VideoSidebar extends React.Component {
@@ -22,7 +24,7 @@ class VideoSidebar extends React.Component {
     const name = this.state.newBoardName
 
     if (name) {
-      this.props.onSubmitBoard(name)
+      this.props.addBoard(name)
     } else {
       console.log('Board name is required')
     }
@@ -56,4 +58,4 @@ class VideoSidebar extends React.Component {
 VideoSidebar.propTypes = propTypes
 VideoSidebar.defaultProps = defaultProps
 
-export default VideoSidebar
+export default connect(null, { addBoard })(VideoSidebar)

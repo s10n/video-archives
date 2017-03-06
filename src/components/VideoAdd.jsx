@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
+import { addVideo } from '../actions/index'
 import VideoItem from './VideoItem'
 
 const API_INFO = {
@@ -15,11 +17,11 @@ const API_INFO = {
 const ERROR_MESSAGE = 'No results'
 
 const propTypes = {
-  onSubmitVideo: React.PropTypes.func.isRequired
+  addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  onSubmitVideo: () => console.error('onSubmitVideo not defined')
+  addVideo: () => console.log('addVideo not defined')
 }
 
 class VideoAdd extends React.Component {
@@ -42,7 +44,7 @@ class VideoAdd extends React.Component {
 
   onClickButton() {
     if (this.state.listName && !_.isEmpty(this.state.videoData)) {
-      this.props.onSubmitVideo({ listName: this.state.listName, videoData: this.state.videoData })
+      this.props.addVideo(this.state)
       this.setState({ listName: '', videoData: {} })
     } else {
       console.log('List name is required.') // TODO
@@ -83,4 +85,4 @@ class VideoAdd extends React.Component {
 VideoAdd.propTypes = propTypes
 VideoAdd.defaultProps = defaultProps
 
-export default VideoAdd
+export default connect(null, { addVideo })(VideoAdd)
