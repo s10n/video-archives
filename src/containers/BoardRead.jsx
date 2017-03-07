@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { addList } from '../actions/index'
 import React from 'react'
 import VideoList from '../components/VideoList'
+import './BoardRead.css'
 
 const propTypes = {
   videoStorage: React.PropTypes.object.isRequired,
@@ -39,19 +40,28 @@ class BoardRead extends React.Component {
     const currentBoard = _.find(currentVideoStorage.boards, o => {return o.name === currentBoardName})
 
     return (
-      <section>
-        <h1>{this.props.params.boardName}</h1>
+      <section className="BoardRead">
+        <h1 className="BoardTitle">{this.props.params.boardName}</h1>
 
-        {currentBoard.lists.map(list => {
-          return <VideoList key={list} listName={list} videoList={currentVideoStorage.videos} />
-        })}
 
-        <input
-          onChange={event => this.setState({ newListName: event.target.value })}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-          value={this.state.newListName}
-          placeholder="Add a list"
-        />
+        <div className="BoardCanvas">
+          <div className="BoardScroll">
+            {currentBoard.lists.map(list => {
+              return (
+                <div className="VideoWrapper" key={list}>
+                  <VideoList listName={list} videoList={currentVideoStorage.videos} />
+                </div>
+              )
+            })}
+
+            <input
+              onChange={event => this.setState({ newListName: event.target.value })}
+              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+              value={this.state.newListName}
+              placeholder="Add a list"
+            />
+          </div>
+        </div>
       </section>
     )
   }

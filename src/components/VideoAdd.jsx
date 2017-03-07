@@ -58,9 +58,9 @@ class VideoAdd extends React.Component {
     const errorMessage = ERROR_MESSAGE
 
     return (
-      <section>
+      <section className="VideoAdd">
         <input
-          type="text"
+          type="hidden"
           onChange={event => this.setState({ listName: event.target.value })}
           value={this.state.listName}
           placeholder="List name"

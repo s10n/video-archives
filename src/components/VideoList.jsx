@@ -1,6 +1,7 @@
 import React from 'react'
 import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
+import './VideoList.css'
 
 const propTypes = {
   listName: React.PropTypes.string.isRequired,
@@ -26,9 +27,12 @@ class VideoList extends React.Component {
     }
 
     return (
-      <article>
-        <h2>{listName}</h2>
-        {mapToComponent(this.props.videoList)}
+      <article className="VideoList">
+        <h2 className="ListName">{listName}</h2>
+
+        <div className="ListScroll">
+          {mapToComponent(this.props.videoList)}
+        </div>
 
         <VideoAdd listName={listName} />
       </article>

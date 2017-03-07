@@ -1,0 +1,11 @@
+.AppSidebar {
+	border-right: 1px solid silver;
+}
+
+.AppSidebar a {
+	display: block;
+}
+
+.AppSidebar a:hover {
+	background-color: hsl(0, 0%, 90%);
+}

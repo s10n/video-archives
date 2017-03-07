@@ -1,0 +1,36 @@
+.BoardRead {
+	display: flex;
+	flex-direction: column;
+	background-color: hsl(0, 0%, 95%);
+	height: 100%;
+}
+
+.BoardTitle {
+	flex: none;
+	background-color: hsl(0, 0%, 85%);
+	height: 50px;
+}
+
+.BoardCanvas {
+	flex-grow: 1;
+	position: relative;
+}
+
+.BoardScroll {
+	position: absolute;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-bottom: 15px;
+	white-space: nowrap;
+}
+
+.VideoWrapper {
+	display: inline-block;
+	height: 100%;
+	margin: 0 5px;
+	vertical-align: top;
+	white-space: nowrap;
+	width: calc(160px + 30px);
+}

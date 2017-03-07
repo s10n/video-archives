@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { addBoard } from '../actions/index'
+import './AppSidebar.css'
 
 const propTypes = {
   boardsList: React.PropTypes.array.isRequired,
@@ -13,7 +14,7 @@ const defaultProps = {
   addBoard: () => console.error('addBoard not defined')
 }
 
-class VideoSidebar extends React.Component {
+class AppSidebar extends React.Component {
   constructor(props) {
     super(props)
     this.state = { newBoardName: '' }
@@ -34,7 +35,7 @@ class VideoSidebar extends React.Component {
 
   render() {
     return (
-      <nav>
+      <nav className="AppSidebar">
         {this.props.boardsList.map(item => {return (
           <Link to={`${item.name}`} key={item.name}>{item.name}</Link>
         )})}
@@ -50,7 +51,7 @@ class VideoSidebar extends React.Component {
   }
 }
 
-VideoSidebar.propTypes = propTypes
-VideoSidebar.defaultProps = defaultProps
+AppSidebar.propTypes = propTypes
+AppSidebar.defaultProps = defaultProps
 
-export default connect(null, { addBoard })(VideoSidebar)
+export default connect(null, { addBoard })(AppSidebar)

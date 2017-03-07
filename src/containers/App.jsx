@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchStorage, pushStorage } from '../actions/index'
-import Sidebar from './Sidebar'
+import AppHeader from './AppHeader'
+import AppSidebar from './AppSidebar'
 import 'normalize.css'
+import './App.css'
 
 const propTypes = {
   videoStorage: React.PropTypes.object.isRequired,
@@ -29,10 +31,13 @@ class Index extends React.Component {
     const currentVideoStorage = this.props.videoStorage
 
     return (
-      <div>
-        <h1><a href="/">Video Archives</a></h1>
-        <Sidebar boardsList={currentVideoStorage.boards} />
-        <main>{this.props.children}</main>
+      <div className="AppContainer">
+        <AppHeader />
+
+        <section className="AppWrapper">
+          <AppSidebar boardsList={currentVideoStorage.boards} />
+          <main className="AppMain">{this.props.children}</main>
+        </section>
       </div>
     )
   }
