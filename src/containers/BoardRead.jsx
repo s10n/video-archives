@@ -42,24 +42,16 @@ class BoardRead extends React.Component {
       <section>
         <h1>{this.props.params.boardName}</h1>
 
-        <section className="row">
-          {currentBoard.lists.map(list => {
-            return (
-              <div className="col-sm-4" key={list}>
-                <VideoList listName={list} videoList={currentVideoStorage.videos} />
-              </div>
-            )
-          })}
+        {currentBoard.lists.map(list => {
+          return <VideoList key={list} listName={list} videoList={currentVideoStorage.videos} />
+        })}
 
-          <div className="col-sm-4">
-            <input
-              className="form-control"
-              onChange={event => this.setState({ newListName: event.target.value })}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.newListName}
-              placeholder="Add a list" />
-          </div>
-        </section>
+        <input
+          onChange={event => this.setState({ newListName: event.target.value })}
+          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          value={this.state.newListName}
+          placeholder="Add a list"
+        />
       </section>
     )
   }

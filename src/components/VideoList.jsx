@@ -26,12 +26,12 @@ class VideoList extends React.Component {
     }
 
     return (
-      <section className="card">
+      <article>
         <h2>{listName}</h2>
         {mapToComponent(this.props.videoList)}
 
         <VideoAdd listName={listName} />
-      </section>
+      </article>
     )
   }
 }

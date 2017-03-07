@@ -60,25 +60,20 @@ class VideoAdd extends React.Component {
     return (
       <section>
         <input
-          className="form-control sr-only"
           type="text"
           onChange={event => this.setState({ listName: event.target.value })}
           value={this.state.listName}
-          placeholder="List name" />
-        <div className="input-group">
-          <input
-            className="form-control"
-            type="text"
-            onChange={this.onInputChange}
-            value={this.state.videoId} />
-          <span className="input-group-btn">
-            <button className="btn btn-secondary" type="button" onClick={this.onClickButton}>추가</button>
-          </span>
-        </div>
+          placeholder="List name"
+        />
+        <input
+          type="text"
+          onChange={this.onInputChange}
+          value={this.state.videoId}
+          placeholder="Video ID"
+        />
+        <button type="button" onClick={this.onClickButton}>추가</button>
 
-        <article>
-          {videoData.hasOwnProperty('id') ? <VideoItem video={this.state} /> : <p>{errorMessage}</p>}
-        </article>
+        {videoData.hasOwnProperty('id') ? <VideoItem video={this.state} /> : <p>{errorMessage}</p>}
       </section>
     )
   }

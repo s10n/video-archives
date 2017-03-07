@@ -33,12 +33,12 @@ class VideoItem extends React.Component {
     const publishedAt = new Date(videoSnippet.publishedAt)
 
     return (
-      <header>
+      <article>
         <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" /> {/* Resolution issue */}
         <h3>{videoSnippet.title}</h3>
-        <date className="text-muted small">{publishedAt.toLocaleString('en-US')} </date>
-        <span className="sr-only">{categoryTitle.ko_KR}</span>
-      </header>
+        <date>{publishedAt.toLocaleString('en-US')} </date>
+        <span>{categoryTitle.ko_KR}</span>
+      </article>
     )
   }
 }

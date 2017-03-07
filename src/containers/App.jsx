@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { fetchStorage, pushStorage } from '../actions/index'
 import Sidebar from './Sidebar'
-import VideoAdd from '../components/VideoAdd'
 import 'normalize.css'
 import '../style/App.css'
 
@@ -31,18 +30,10 @@ class Index extends React.Component {
     const currentVideoStorage = this.props.videoStorage
 
     return (
-      <div className="container-fluid" style={{ marginTop: '15px' }}>
-        <div className="row">
-          <div className="col-sm-3">
-            <Sidebar boardsList={currentVideoStorage.boards} />
-          </div>
-          <div className="col-sm-9">
-            <main>
-              {this.props.children}
-              <VideoAdd />
-            </main>
-          </div>
-        </div>
+      <div>
+        <h1><a href="/">Video Archives</a></h1>
+        <Sidebar boardsList={currentVideoStorage.boards} />
+        <main>{this.props.children}</main>
       </div>
     )
   }
