@@ -22,8 +22,30 @@
 	left: 0; right: 0;
 	overflow-x: auto;
 	overflow-y: hidden;
+	margin-bottom: 15px;
 	padding-bottom: 15px;
 	white-space: nowrap;
+}
+
+.BoardScroll::-webkit-scrollbar {
+	height: 10px;
+	width:  10px;
+}
+
+.BoardScroll::-webkit-scrollbar-button {
+	display: block;
+	height: 5px;
+	width:  5px;
+}
+
+.BoardScroll::-webkit-scrollbar-thumb {
+	background-color: hsl(0, 0%, 50%);
+	border-radius: 5px;
+}
+
+.BoardScroll::-webkit-scrollbar-track-piece {
+	background-color: hsla(0, 0%, 0%, .1);
+	border-radius: 5px;
 }
 
 .VideoWrapper {
