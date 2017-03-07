@@ -15,6 +15,10 @@ const defaultProps = {
 }
 
 class AppSidebar extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object
+  }
+
   constructor(props) {
     super(props)
     this.state = { newBoardName: '' }
@@ -26,6 +30,7 @@ class AppSidebar extends React.Component {
 
     if (name) {
       this.props.addBoard(name)
+      this.context.router.push(name)
     } else {
       console.log('Board name is required')
     }
