@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { fetchStorage, pushStorage } from '../actions/index'
 import Sidebar from './Sidebar'
 import VideoAdd from '../components/VideoAdd'
-import '../App.css'
+import 'normalize.css'
+import '../style/App.css'
 
 const propTypes = {
   videoStorage: React.PropTypes.object.isRequired,
