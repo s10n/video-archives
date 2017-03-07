@@ -12,7 +12,7 @@ html {
 /* Layout */
 html,
 body,
-#root,
+#app,
 .AppContainer {
 	height: 100%;
 }
