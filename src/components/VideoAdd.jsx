@@ -30,7 +30,6 @@ class VideoAdd extends React.Component {
     super(props)
     this.state = { listName: this.props.listName, videoId: '', videoData: {} }
     this.onInputChange = this.onInputChange.bind(this)
-    this.onClickButton = this.onClickButton.bind(this)
   }
 
   onInputChange(event) {
@@ -44,7 +43,7 @@ class VideoAdd extends React.Component {
     }
   }
 
-  onClickButton() {
+  onPressEnter() {
     if (this.state.listName && !_.isEmpty(this.state.videoData)) {
       this.props.addVideo(this.state)
       this.setState({ ...this.state, videoId: '', videoData: {} })
@@ -68,10 +67,10 @@ class VideoAdd extends React.Component {
         <input
           type="text"
           onChange={this.onInputChange}
+          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
           value={this.state.videoId}
           placeholder="Video ID"
         />
-        <button type="button" onClick={this.onClickButton}>추가</button>
 
         {videoData.hasOwnProperty('id') ? <VideoItem video={this.state} /> : <p>{errorMessage}</p>}
       </section>
