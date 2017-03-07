@@ -40,7 +40,6 @@ class Index extends React.Component {
               {this.props.children}
               <VideoAdd />
             </main>
-            <pre>{JSON.stringify(currentVideoStorage, null, 2)}</pre>
           </div>
         </div>
       </div>
