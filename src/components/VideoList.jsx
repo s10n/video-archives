@@ -1,5 +1,6 @@
 import React from 'react'
 import VideoItem from './VideoItem'
+import VideoAdd from './VideoAdd'
 
 const propTypes = {
   listName: React.PropTypes.string.isRequired,
@@ -13,9 +14,10 @@ const defaultProps = {
 
 class VideoList extends React.Component {
   render() {
+    const listName = this.props.listName
     const mapToComponent = list => {
       return list.map((item, i) => {
-        if (item.listName === this.props.listName) {
+        if (item.listName === listName) {
           return <VideoItem video={item} key={i} />
         } else {
           return false
@@ -25,8 +27,10 @@ class VideoList extends React.Component {
 
     return (
       <section className="card">
-        <h2>{this.props.listName}</h2>
+        <h2>{listName}</h2>
         {mapToComponent(this.props.videoList)}
+
+        <VideoAdd listName={listName} />
       </section>
     )
   }

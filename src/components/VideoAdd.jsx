@@ -10,42 +10,44 @@ const API_INFO = {
   part   : 'snippet,contentDetails',
   fields : 'items(id,snippet(publishedAt,channelId,title,thumbnails,channelTitle,categoryId),' +
            'contentDetails(duration))',
-  sampleVideoId : 'PmYqo0xJW1k',
   videoIdLength : 11
 }
 
 const ERROR_MESSAGE = 'No results'
 
 const propTypes = {
-  addVideo: React.PropTypes.func.isRequired
+  addVideo: React.PropTypes.func.isRequired,
+  listName: React.PropTypes.string
 }
 
 const defaultProps = {
-  addVideo: () => console.log('addVideo not defined')
+  addVideo: () => console.log('addVideo not defined'),
+  listName: ''
 }
 
 class VideoAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { listName: '', videoData: {} }
+    this.state = { listName: this.props.listName, videoId: '', videoData: {} }
     this.onInputChange = this.onInputChange.bind(this)
     this.onClickButton = this.onClickButton.bind(this)
   }
 
   onInputChange(event) {
     const video_id = event.target.value
+    this.setState({ ...this.statem, videoId: event.target.value })
 
     if (video_id.length === API_INFO.videoIdLength) {
       fetch(`${API_INFO.url}?id=${video_id}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
         .then(response => response.json())
-        .then(({items}) => this.setState({ videoData: items.length ? items[0] : {} }))
+        .then(({items}) => this.setState({ ...this.state, videoData: items.length ? items[0] : {} }))
     }
   }
 
   onClickButton() {
     if (this.state.listName && !_.isEmpty(this.state.videoData)) {
       this.props.addVideo(this.state)
-      this.setState({ listName: '', videoData: {} })
+      this.setState({ ...this.state, videoId: '', videoData: {} })
     } else {
       console.log('List name is required.') // TODO
     }
@@ -58,7 +60,7 @@ class VideoAdd extends React.Component {
     return (
       <section>
         <input
-          className="form-control"
+          className="form-control sr-only"
           type="text"
           onChange={event => this.setState({ listName: event.target.value })}
           value={this.state.listName}
@@ -68,7 +70,7 @@ class VideoAdd extends React.Component {
             className="form-control"
             type="text"
             onChange={this.onInputChange}
-            defaultValue={API_INFO.sampleVideoId} />
+            value={this.state.videoId} />
           <span className="input-group-btn">
             <button className="btn btn-secondary" type="button" onClick={this.onClickButton}>추가</button>
           </span>
