@@ -45,7 +45,7 @@ class VideoAdd extends React.Component {
 
   onInputChange(event) {
     const video_id = event.target.value
-    this.setState({ ...this.statem, videoId: event.target.value })
+    this.setState({ ...this.state, videoId: event.target.value })
 
     if (video_id.length === API_INFO.videoIdLength) {
       fetch(`${API_INFO.url}?id=${video_id}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
