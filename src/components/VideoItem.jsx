@@ -29,13 +29,14 @@ const defaultProps = {
 class VideoItem extends React.Component {
   render() {
     const videoSnippet = this.props.video.videoData.snippet
-    const categoryTitle = CATEGORY_LIST.find(o => {return o.id === videoSnippet.categoryId}).title
+    const videoUrl = `https://www.youtube.com/watch?v=${this.props.video.videoData.id}`
     const publishedAt = new Date(videoSnippet.publishedAt)
+    const categoryTitle = CATEGORY_LIST.find(o => {return o.id === videoSnippet.categoryId}).title
 
     return (
       <article>
         <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" /> {/* Resolution issue */}
-        <h3>{videoSnippet.title}</h3>
+        <h3><a href={videoUrl} target="_blank">{videoSnippet.title}</a></h3>
         <date>{publishedAt.toLocaleString('en-US')} </date>
         <span>{categoryTitle.ko_KR}</span>
       </article>
