@@ -29,6 +29,28 @@ class BoardAdd extends React.Component {
   }
 
   onPressEnter() {
+    /*
+      Slugify issue: support CJK
+
+      Rules
+      * RFC 3986 (https://tools.ietf.org/html/rfc3986#section-2.2)
+      * Reserved character
+        : / ? # [ ] @ ! $ & ' ( ) * + , ; =
+      * Unicode - More than alphanumeric, Support emoji
+      * CJK
+
+      References
+      * http://stackoverflow.com/a/19751054
+      * WordPress - https://core.trac.wordpress.org/browser/tags/4.7.3/src/wp-includes/formatting.php
+      * JavaScript from https://gist.github.com/mathewbyrne/1280286
+        ```
+        .replace(/\s+/g, '-')           // Replace spaces with hyphen
+        .replace(/\-\-+/g, '-')         // Replace multiple hyphen with single hyphen
+        .replace(/^-+/, '')             // Trim hyphen from start of text
+        .replace(/-+$/, '');            // Trim hyphen from end of text
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        ````
+    */
     const name = this.state.name.trim()
     const slug = name.toString().toLowerCase().replace(/\s+/g, '-')
 
