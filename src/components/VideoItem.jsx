@@ -63,6 +63,7 @@ class VideoItem extends React.Component {
           <span hidden>{categoryTitle.en_US}</span>
           {/* TODO: if not video-add */}
           <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
+          {/* TODO: if deleted {listName, restore} */}
         </section>
       </article>
     )

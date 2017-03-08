@@ -16,8 +16,8 @@ const defaultProps = {
 class VideoList extends React.Component {
   render() {
     const listName = this.props.list.name
-    const mapToComponent = list => {
-      return list.map(video => {
+    const mapToComponent = vidoes => {
+      return vidoes.map(video => {
         if (video.list === listName && !video.deleted) {
           return <VideoItem video={video} key={video.data.id} />
         } else {
