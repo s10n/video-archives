@@ -1,43 +1,25 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { addList } from '../actions/index'
 import './BoardRead.css'
 import VideoList from '../components/VideoList'
+import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  videoStorage: React.PropTypes.object.isRequired,
-  addList: React.PropTypes.func.isRequired
+  videoStorage: React.PropTypes.object.isRequired
 }
 
 const defaultProps = {
-  videoStorage: {},
-  addList: () => console.log('addList not defined')
+  videoStorage: {}
 }
 
 class BoardRead extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { newListName: '' }
-    this.onPressEnter = this.onPressEnter.bind(this)
-  }
-
-  onPressEnter() {
-    const name = this.state.newListName
-    const currentBoardSlug = this.props.params.slug
-
-    if (name) {
-      this.props.addList(name, currentBoardSlug)
-      this.setState({ newListName: '' })
-    } else {
-      console.log('List name is required')
-    }
-  }
-
   render() {
     const currentVideoStorage = this.props.videoStorage
     const currentBoardSlug = this.props.params.slug
-    const currentBoard = _.find(currentVideoStorage.boards, o => {return o.slug === currentBoardSlug})
+    const currentBoard = _.find(currentVideoStorage.boards, board => {
+      return board.slug === currentBoardSlug
+    })
 
     return (
       <section className="BoardRead">
@@ -55,13 +37,7 @@ class BoardRead extends React.Component {
 
             <div className="VideoWrapper">
               <article className="VideoList card">
-                <input
-                  className="ListAddInput card-title"
-                  onChange={event => this.setState({ newListName: event.target.value })}
-                  onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-                  value={this.state.newListName}
-                  placeholder="Add a list..."
-                />
+                <ListAdd boardSlug={currentBoardSlug} />
               </article>
             </div>
           </div>
@@ -78,4 +54,4 @@ function mapStateToProps(state) {
 BoardRead.propTypes = propTypes
 BoardRead.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { addList })(BoardRead)
+export default connect(mapStateToProps)(BoardRead)
