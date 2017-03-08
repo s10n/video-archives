@@ -1,0 +1,35 @@
+html,
+body,
+#app,
+.AppContainer {
+	height: 100%;
+}
+
+body {
+	overflow: hidden;
+}
+
+.AppContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+.AppHeader {
+	flex: none;
+	height: 50px;
+}
+
+.AppWrapper {
+	flex-grow: 1;
+	display: flex;
+}
+
+.AppSidebar {
+	flex: none;
+	width: 200px;
+}
+
+.AppMain {
+	flex-grow: 1;
+	background-color: hsl(0, 0%, 95%);
+}

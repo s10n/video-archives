@@ -1,0 +1,62 @@
+.BoardRead {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.BoardTitle {
+	flex: none;
+	height: 50px;
+	padding: 10px 24px;
+}
+
+.BoardCanvas {
+	flex-grow: 1;
+	position: relative;
+}
+
+.BoardScroll {
+	position: absolute;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin-bottom: 15px;
+	padding-left: calc(24px - 5px);
+	padding-right: calc(24px - 5px);
+	padding-bottom: 15px;
+	white-space: nowrap;
+}
+
+.BoardScroll::-webkit-scrollbar {
+	height: 10px;
+	width:  10px;
+}
+
+.BoardScroll::-webkit-scrollbar-button {
+	display: block;
+	height: 12px;
+	width:  12px;
+}
+
+.BoardScroll::-webkit-scrollbar-thumb {
+	background-color: silver;
+	border-radius: 5px;
+}
+
+.BoardScroll::-webkit-scrollbar-track-piece {
+	background-color: hsla(0, 0%, 0%, .1);
+	border-radius: 5px;
+}
+
+.VideoWrapper {
+	display: inline-block;
+	height: 100%;
+	margin: 0 5px;
+	vertical-align: top;
+	width: calc(160px + 30px + 6px);
+}
+
+.ListAddInput {
+	border: 0;
+}

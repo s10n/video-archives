@@ -1,7 +1,8 @@
 import _ from 'lodash'
+import React from 'react'
 import { connect } from 'react-redux'
 import { addList } from '../actions/index'
-import React from 'react'
+import './BoardRead.css'
 import VideoList from '../components/VideoList'
 
 const propTypes = {
@@ -39,27 +40,33 @@ class BoardRead extends React.Component {
     const currentBoard = _.find(currentVideoStorage.boards, o => {return o.name === currentBoardName})
 
     return (
-      <section>
-        <h1>{this.props.params.boardName}</h1>
+      <section className="BoardRead">
+        <h1 className="BoardTitle">{this.props.params.boardName}</h1>
 
-        <section className="row">
-          {currentBoard.lists.map(list => {
-            return (
-              <div className="col-sm-4" key={list}>
-                <VideoList listName={list} videoList={currentVideoStorage.videos} />
-              </div>
-            )
-          })}
 
-          <div className="col-sm-4">
-            <input
-              className="form-control"
-              onChange={event => this.setState({ newListName: event.target.value })}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.newListName}
-              placeholder="Add a list" />
+        <div className="BoardCanvas">
+          <div className="BoardScroll">
+            {currentBoard.lists.map(list => {
+              return (
+                <div className="VideoWrapper" key={list}>
+                  <VideoList listName={list} videoList={currentVideoStorage.videos} />
+                </div>
+              )
+            })}
+
+            <div className="VideoWrapper">
+              <article className="VideoList card">
+                <input
+                  className="ListAddInput card-title"
+                  onChange={event => this.setState({ newListName: event.target.value })}
+                  onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+                  value={this.state.newListName}
+                  placeholder="Add a list..."
+                />
+              </article>
+            </div>
           </div>
-        </section>
+        </div>
       </section>
     )
   }

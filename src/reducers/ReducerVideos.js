@@ -49,14 +49,9 @@ export default function(state = INITIAL_STATE, action) {
     case ADD_VIDEO:
       const videoItem = action.payload
 
-      if (!_.find(state.videos, o => {return o.videoData.id === videoItem.videoData.id})) {
-        return {
-          boards: state.boards,
-          videos: [ ...state.videos, videoItem ]
-        }
-      } else {
-        console.log('FAIL: Video exists')
-        return state
+      return {
+        boards: state.boards,
+        videos: [ ...state.videos, videoItem ]
       }
 
     default:

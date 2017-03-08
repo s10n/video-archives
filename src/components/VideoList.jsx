@@ -1,4 +1,5 @@
 import React from 'react'
+import './VideoList.css'
 import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
 
@@ -26,12 +27,15 @@ class VideoList extends React.Component {
     }
 
     return (
-      <section className="card">
-        <h2>{listName}</h2>
-        {mapToComponent(this.props.videoList)}
+      <article className="VideoList card">
+        <h2 className="ListName card-title">{listName}</h2>
+
+        <div className="ListScroll">
+          {mapToComponent(this.props.videoList)}
+        </div>
 
         <VideoAdd listName={listName} />
-      </section>
+      </article>
     )
   }
 }

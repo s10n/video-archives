@@ -1,4 +1,5 @@
 import React from 'react'
+import './VideoItem.css'
 
 const CATEGORY_LIST = [
   { id: '1', title: { en_US: 'Film & Animation', ko_KR: '영화/애니메이션' } },
@@ -29,16 +30,23 @@ const defaultProps = {
 class VideoItem extends React.Component {
   render() {
     const videoSnippet = this.props.video.videoData.snippet
-    const categoryTitle = CATEGORY_LIST.find(o => {return o.id === videoSnippet.categoryId}).title
+    const videoUrl = `https://www.youtube.com/watch?v=${this.props.video.videoData.id}`
     const publishedAt = new Date(videoSnippet.publishedAt)
+    const categoryTitle = CATEGORY_LIST.find(o => {return o.id === videoSnippet.categoryId}).title
 
     return (
-      <header>
-        <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" /> {/* Resolution issue */}
-        <h3>{videoSnippet.title}</h3>
-        <date className="text-muted small">{publishedAt.toLocaleString('en-US')} </date>
-        <span className="sr-only">{categoryTitle.ko_KR}</span>
-      </header>
+      <article className="VideoItem">
+        <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" />
+
+        <h3 className="VideoTitle">
+          <a href={videoUrl} target="_blank">{videoSnippet.title}</a>
+        </h3>
+
+        <section className="VideoMeta">
+          <date>{publishedAt.toLocaleString('en-US')} </date>
+          <span hidden>{categoryTitle.en_US}</span>
+        </section>
+      </article>
     )
   }
 }

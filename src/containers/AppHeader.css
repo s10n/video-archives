@@ -1,0 +1,15 @@
+.AppHeader {
+	border-bottom: 1px solid hsl(0, 0%, 90%);
+}
+
+.AppTitle {
+	padding: 10px 24px;
+}
+
+.AppTitle a {
+	color: black;
+}
+
+.AppTitle small {
+	color: silver;
+}

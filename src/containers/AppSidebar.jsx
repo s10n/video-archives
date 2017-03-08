@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { addBoard } from '../actions/index'
+import './AppSidebar.css'
 
 const propTypes = {
   boardsList: React.PropTypes.array.isRequired,
@@ -13,7 +14,11 @@ const defaultProps = {
   addBoard: () => console.error('addBoard not defined')
 }
 
-class VideoSidebar extends React.Component {
+class AppSidebar extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object
+  }
+
   constructor(props) {
     super(props)
     this.state = { newBoardName: '' }
@@ -25,6 +30,7 @@ class VideoSidebar extends React.Component {
 
     if (name) {
       this.props.addBoard(name)
+      this.context.router.push(name)
     } else {
       console.log('Board name is required')
     }
@@ -34,28 +40,29 @@ class VideoSidebar extends React.Component {
 
   render() {
     return (
-      <nav>
-        <div className="list-group">
-          {this.props.boardsList.map(item => {return (
-            <Link
-              className="list-group-item list-group-item-action"
-              to={`${item.name}`}
-              key={item.name}>{item.name}</Link>
-          )})}
-        </div>
+      <nav className="AppSidebar">
+        {this.props.boardsList.map(item => {return (
+          <Link to={`${item.name}`} key={item.name}>{item.name}</Link>
+        )})}
 
         <input
-          className="form-control"
           onChange={event => this.setState({ newBoardName: event.target.value })}
           onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
           value={this.state.newBoardName}
-          placeholder="Create new board" />
+          placeholder="Create new board..."
+        />
+
+        {this.state.newBoardName.length > 0 &&
+          <p className="HelpBlock">
+            <small>Press enter key to create &crarr;</small>
+          </p>
+        }
       </nav>
     )
   }
 }
 
-VideoSidebar.propTypes = propTypes
-VideoSidebar.defaultProps = defaultProps
+AppSidebar.propTypes = propTypes
+AppSidebar.defaultProps = defaultProps
 
-export default connect(null, { addBoard })(VideoSidebar)
+export default connect(null, { addBoard })(AppSidebar)
