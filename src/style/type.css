@@ -1,0 +1,22 @@
+h1, h2, h3 {
+	font-weight: normal;
+	line-height: 1.25;
+	margin: 0;
+}
+
+h1 {
+	font-size: 1.5rem;
+}
+
+h2 {
+	font-size: 1rem;
+}
+
+h3 {
+	font-size: 13px;
+}
+
+a {
+	color: hsl(206, 80%, 43%);
+	text-decoration: none;
+}

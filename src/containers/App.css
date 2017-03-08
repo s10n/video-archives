@@ -1,15 +1,3 @@
-/* Base */
-html {
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-/* Layout */
 html,
 body,
 #app,
@@ -43,21 +31,4 @@ body {
 
 .AppMain {
 	flex-grow: 1;
-}
-
-/* Typography */
-h1, h2, h3 {
-	margin: 0;
-}
-
-h1 {
-	font-size: 1.5rem;
-}
-
-h2 {
-	font-size: 1rem;
-}
-
-h3 {
-	font-size: 13px;
 }
