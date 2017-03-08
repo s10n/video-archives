@@ -74,7 +74,7 @@ class VideoAdd extends React.Component {
     const videoId = this.state.videoId
     const listVideoExists = _.find(
       this.props.videoStorage.videos,
-      o => {return o.data.id === videoId}
+      video => {return video.data.id === videoId}
     )
 
     if (videoId.length !== API_INFO.videoIdLength) {

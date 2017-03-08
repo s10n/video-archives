@@ -32,7 +32,9 @@ class VideoItem extends React.Component {
     const videoSnippet = this.props.video.data.snippet
     const videoUrl = `https://www.youtube.com/watch?v=${this.props.video.data.id}`
     const publishedAt = new Date(videoSnippet.publishedAt)
-    const categoryTitle = CATEGORY_LIST.find(o => {return o.id === videoSnippet.categoryId}).title
+    const categoryTitle = CATEGORY_LIST.find(category => {
+      return category.id === videoSnippet.categoryId
+    }).title
 
     return (
       <article className="VideoItem">

@@ -15,7 +15,7 @@ export default function(state = INITIAL_STATE, action) {
     case ADD_BOARD:
       const newBoard = action.payload
 
-      if (!_.find(state.boards, o => {return o.slug === newBoard.slug})) {
+      if (!_.find(state.boards, board => {return board.slug === newBoard.slug})) {
         return {
           boards: [ ...state.boards, { name: newBoard.name, slug: newBoard.slug, lists: [] } ],
           videos: state.videos
