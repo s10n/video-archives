@@ -17,12 +17,12 @@ export function pushStorage(currentVideoStorage, prevVideoStorage) {
   return { type: PUSH_STORAGE }
 }
 
-export function addBoard(boardName) {
-  return { type: ADD_BOARD, payload: boardName }
+export function addBoard(newBoard) {
+  return { type: ADD_BOARD, payload: newBoard }
 }
 
-export function addList(listName, currentBoardName) {
-  return { type: ADD_LIST, payload: { listName, currentBoardName } }
+export function addList(listName, currentBoardSlug) {
+  return { type: ADD_LIST, payload: { listName, currentBoardSlug } }
 }
 
 export function addVideo(videoItem) {

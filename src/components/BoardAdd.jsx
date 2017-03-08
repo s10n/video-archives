@@ -18,34 +18,43 @@ class BoardAdd extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { newBoardName: '' }
+    this.state = { name: '', slug: '' }
+    this.onInputChange = this.onInputChange.bind(this)
     this.onPressEnter = this.onPressEnter.bind(this)
   }
 
-  onPressEnter() {
-    const name = this.state.newBoardName
+  onInputChange(event) {
+    const name = event.target.value
+    this.setState({ ...this.state, name: name})
+  }
 
-    if (name) {
-      this.props.addBoard(name)
-      this.context.router.push(name)
+  onPressEnter() {
+    const name = this.state.name.trim()
+    const slug = name.toString().toLowerCase().replace(/\s+/g, '-')
+
+    if (name && slug) {
+      const newBoard = { name, slug }
+      this.props.addBoard(newBoard)
+      this.context.router.push(slug)
     } else {
       console.log('Board name is required')
     }
 
-    this.setState({ newBoardName: '' })
+    this.setState({ name: '', slug: '' })
   }
 
   render() {
     return (
       <section className="BoardAdd">
         <input
-          onChange={event => this.setState({ newBoardName: event.target.value })}
+          type="text"
+          onChange={this.onInputChange}
           onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-          value={this.state.newBoardName}
+          value={this.state.name}
           placeholder="Create new board..."
         />
 
-        {this.state.newBoardName.length > 0 &&
+        {this.state.name.length > 0 &&
           <p className="HelpBlock">
             <small>Press enter key to create &crarr;</small>
           </p>

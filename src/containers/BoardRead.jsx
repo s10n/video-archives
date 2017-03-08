@@ -24,10 +24,10 @@ class BoardRead extends React.Component {
 
   onPressEnter() {
     const name = this.state.newListName
-    const currentBoardName = this.props.params.boardName
+    const currentBoardSlug = this.props.params.slug
 
     if (name) {
-      this.props.addList(name, currentBoardName)
+      this.props.addList(name, currentBoardSlug)
       this.setState({ newListName: '' })
     } else {
       console.log('List name is required')
@@ -36,13 +36,12 @@ class BoardRead extends React.Component {
 
   render() {
     const currentVideoStorage = this.props.videoStorage
-    const currentBoardName = this.props.params.boardName
-    const currentBoard = _.find(currentVideoStorage.boards, o => {return o.name === currentBoardName})
+    const currentBoardSlug = this.props.params.slug
+    const currentBoard = _.find(currentVideoStorage.boards, o => {return o.slug === currentBoardSlug})
 
     return (
       <section className="BoardRead">
-        <h1 className="BoardTitle">{this.props.params.boardName}</h1>
-
+        <h1 className="BoardTitle">{currentBoard.name}</h1>
 
         <div className="BoardCanvas">
           <div className="BoardScroll">

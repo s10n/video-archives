@@ -7,6 +7,6 @@ import BoardRead from './containers/BoardRead'
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={FrontPage} />
-    <Route path=":boardName" component={BoardRead} />
+    <Route path=":slug" component={BoardRead} />
   </Route>
 )
