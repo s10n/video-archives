@@ -4,14 +4,7 @@
 	height: 100%;
 }
 
-.BoardTitle {
-	flex: none;
-	height: 50px;
-	padding: 10px 24px;
-}
-
 .BoardCanvas {
-	flex-grow: 1;
 	position: relative;
 }
 

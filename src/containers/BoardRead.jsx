@@ -23,9 +23,9 @@ class BoardRead extends React.Component {
 
     return (
       <section className="BoardRead">
-        <h1 className="BoardTitle">{currentBoard.name}</h1>
+        <h1 className="page-title">{currentBoard.name}</h1>
 
-        <div className="BoardCanvas">
+        <main className="BoardCanvas page-content">
           <div className="BoardScroll">
             {currentBoard.lists.map(list => {
               return (
@@ -41,7 +41,7 @@ class BoardRead extends React.Component {
               </article>
             </div>
           </div>
-        </div>
+        </main>
       </section>
     )
   }
