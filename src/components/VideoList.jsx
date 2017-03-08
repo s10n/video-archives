@@ -1,7 +1,7 @@
 import React from 'react'
+import './VideoList.css'
 import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
-import './VideoList.css'
 
 const propTypes = {
   listName: React.PropTypes.string.isRequired,

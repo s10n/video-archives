@@ -1,9 +1,9 @@
 import _ from 'lodash'
+import React from 'react'
 import { connect } from 'react-redux'
 import { addList } from '../actions/index'
-import React from 'react'
-import VideoList from '../components/VideoList'
 import './BoardRead.css'
+import VideoList from '../components/VideoList'
 
 const propTypes = {
   videoStorage: React.PropTypes.object.isRequired,

@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchStorage, pushStorage } from '../actions/index'
-import AppHeader from './AppHeader'
-import AppSidebar from './AppSidebar'
 import 'normalize.css'
 import './App.css'
+import AppHeader from './AppHeader'
+import AppSidebar from './AppSidebar'
 
 const propTypes = {
   videoStorage: React.PropTypes.object.isRequired,
