@@ -16,3 +16,9 @@
 .AppSidebar input:hover {
 	background-color: hsl(0, 0%, 95%);
 }
+
+.AppSidebar .active,
+.AppSidebar .active:hover {
+	background-color: hsl(358, 79%, 45%);
+	color: white;
+}
