@@ -18,7 +18,7 @@ class VideoList extends React.Component {
     const listName = this.props.listName
     const mapToComponent = list => {
       return list.map((item, i) => {
-        if (item.listName === listName) {
+        if (item.list === listName) {
           return <VideoItem video={item} key={i} />
         } else {
           return false
