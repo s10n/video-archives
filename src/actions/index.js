@@ -3,6 +3,7 @@ export const PUSH_STORAGE = 'PUSH_STORAGE'
 export const ADD_BOARD = 'ADD_BOARD'
 export const ADD_LIST = 'ADD_LIST'
 export const ADD_VIDEO = 'ADD_VIDEO'
+export const EDIT_VIDEO = 'EDIT_VIDEO'
 
 export function fetchStorage() {
   const localVideoStorage = localStorage.videoStorage
@@ -25,6 +26,10 @@ export function addList(newList, boardSlug) {
   return { type: ADD_LIST, payload: { newList, boardSlug } }
 }
 
-export function addVideo(videoItem) {
-  return { type: ADD_VIDEO, payload: videoItem }
+export function addVideo(newVideo) {
+  return { type: ADD_VIDEO, payload: newVideo }
+}
+
+export function editVideo(editingVideo) {
+  return { type: EDIT_VIDEO, payload: editingVideo }
 }

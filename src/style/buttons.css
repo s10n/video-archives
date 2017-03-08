@@ -1,0 +1,8 @@
+.btn-link {
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	line-height: inherit;
+	outline: 0;
+	padding: 0;
+}

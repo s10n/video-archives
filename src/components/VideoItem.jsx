@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { editVideo } from '../actions/index'
 import './VideoItem.css'
 
 const CATEGORY_LIST = [
@@ -20,14 +22,25 @@ const CATEGORY_LIST = [
 ]
 
 const propTypes = {
-  video: React.PropTypes.object.isRequired
+  video: React.PropTypes.object.isRequired,
+  editVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  video: {}
+  video: {},
+  editVideo: () => console.log('editVideo not defined')
 }
 
 class VideoItem extends React.Component {
+  constructor(props) {
+    super(props)
+    this.onDeleteClick = this.onDeleteClick.bind(this)
+  }
+
+  onDeleteClick() {
+    this.props.editVideo(this.props.video)
+  }
+
   render() {
     const videoSnippet = this.props.video.data.snippet
     const videoUrl = `https://www.youtube.com/watch?v=${this.props.video.data.id}`
@@ -46,8 +59,10 @@ class VideoItem extends React.Component {
         </h3>
 
         <section className="VideoMeta">
-          <date>{publishedAt.toLocaleString('en-US')} </date>
+          <date>{publishedAt.toLocaleString('en-US')}</date>
           <span hidden>{categoryTitle.en_US}</span>
+          {/* TODO: if not video-add */}
+          <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
         </section>
       </article>
     )
@@ -57,4 +72,4 @@ class VideoItem extends React.Component {
 VideoItem.propTypes = propTypes
 VideoItem.defaultProps = defaultProps
 
-export default VideoItem
+export default connect(null, { editVideo })(VideoItem)

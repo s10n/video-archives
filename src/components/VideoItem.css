@@ -12,3 +12,12 @@
 	font-size: 11px;
 	line-height: 1.3;
 }
+
+.VideoMeta .btn-link {
+	color: inherit;
+	float: right;
+}
+
+.VideoMeta .btn-link:hover {
+	color: black;
+}

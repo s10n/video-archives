@@ -17,9 +17,9 @@ class VideoList extends React.Component {
   render() {
     const listName = this.props.list.name
     const mapToComponent = list => {
-      return list.map((item, i) => {
-        if (item.list === listName) {
-          return <VideoItem video={item} key={i} />
+      return list.map(video => {
+        if (video.list === listName && !video.deleted) {
+          return <VideoItem video={video} key={video.data.id} />
         } else {
           return false
         }
