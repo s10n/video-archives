@@ -1,4 +1,5 @@
 import React from 'react'
+import './VideoItem.css'
 
 const CATEGORY_LIST = [
   { id: '1', title: { en_US: 'Film & Animation', ko_KR: '영화/애니메이션' } },
@@ -34,11 +35,17 @@ class VideoItem extends React.Component {
     const categoryTitle = CATEGORY_LIST.find(o => {return o.id === videoSnippet.categoryId}).title
 
     return (
-      <article>
-        <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" /> {/* Resolution issue */}
-        <h3><a href={videoUrl} target="_blank">{videoSnippet.title}</a></h3>
-        <date>{publishedAt.toLocaleString('en-US')} </date>
-        <span>{categoryTitle.ko_KR}</span>
+      <article className="VideoItem">
+        <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" />
+
+        <h3 className="VideoTitle">
+          <a href={videoUrl} target="_blank">{videoSnippet.title}</a>
+        </h3>
+
+        <section className="VideoMeta">
+          <date>{publishedAt.toLocaleString('en-US')} </date>
+          <span hidden>{categoryTitle.en_US}</span>
+        </section>
       </article>
     )
   }

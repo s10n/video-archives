@@ -27,8 +27,8 @@ class VideoList extends React.Component {
     }
 
     return (
-      <article className="VideoList">
-        <h2 className="ListName">{listName}</h2>
+      <article className="VideoList card">
+        <h2 className="ListName card-title">{listName}</h2>
 
         <div className="ListScroll">
           {mapToComponent(this.props.videoList)}

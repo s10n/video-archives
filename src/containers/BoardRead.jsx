@@ -54,12 +54,17 @@ class BoardRead extends React.Component {
               )
             })}
 
-            <input
-              onChange={event => this.setState({ newListName: event.target.value })}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.newListName}
-              placeholder="Add a list"
-            />
+            <div className="VideoWrapper">
+              <article className="VideoList card">
+                <input
+                  className="ListAddInput card-title"
+                  onChange={event => this.setState({ newListName: event.target.value })}
+                  onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+                  value={this.state.newListName}
+                  placeholder="Add a list..."
+                />
+              </article>
+            </div>
           </div>
         </div>
       </section>

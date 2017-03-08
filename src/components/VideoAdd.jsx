@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { addVideo } from '../actions/index'
+import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
 const API_INFO = {
@@ -13,22 +14,28 @@ const API_INFO = {
   videoIdLength : 11
 }
 
-const ERROR_MESSAGE = 'No results'
+const ERROR_MESSAGE = {
+  charLength: 'Type 11 characters',
+  noResults: 'No results',
+  videoExists: 'Video exists'
+}
 
 const propTypes = {
-  addVideo: React.PropTypes.func.isRequired,
-  listName: React.PropTypes.string
+  listName: React.PropTypes.string,
+  videoStorage: React.PropTypes.object.isRequired,
+  addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  addVideo: () => console.log('addVideo not defined'),
-  listName: ''
+  listName: '',
+  videoStorage: {},
+  addVideo: () => console.log('addVideo not defined')
 }
 
 class VideoAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { listName: this.props.listName, videoId: '', videoData: {} }
+    this.state = { listName: this.props.listName, videoId: '', videoData: {}, fetchResult: null }
     this.onInputChange = this.onInputChange.bind(this)
   }
 
@@ -39,25 +46,72 @@ class VideoAdd extends React.Component {
     if (video_id.length === API_INFO.videoIdLength) {
       fetch(`${API_INFO.url}?id=${video_id}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
         .then(response => response.json())
-        .then(({items}) => this.setState({ ...this.state, videoData: items.length ? items[0] : {} }))
+        .then(({items}) => this.setState(items.length ?
+          { ...this.state, videoData: items[0], fetchResult: true } :
+          { ...this.state, fetchResult: false }
+        ))
     }
   }
 
   onPressEnter() {
     if (this.state.listName && !_.isEmpty(this.state.videoData)) {
       this.props.addVideo(this.state)
-      this.setState({ ...this.state, videoId: '', videoData: {} })
+      this.setState({ ...this.state, videoId: '', videoData: {}, fetchResult: null })
     } else {
       console.log('List name is required.') // TODO
     }
   }
 
-  render() {
-    const videoData = this.state.videoData
-    const errorMessage = ERROR_MESSAGE
+  showFetchResult() {
+    const videoId = this.state.videoId
+    const listVideoExists = _.find(
+      this.props.videoStorage.videos,
+      o => {return o.videoData.id === videoId}
+    )
 
+    if (videoId.length !== API_INFO.videoIdLength) {
+      return (
+        <p className="HelpBlock">
+          <small>{ERROR_MESSAGE.charLength}</small>
+        </p>
+      )
+    } else if (listVideoExists) {
+      return (
+        <p className="HelpBlock">
+          <small>{`${ERROR_MESSAGE.videoExists}: List '${listVideoExists.listName}'`}</small>
+        </p>
+      )
+    } else if (this.state.fetchResult === false) {
+      return (
+        <p className="HelpBlock">
+          <small>{ERROR_MESSAGE.noResults}</small>
+        </p>
+      )
+    } else if (!this.state.videoData.hasOwnProperty('id')) {
+      return (
+        <p className="HelpBlock">
+          <small>Fetching...</small>
+        </p>
+      )
+    } else {
+      return (
+        <div>
+          <p><small className="strong">Press enter key to add this video &crarr;</small></p>
+          <VideoItem video={this.state} />
+        </div>
+      )
+    }
+  }
+
+  render() {
     return (
       <section className="VideoAdd">
+        {this.state.videoId.length > 0 &&
+          <section className="FetchResult">
+            {this.showFetchResult()}
+          </section>
+        }
+
         <input
           type="hidden"
           onChange={event => this.setState({ listName: event.target.value })}
@@ -69,16 +123,18 @@ class VideoAdd extends React.Component {
           onChange={this.onInputChange}
           onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
           value={this.state.videoId}
-          placeholder="Video ID"
+          placeholder="Add a video..."
         />
-
-        {videoData.hasOwnProperty('id') ? <VideoItem video={this.state} /> : <p>{errorMessage}</p>}
       </section>
     )
   }
 }
 
+function mapStateToProps(state) {
+  return { videoStorage: state.videoStorage }
+}
+
 VideoAdd.propTypes = propTypes
 VideoAdd.defaultProps = defaultProps
 
-export default connect(null, { addVideo })(VideoAdd)
+export default connect(mapStateToProps, { addVideo })(VideoAdd)

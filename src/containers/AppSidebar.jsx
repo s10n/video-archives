@@ -49,8 +49,14 @@ class AppSidebar extends React.Component {
           onChange={event => this.setState({ newBoardName: event.target.value })}
           onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
           value={this.state.newBoardName}
-          placeholder="Create new board"
+          placeholder="Create new board..."
         />
+
+        {this.state.newBoardName.length > 0 &&
+          <p className="HelpBlock">
+            <small>Press enter key to create &crarr;</small>
+          </p>
+        }
       </nav>
     )
   }

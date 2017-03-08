@@ -31,4 +31,5 @@ body {
 
 .AppMain {
 	flex-grow: 1;
+	background-color: hsl(0, 0%, 95%);
 }

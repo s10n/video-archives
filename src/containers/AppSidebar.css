@@ -1,11 +1,23 @@
 .AppSidebar {
-	border-right: 1px solid silver;
+	border-right: 1px solid hsl(0, 0%, 90%);
 }
 
-.AppSidebar a {
+.AppSidebar a,
+.AppSidebar input {
+	border: 0;
+	color: black;
 	display: block;
+	line-height: 20px;
+	padding: 10px 24px;
+	width: 100%;
 }
 
-.AppSidebar a:hover {
-	background-color: hsl(0, 0%, 90%);
+.AppSidebar a:hover,
+.AppSidebar input:hover {
+	background-color: hsl(0, 0%, 95%);
+}
+
+.AppSidebar .HelpBlock {
+	color: gray;
+	padding: 0 24px;
 }

@@ -1,0 +1,14 @@
+.VideoItem + .VideoItem {
+	margin-top: 20px;
+}
+
+.VideoTitle {
+	font-size: 13px;
+	line-height: 1.3;
+}
+
+.VideoMeta {
+	color: gray;
+	font-size: 11px;
+	line-height: 1.3;
+}
