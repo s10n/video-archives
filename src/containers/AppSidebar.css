@@ -17,7 +17,8 @@
 	background-color: hsl(0, 0%, 95%);
 }
 
-.AppSidebar .HelpBlock {
-	color: gray;
-	padding: 0 24px;
+.AppSidebar .active,
+.AppSidebar .active:hover {
+	background-color: hsl(358, 79%, 45%);
+	color: white;
 }

@@ -13,11 +13,11 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case ADD_BOARD:
-      const boardName = action.payload
+      const newBoard = action.payload
 
-      if (!_.find(state.boards, o => {return o.name === boardName})) {
+      if (!_.find(state.boards, board => {return board.slug === newBoard.slug})) {
         return {
-          boards: [ ...state.boards, { name: boardName, lists: [] } ],
+          boards: [ ...state.boards, { name: newBoard.name, slug: newBoard.slug, lists: [] } ],
           videos: state.videos
         }
       } else {
@@ -26,20 +26,20 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case ADD_LIST:
-      const { listName, currentBoardName } = action.payload
-      const currentBoard = _.find(state.boards, o => {return o.name === currentBoardName})
+      const { newList, boardSlug } = action.payload
+      const currentBoard = _.find(state.boards, board => {return board.slug === boardSlug})
 
-      if (currentBoard.lists.indexOf(listName) === -1) {
+      if (!_.find(currentBoard.lists, list => {return list.slug === newList.slug})) {
         return {
           // TODO: optimize
+          ...state,
           boards: state.boards.map(board => {
             if (board === currentBoard) {
-              return { name: board.name, lists: [ ...board.lists, listName ] }
+              return { name: board.name, slug: board.slug, lists: [ ...board.lists, newList ] }
             } else {
               return board
             }
-          }),
-          videos: state.videos
+          })
         }
       } else {
         console.log('FAIL: List exists')

@@ -35,28 +35,36 @@ const defaultProps = {
 class VideoAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { listName: this.props.listName, videoId: '', videoData: {}, fetchResult: null }
+    this.state = {
+      videoId: '',
+      fetchResult: null,
+      video: { list: this.props.listName, source: 'YouTube', data: {} }
+    }
     this.onInputChange = this.onInputChange.bind(this)
   }
 
   onInputChange(event) {
     const video_id = event.target.value
-    this.setState({ ...this.statem, videoId: event.target.value })
+    this.setState({ ...this.state, videoId: event.target.value })
 
     if (video_id.length === API_INFO.videoIdLength) {
       fetch(`${API_INFO.url}?id=${video_id}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
         .then(response => response.json())
         .then(({items}) => this.setState(items.length ?
-          { ...this.state, videoData: items[0], fetchResult: true } :
+          { ...this.state, fetchResult: true, video: { ...this.state.video, data: items[0] } } :
           { ...this.state, fetchResult: false }
         ))
     }
   }
 
   onPressEnter() {
-    if (this.state.listName && !_.isEmpty(this.state.videoData)) {
-      this.props.addVideo(this.state)
-      this.setState({ ...this.state, videoId: '', videoData: {}, fetchResult: null })
+    if (this.state.video.list && !_.isEmpty(this.state.video.data)) {
+      this.props.addVideo(this.state.video)
+      this.setState({
+        videoId: '',
+        fetchResult: null,
+        video: { ...this.state.video, data: {} }
+      })
     } else {
       console.log('List name is required.') // TODO
     }
@@ -66,7 +74,7 @@ class VideoAdd extends React.Component {
     const videoId = this.state.videoId
     const listVideoExists = _.find(
       this.props.videoStorage.videos,
-      o => {return o.videoData.id === videoId}
+      video => {return video.data.id === videoId}
     )
 
     if (videoId.length !== API_INFO.videoIdLength) {
@@ -78,7 +86,7 @@ class VideoAdd extends React.Component {
     } else if (listVideoExists) {
       return (
         <p className="HelpBlock">
-          <small>{`${ERROR_MESSAGE.videoExists}: List '${listVideoExists.listName}'`}</small>
+          <small>{`${ERROR_MESSAGE.videoExists}: List '${listVideoExists.list}'`}</small>
         </p>
       )
     } else if (this.state.fetchResult === false) {
@@ -87,7 +95,7 @@ class VideoAdd extends React.Component {
           <small>{ERROR_MESSAGE.noResults}</small>
         </p>
       )
-    } else if (!this.state.videoData.hasOwnProperty('id')) {
+    } else if (!this.state.video.data.hasOwnProperty('id')) {
       return (
         <p className="HelpBlock">
           <small>Fetching...</small>
@@ -97,7 +105,7 @@ class VideoAdd extends React.Component {
       return (
         <div>
           <p><small className="strong">Press enter key to add this video &crarr;</small></p>
-          <VideoItem video={this.state} />
+          <VideoItem video={this.state.video} />
         </div>
       )
     }
@@ -115,7 +123,7 @@ class VideoAdd extends React.Component {
         <input
           type="hidden"
           onChange={event => this.setState({ listName: event.target.value })}
-          value={this.state.listName}
+          value={this.state.video.list}
           placeholder="List name"
         />
         <input

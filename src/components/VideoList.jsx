@@ -15,10 +15,10 @@ const defaultProps = {
 
 class VideoList extends React.Component {
   render() {
-    const listName = this.props.listName
+    const listName = this.props.list.name
     const mapToComponent = list => {
       return list.map((item, i) => {
-        if (item.listName === listName) {
+        if (item.list === listName) {
           return <VideoItem video={item} key={i} />
         } else {
           return false
