@@ -21,8 +21,8 @@ export function addBoard(newBoard) {
   return { type: ADD_BOARD, payload: newBoard }
 }
 
-export function addList(listName, currentBoardSlug) {
-  return { type: ADD_LIST, payload: { listName, currentBoardSlug } }
+export function addList(newList, boardSlug) {
+  return { type: ADD_LIST, payload: { newList, boardSlug } }
 }
 
 export function addVideo(videoItem) {

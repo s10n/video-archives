@@ -16,29 +16,38 @@ const defaultProps = {
 class ListAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { newListName: '' }
+    this.state = { name: '', slug: '' }
+    this.onInputChange = this.onInputChange.bind(this)
     this.onPressEnter = this.onPressEnter.bind(this)
   }
 
-  onPressEnter() {
-    const name = this.state.newListName
-    const boardSlug = this.props.boardSlug
+  onInputChange(event) {
+    const name = event.target.value
+    this.setState({ ...this.state, name })
+  }
 
-    if (name) {
-      this.props.addList(name, boardSlug)
-      this.setState({ newListName: '' })
+  onPressEnter() {
+    const boardSlug = this.props.boardSlug
+    const name = this.state.name.trim()
+    const slug = name.toString().toLowerCase().replace(/\s+/g, '-')
+
+    if (name && slug) {
+      const newList = { name, slug }
+      this.props.addList(newList, boardSlug)
     } else {
       console.log('List name is required')
     }
+
+    this.setState({ name: '', slug: '' })
   }
 
   render() {
     return (
       <input
         className="ListAddInput card-title"
-        onChange={event => this.setState({ newListName: event.target.value })}
+        onChange={this.onInputChange}
         onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-        value={this.state.newListName}
+        value={this.state.name}
         placeholder="Add a list..."
       />
     )

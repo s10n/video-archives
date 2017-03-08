@@ -29,8 +29,8 @@ class BoardRead extends React.Component {
           <div className="BoardScroll">
             {currentBoard.lists.map(list => {
               return (
-                <div className="VideoWrapper" key={list}>
-                  <VideoList listName={list} videoList={currentVideoStorage.videos} />
+                <div className="VideoWrapper" key={list.slug}>
+                  <VideoList list={list} videoList={currentVideoStorage.videos} />
                 </div>
               )
             })}
