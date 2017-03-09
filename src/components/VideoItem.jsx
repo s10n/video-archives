@@ -36,9 +36,18 @@ const defaultProps = {
 class VideoItem extends React.Component {
   constructor(props) {
     super(props)
+    this.onMoveClick = this.onMoveClick.bind(this)
     this.onTrashClick = this.onTrashClick.bind(this)
     this.onRecoverClick = this.onRecoverClick.bind(this)
     this.onDeleteClick = this.onDeleteClick.bind(this)
+  }
+
+  onMoveClick() {
+    const list = prompt(`Type a name of list`)
+
+    if (list) {
+      this.props.editVideo(this.props.video, { list: list })
+    }
   }
 
   onTrashClick() {
@@ -74,16 +83,27 @@ class VideoItem extends React.Component {
           <date>{publishedAt.toLocaleString('en-US')}</date>
           <span hidden>{categoryTitle}</span>
           {/* TODO: if not video-add */}
-          {/* TODO: change list */}
-          {!video.deleted ?
-            <section>
-              <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
-            </section> :
-            <section>
-              <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
-              &middot;
-              <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
-            </section>
+          {
+            !video.deleted ?
+              <section>
+                <button className="btn-link" onClick={this.onMoveClick}>
+                  Move
+                </button>
+                &middot;
+                <button className="btn-link" onClick={this.onTrashClick}>
+                  🗑
+                </button>
+              </section>
+            :
+              <section>
+                <button className="btn-link" onClick={this.onRecoverClick}>
+                  Recover {video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}
+                </button>
+                &middot;
+                <button className="btn-link" onClick={this.onDeleteClick}>
+                  Delete
+                </button>
+              </section>
           }
         </section>
       </article>

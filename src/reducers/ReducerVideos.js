@@ -53,6 +53,13 @@ export default function(state = INITIAL_STATE, action) {
             } else {
               return board
             }
+          }),
+          videos: state.videos.map(video => {
+            if (video.board === editingBoard.slug) {
+              return Object.assign({}, video, { board: editingBoardPart.slug })
+            } else {
+              return video
+            }
           })
         }
       } else {
@@ -65,7 +72,14 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state,
-        boards: state.boards.filter(board => {return board !== deletingBoard})
+        boards: state.boards.filter(board => {return board !== deletingBoard}),
+        videos: state.videos.map(video => {
+          if (video.board === deletingBoard.slug) {
+            return Object.assign({}, video, { board: null, list: null, deleted: true })
+          } else {
+            return video
+          }
+        })
       }
 
     case ADD_LIST:
@@ -104,6 +118,13 @@ export default function(state = INITIAL_STATE, action) {
             } else {
               return board
             }
+          }),
+          videos: state.videos.map(video => {
+            if (video.list === editingList.slug) {
+              return Object.assign({}, video, { list: editingListPart.slug })
+            } else {
+              return video
+            }
           })
         }
       } else {
@@ -121,6 +142,13 @@ export default function(state = INITIAL_STATE, action) {
             return { ...board, lists: board.lists.filter(list => {return list !== deletingList}) }
           } else {
             return board
+          }
+        }),
+        videos: state.videos.map(video => {
+          if (video.board === deletingListCurrentBoard.slug && video.list === deletingList.slug) {
+            return Object.assign({}, video, { list: null, deleted: true })
+          } else {
+            return video
           }
         })
       }

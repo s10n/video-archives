@@ -17,6 +17,14 @@
 	padding-bottom: 10px;
 }
 
+.ListHeader .BtnTrash {
+	display: none;
+}
+
+.ListHeader:hover .BtnTrash {
+	display: inline-block;
+}
+
 .ListScroll {
 	flex: 1 1 auto;
 	overflow-x: hidden;

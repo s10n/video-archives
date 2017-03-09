@@ -92,13 +92,13 @@ class BoardRead extends React.Component {
     return (
       <section className="BoardRead">
         {!this.state.isEditing ?
-          <header>
+          <header className="BoardHeader">
             <h1
               className="BoardTitle page-title"
               onClick={this.onTitleClick}>
               {currentBoard.title}
             </h1>
-            <button className="btn-link" onClick={this.onDeleteClick}>🗑</button>
+            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
           </header> :
           <input
             className="BoardTitleInput page-title"
