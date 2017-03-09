@@ -61,7 +61,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         videos: state.videos.map(video => {
           if (video === editingVideo) {
-            return Object.assign(video, editingPart)
+            return Object.assign({}, video, editingPart)
           } else {
             return video
           }
