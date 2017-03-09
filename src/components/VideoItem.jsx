@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { editVideo } from '../actions/index'
+import { editVideo, deleteVideo } from '../actions/index'
 import './VideoItem.css'
 
 const CATEGORY_LIST = [
@@ -23,27 +23,34 @@ const CATEGORY_LIST = [
 
 const propTypes = {
   video: React.PropTypes.object.isRequired,
-  editVideo: React.PropTypes.func.isRequired
+  editVideo: React.PropTypes.func.isRequired,
+  deleteVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   video: {},
-  editVideo: () => console.log('editVideo not defined')
+  editVideo: () => console.log('editVideo not defined'),
+  deleteVideo: () => console.log('deleteVideo not defined')
 }
 
 class VideoItem extends React.Component {
   constructor(props) {
     super(props)
-    this.onDeleteClick = this.onDeleteClick.bind(this)
+    this.onTrashClick = this.onTrashClick.bind(this)
     this.onRecoverClick = this.onRecoverClick.bind(this)
+    this.onDeleteClick = this.onDeleteClick.bind(this)
   }
 
-  onDeleteClick() {
+  onTrashClick() {
     this.props.editVideo(this.props.video, { deleted: true })
   }
 
   onRecoverClick() {
     this.props.editVideo(this.props.video, { deleted: false })
+  }
+
+  onDeleteClick() {
+    this.props.deleteVideo(this.props.video)
   }
 
   render() {
@@ -68,8 +75,11 @@ class VideoItem extends React.Component {
           <span hidden>{categoryTitle}</span>
           {/* TODO: if not video-add */}
           {!video.deleted ?
-            <button className="btn-link" onClick={this.onDeleteClick}>Delete</button> :
-            <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
+            <button className="btn-link" onClick={this.onTrashClick}>🗑</button> :
+            <span>
+              <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
+              <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
+            </span>
           }
         </section>
       </article>
@@ -80,4 +90,4 @@ class VideoItem extends React.Component {
 VideoItem.propTypes = propTypes
 VideoItem.defaultProps = defaultProps
 
-export default connect(null, { editVideo })(VideoItem)
+export default connect(null, { editVideo, deleteVideo })(VideoItem)
