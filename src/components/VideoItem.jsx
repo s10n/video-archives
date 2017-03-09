@@ -35,35 +35,42 @@ class VideoItem extends React.Component {
   constructor(props) {
     super(props)
     this.onDeleteClick = this.onDeleteClick.bind(this)
+    this.onRecoverClick = this.onRecoverClick.bind(this)
   }
 
   onDeleteClick() {
-    this.props.editVideo(this.props.video)
+    this.props.editVideo(this.props.video, { deleted: true })
+  }
+
+  onRecoverClick() {
+    this.props.editVideo(this.props.video, { deleted: false })
   }
 
   render() {
-    const videoSnippet = this.props.video.data.snippet
-    const videoUrl = `https://www.youtube.com/watch?v=${this.props.video.data.id}`
-    const publishedAt = new Date(videoSnippet.publishedAt)
+    const video = this.props.video
+    const url = `https://www.youtube.com/watch?v=${video.data.id}`
+    const publishedAt = new Date(video.data.snippet.publishedAt)
     const categoryTitle = CATEGORY_LIST.find(category => {
-      return category.id === videoSnippet.categoryId
-    }).title
+      return category.id === video.data.snippet.categoryId
+    }).title.en_US
 
     return (
       <article className="VideoItem">
         {/* TODO: Change thumbnail ratio to 16:9 */}
-        <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" />
+        <img src={video.data.snippet.thumbnails.high.url} role="presentation" height="120" />
 
         <h3 className="VideoTitle">
-          <a href={videoUrl} target="_blank">{videoSnippet.title}</a>
+          <a href={url} target="_blank">{video.data.snippet.title}</a>
         </h3>
 
         <section className="VideoMeta">
           <date>{publishedAt.toLocaleString('en-US')}</date>
-          <span hidden>{categoryTitle.en_US}</span>
+          <span hidden>{categoryTitle}</span>
           {/* TODO: if not video-add */}
-          <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
-          {/* TODO: if deleted {listName, restore} */}
+          {!video.deleted ?
+            <button className="btn-link" onClick={this.onDeleteClick}>Delete</button> :
+            <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
+          }
         </section>
       </article>
     )

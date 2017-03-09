@@ -55,13 +55,13 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case EDIT_VIDEO:
-      const editingVideo = action.payload
+      const { editingVideo, editingPart } = action.payload
 
       return {
         ...state,
         videos: state.videos.map(video => {
           if (video === editingVideo) {
-            return { ...video, deleted: true }
+            return Object.assign(video, editingPart)
           } else {
             return video
           }

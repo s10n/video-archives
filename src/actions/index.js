@@ -30,6 +30,6 @@ export function addVideo(newVideo) {
   return { type: ADD_VIDEO, payload: newVideo }
 }
 
-export function editVideo(editingVideo) {
-  return { type: EDIT_VIDEO, payload: editingVideo }
+export function editVideo(editingVideo, editingPart) {
+  return { type: EDIT_VIDEO, payload: { editingVideo, editingPart } }
 }
