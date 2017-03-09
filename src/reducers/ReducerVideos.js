@@ -1,11 +1,19 @@
 import _ from 'lodash'
 import {
   FETCH_STORAGE,
+
   ADD_BOARD,
+  EDIT_BOARD,
+  DELETE_BOARD,
+
   ADD_LIST,
+  EDIT_LIST,
+  DELETE_LIST,
+
   ADD_VIDEO,
   EDIT_VIDEO,
   DELETE_VIDEO,
+
   EMPTY_TRASH
 } from '../actions/index'
 
@@ -33,6 +41,24 @@ export default function(state = INITIAL_STATE, action) {
         return state
       }
 
+    case EDIT_BOARD:
+      const { editingBoard, editingBoardPart } = action.payload
+
+      return {
+        ...state,
+        boards: state.boards.map(board => {
+          if (board === editingBoard) {
+            return Object.assign({}, board, editingBoardPart)
+          } else {
+            return board
+          }
+        })
+      }
+
+    case DELETE_BOARD:
+      console.log('Deleting board')
+      return state
+
     case ADD_LIST:
       const { newList, boardSlug } = action.payload
       const currentBoard = _.find(state.boards, board => {return board.slug === boardSlug})
@@ -54,6 +80,14 @@ export default function(state = INITIAL_STATE, action) {
         return state
       }
 
+    case EDIT_LIST:
+      console.log('Editing board')
+      return state
+
+    case DELETE_LIST:
+      console.log('Deleting board')
+      return state
+
     case ADD_VIDEO:
       const newVideo = action.payload
 
@@ -63,13 +97,13 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case EDIT_VIDEO:
-      const { editingVideo, editingPart } = action.payload
+      const { editingVideo, editingVideoPart } = action.payload
 
       return {
         ...state,
         videos: state.videos.map(video => {
           if (video === editingVideo) {
-            return Object.assign({}, video, editingPart)
+            return Object.assign({}, video, editingVideoPart)
           } else {
             return video
           }
