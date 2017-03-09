@@ -53,6 +53,13 @@ export default function(state = INITIAL_STATE, action) {
             } else {
               return board
             }
+          }),
+          videos: state.videos.map(video => {
+            if (video.board === editingBoard.slug) {
+              return Object.assign({}, video, { board: editingBoardPart.slug })
+            } else {
+              return video
+            }
           })
         }
       } else {
@@ -103,6 +110,13 @@ export default function(state = INITIAL_STATE, action) {
               }
             } else {
               return board
+            }
+          }),
+          videos: state.videos.map(video => {
+            if (video.list === editingList.slug) {
+              return Object.assign({}, video, { list: editingListPart.slug })
+            } else {
+              return video
             }
           })
         }
