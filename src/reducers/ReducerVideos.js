@@ -112,8 +112,18 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case DELETE_LIST:
-      console.log('Deleting board')
-      return state
+      const { deletingList, deletingListCurrentBoard } = action.payload
+
+      return {
+        ...state,
+        boards: state.boards.map(board => {
+          if (board === deletingListCurrentBoard) {
+            return { ...board, lists: board.lists.filter(list => {return list !== deletingList}) }
+          } else {
+            return board
+          }
+        })
+      }
 
     case ADD_VIDEO:
       const newVideo = action.payload

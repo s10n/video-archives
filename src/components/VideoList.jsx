@@ -64,7 +64,7 @@ class VideoList extends React.Component {
 
   onDeleteClick() {
     if (confirm(`Delete ${this.props.list.name}?`)) {
-      this.props.deleteList(this.props.list)
+      this.props.deleteList(this.props.list, this.props.currentBoard)
     }
   }
 

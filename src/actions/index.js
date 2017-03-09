@@ -48,8 +48,8 @@ export function editList(editingList, editingListPart, editingListCurrentBoard) 
   return { type: EDIT_LIST, payload: { editingList, editingListPart, editingListCurrentBoard } }
 }
 
-export function deleteList(deletingList) {
-  return { type: DELETE_LIST, payload: deletingList }
+export function deleteList(deletingList, deletingListCurrentBoard) {
+  return { type: DELETE_LIST, payload: { deletingList, deletingListCurrentBoard } }
 }
 
 export function addVideo(newVideo) {
