@@ -15,6 +15,14 @@
 	line-height: 1.25;
 }
 
+.BoardHeader .BtnTrash {
+	display: none;
+}
+
+.BoardHeader:hover .BtnTrash {
+	display: inline-block;
+}
+
 .BoardCanvas {
 	position: relative;
 }

@@ -84,13 +84,13 @@ class VideoList extends React.Component {
     return (
       <article className="VideoList card">
         {!this.state.isEditing ?
-          <header>
+          <header className="ListHeader">
             <h2
               className="ListName card-title"
               onClick={this.onNameClick}>
               {list.name}
             </h2>
-            <button className="btn-link" onClick={this.onDeleteClick}>🗑</button>
+            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
           </header> :
           <input
             className="ListNameInput card-title"
