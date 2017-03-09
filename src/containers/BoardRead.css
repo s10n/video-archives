@@ -4,6 +4,10 @@
 	height: 100%;
 }
 
+.BoardTitle {
+	display: inline-block;
+}
+
 .BoardTitleInput {
 	border: 0;
 	background-color: transparent;

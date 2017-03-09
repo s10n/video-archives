@@ -56,8 +56,12 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case DELETE_BOARD:
-      console.log('Deleting board')
-      return state
+      const deletingBoard = action.payload
+
+      return {
+        ...state,
+        boards: state.boards.filter(board => {return board !== deletingBoard})
+      }
 
     case ADD_LIST:
       const { newList, boardSlug } = action.payload

@@ -30,6 +30,7 @@ class BoardRead extends React.Component {
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
     this.onPressEnter = this.onPressEnter.bind(this)
+    this.onDeleteClick = this.onDeleteClick.bind(this)
   }
 
   onTitleClick() {
@@ -72,6 +73,17 @@ class BoardRead extends React.Component {
     }
   }
 
+  onDeleteClick() {
+    const currentBoard = _.find(this.props.videoStorage.boards, board => {
+      return board.slug === this.props.params.boardSlug
+    })
+
+    if (confirm(`Delete ${currentBoard.title}?`)) {
+      this.props.deleteBoard(currentBoard)
+      this.context.router.push('/')
+    }
+  }
+
   render() {
     const currentBoard = _.find(this.props.videoStorage.boards, board => {
       return board.slug === this.props.params.boardSlug
@@ -80,11 +92,14 @@ class BoardRead extends React.Component {
     return (
       <section className="BoardRead">
         {!this.state.isEditing ?
-          <h1
-            className="BoardTitle page-title"
-            onClick={this.onTitleClick}>
-            {currentBoard.title}
-          </h1> :
+          <header>
+            <h1
+              className="BoardTitle page-title"
+              onClick={this.onTitleClick}>
+              {currentBoard.title}
+            </h1>
+            <button className="btn-link" onClick={this.onDeleteClick}>🗑</button>
+          </header>:
           <input
             className="BoardTitleInput page-title"
             type="text"
