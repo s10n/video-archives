@@ -44,8 +44,8 @@ export function addList(newList, boardSlug) {
   return { type: ADD_LIST, payload: { newList, boardSlug } }
 }
 
-export function editList(editingList, editingListPart) {
-  return { type: EDIT_LIST, payload: { editingList, editingListPart } }
+export function editList(editingList, editingListPart, editingListCurrentBoard) {
+  return { type: EDIT_LIST, payload: { editingList, editingListPart, editingListCurrentBoard } }
 }
 
 export function deleteList(deletingList) {

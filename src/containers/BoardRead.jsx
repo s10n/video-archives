@@ -99,7 +99,7 @@ class BoardRead extends React.Component {
               {currentBoard.title}
             </h1>
             <button className="btn-link" onClick={this.onDeleteClick}>🗑</button>
-          </header>:
+          </header> :
           <input
             className="BoardTitleInput page-title"
             type="text"
@@ -116,7 +116,11 @@ class BoardRead extends React.Component {
             {currentBoard.lists.map(list => {
               return (
                 <div className="VideoWrapper" key={list.slug}>
-                  <VideoList list={list} videoList={this.props.videoStorage.videos} />
+                  <VideoList
+                    list={list}
+                    videoList={this.props.videoStorage.videos}
+                    currentBoard={currentBoard}
+                  />
                 </div>
               )
             })}

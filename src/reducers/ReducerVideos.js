@@ -44,15 +44,20 @@ export default function(state = INITIAL_STATE, action) {
     case EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
 
-      return {
-        ...state,
-        boards: state.boards.map(board => {
-          if (board === editingBoard) {
-            return Object.assign({}, board, editingBoardPart)
-          } else {
-            return board
-          }
-        })
+      if (!_.find(state.boards, board => {return board.slug === editingBoardPart.slug})) {
+        return {
+          ...state,
+          boards: state.boards.map(board => {
+            if (board === editingBoard) {
+              return Object.assign({}, board, editingBoardPart)
+            } else {
+              return board
+            }
+          })
+        }
+      } else {
+        console.log('FAIL: Board exists')
+        return state
       }
 
     case DELETE_BOARD:
@@ -85,8 +90,26 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case EDIT_LIST:
-      console.log('Editing board')
-      return state
+      const { editingList, editingListPart, editingListCurrentBoard } = action.payload
+
+      if (!_.find(editingListCurrentBoard.lists, list => {return list.slug === editingListPart.slug})) {
+        return {
+          ...state,
+          boards: state.boards.map(board => {
+            if (board === editingListCurrentBoard) {
+              return {
+                ...board,
+                lists: board.lists.map(list => {return list === editingList ? editingListPart : list})
+              }
+            } else {
+              return board
+            }
+          })
+        }
+      } else {
+        console.log('FAIL: List exists')
+        return state
+      }
 
     case DELETE_LIST:
       console.log('Deleting board')

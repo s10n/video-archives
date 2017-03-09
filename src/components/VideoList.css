@@ -8,6 +8,13 @@
 .ListName {
 	flex: 0 0 auto;
 	padding-bottom: 10px;
+	display: inline-block;
+}
+
+.ListNameInput {
+	border: 0;
+	line-height: 1.25;
+	padding-bottom: 10px;
 }
 
 .ListScroll {
