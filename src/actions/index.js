@@ -5,6 +5,7 @@ export const ADD_LIST = 'ADD_LIST'
 export const ADD_VIDEO = 'ADD_VIDEO'
 export const EDIT_VIDEO = 'EDIT_VIDEO'
 export const DELETE_VIDEO = 'DELETE_VIDEO'
+export const EMPTY_TRASH = 'EMPTY_TRASH'
 
 export function fetchStorage() {
   const localVideoStorage = localStorage.videoStorage
@@ -37,4 +38,8 @@ export function editVideo(editingVideo, editingPart) {
 
 export function deleteVideo(deletingVideo) {
   return { type: DELETE_VIDEO, payload: deletingVideo }
+}
+
+export function emptyTrash() {
+  return { type: EMPTY_TRASH }
 }

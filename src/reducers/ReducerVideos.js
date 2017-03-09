@@ -1,5 +1,13 @@
 import _ from 'lodash'
-import { FETCH_STORAGE, ADD_BOARD, ADD_LIST, ADD_VIDEO, EDIT_VIDEO, DELETE_VIDEO } from '../actions/index'
+import {
+  FETCH_STORAGE,
+  ADD_BOARD,
+  ADD_LIST,
+  ADD_VIDEO,
+  EDIT_VIDEO,
+  DELETE_VIDEO,
+  EMPTY_TRASH
+} from '../actions/index'
 
 const INITIAL_STATE = { boards: [], videos: [] }
 
@@ -74,6 +82,12 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         videos: state.videos.filter(video => {return video !== deletingVideo})
+      }
+
+    case EMPTY_TRASH:
+      return {
+        ...state,
+        videos: state.videos.filter(video => {return video.deleted !== true})
       }
 
     default:

@@ -74,12 +74,16 @@ class VideoItem extends React.Component {
           <date>{publishedAt.toLocaleString('en-US')}</date>
           <span hidden>{categoryTitle}</span>
           {/* TODO: if not video-add */}
+          {/* TODO: change list */}
           {!video.deleted ?
-            <button className="btn-link" onClick={this.onTrashClick}>🗑</button> :
-            <span>
+            <section>
+              <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
+            </section> :
+            <section>
               <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
+              &middot;
               <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
-            </span>
+            </section>
           }
         </section>
       </article>
