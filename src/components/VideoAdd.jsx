@@ -72,7 +72,7 @@ class VideoAdd extends React.Component {
 
   showFetchResult() {
     const videoId = this.state.videoId
-    const listVideoExists = _.find(
+    const existVideo = _.find(
       this.props.videoStorage.videos,
       video => {return video.data.id === videoId}
     )
@@ -83,10 +83,13 @@ class VideoAdd extends React.Component {
           <small>{ERROR_MESSAGE.charLength}</small>
         </p>
       )
-    } else if (listVideoExists) {
+    } else if (existVideo) {
+      /* TODO: If existVideo is in Trash, just recover it to current list */
       return (
         <p className="HelpBlock">
-          <small>{`${ERROR_MESSAGE.videoExists}: List '${listVideoExists.list}'`}</small>
+          <small>
+            {ERROR_MESSAGE.videoExists}: {!existVideo.deleted ? `List ${existVideo.list}` : 'Trash'}
+          </small>
         </p>
       )
     } else if (this.state.fetchResult === false) {
