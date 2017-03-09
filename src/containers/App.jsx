@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchStorage, pushStorage } from '../actions/index'
@@ -5,7 +6,9 @@ import 'normalize.css'
 import '../style/reboot.css'
 import '../style/type.css'
 import '../style/forms.css'
+import '../style/buttons.css'
 import '../style/card.css'
+import '../style/page.css'
 import './App.css'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
@@ -32,14 +35,15 @@ class Index extends React.Component {
   }
 
   render() {
-    const currentVideoStorage = this.props.videoStorage
+    const videoStorage = this.props.videoStorage
+    const trash = _.find(videoStorage.videos, video => {return video.deleted}) ? true : false
 
     return (
       <div className="AppContainer">
         <AppHeader />
 
         <section className="AppWrapper">
-          <AppSidebar boardsList={currentVideoStorage.boards} />
+          <AppSidebar boardsList={videoStorage.boards} trash={trash} />
           <main className="AppMain">{this.props.children}</main>
         </section>
       </div>

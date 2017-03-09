@@ -1,5 +1,13 @@
 import _ from 'lodash'
-import { FETCH_STORAGE, ADD_BOARD, ADD_LIST, ADD_VIDEO } from '../actions/index'
+import {
+  FETCH_STORAGE,
+  ADD_BOARD,
+  ADD_LIST,
+  ADD_VIDEO,
+  EDIT_VIDEO,
+  DELETE_VIDEO,
+  EMPTY_TRASH
+} from '../actions/index'
 
 const INITIAL_STATE = { boards: [], videos: [] }
 
@@ -17,8 +25,8 @@ export default function(state = INITIAL_STATE, action) {
 
       if (!_.find(state.boards, board => {return board.slug === newBoard.slug})) {
         return {
-          boards: [ ...state.boards, { name: newBoard.name, slug: newBoard.slug, lists: [] } ],
-          videos: state.videos
+          ...state,
+          boards: [ ...state.boards, { name: newBoard.name, slug: newBoard.slug, lists: [] } ]
         }
       } else {
         console.log('FAIL: Board exists')
@@ -47,11 +55,39 @@ export default function(state = INITIAL_STATE, action) {
       }
 
     case ADD_VIDEO:
-      const videoItem = action.payload
+      const newVideo = action.payload
 
       return {
-        boards: state.boards,
-        videos: [ ...state.videos, videoItem ]
+        ...state,
+        videos: [ ...state.videos, newVideo ]
+      }
+
+    case EDIT_VIDEO:
+      const { editingVideo, editingPart } = action.payload
+
+      return {
+        ...state,
+        videos: state.videos.map(video => {
+          if (video === editingVideo) {
+            return Object.assign({}, video, editingPart)
+          } else {
+            return video
+          }
+        })
+      }
+
+    case DELETE_VIDEO:
+      const deletingVideo = action.payload
+
+      return {
+        ...state,
+        videos: state.videos.filter(video => {return video !== deletingVideo})
+      }
+
+    case EMPTY_TRASH:
+      return {
+        ...state,
+        videos: state.videos.filter(video => {return video.deleted !== true})
       }
 
     default:

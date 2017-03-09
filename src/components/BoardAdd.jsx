@@ -54,7 +54,9 @@ class BoardAdd extends React.Component {
     const name = this.state.name.trim()
     const slug = name.toString().toLowerCase().replace(/\s+/g, '-')
 
-    if (name && slug) {
+    if (slug === 'trash') {
+      console.log('FAIL: Reserved board name')
+    } else if (name && slug) {
       const newBoard = { name, slug }
       this.props.addBoard(newBoard)
       this.context.router.push(slug)

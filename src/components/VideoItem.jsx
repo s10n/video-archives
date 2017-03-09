@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { editVideo, deleteVideo } from '../actions/index'
 import './VideoItem.css'
 
 const CATEGORY_LIST = [
@@ -20,34 +22,69 @@ const CATEGORY_LIST = [
 ]
 
 const propTypes = {
-  video: React.PropTypes.object.isRequired
+  video: React.PropTypes.object.isRequired,
+  editVideo: React.PropTypes.func.isRequired,
+  deleteVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  video: {}
+  video: {},
+  editVideo: () => console.log('editVideo not defined'),
+  deleteVideo: () => console.log('deleteVideo not defined')
 }
 
 class VideoItem extends React.Component {
+  constructor(props) {
+    super(props)
+    this.onTrashClick = this.onTrashClick.bind(this)
+    this.onRecoverClick = this.onRecoverClick.bind(this)
+    this.onDeleteClick = this.onDeleteClick.bind(this)
+  }
+
+  onTrashClick() {
+    this.props.editVideo(this.props.video, { deleted: true })
+  }
+
+  onRecoverClick() {
+    this.props.editVideo(this.props.video, { deleted: false })
+  }
+
+  onDeleteClick() {
+    this.props.deleteVideo(this.props.video)
+  }
+
   render() {
-    const videoSnippet = this.props.video.data.snippet
-    const videoUrl = `https://www.youtube.com/watch?v=${this.props.video.data.id}`
-    const publishedAt = new Date(videoSnippet.publishedAt)
+    const video = this.props.video
+    const url = `https://www.youtube.com/watch?v=${video.data.id}`
+    const publishedAt = new Date(video.data.snippet.publishedAt)
     const categoryTitle = CATEGORY_LIST.find(category => {
-      return category.id === videoSnippet.categoryId
-    }).title
+      return category.id === video.data.snippet.categoryId
+    }).title.en_US
 
     return (
       <article className="VideoItem">
         {/* TODO: Change thumbnail ratio to 16:9 */}
-        <img src={videoSnippet.thumbnails.high.url} role="presentation" height="120" />
+        <img src={video.data.snippet.thumbnails.high.url} role="presentation" height="120" />
 
         <h3 className="VideoTitle">
-          <a href={videoUrl} target="_blank">{videoSnippet.title}</a>
+          <a href={url} target="_blank">{video.data.snippet.title}</a>
         </h3>
 
         <section className="VideoMeta">
-          <date>{publishedAt.toLocaleString('en-US')} </date>
-          <span hidden>{categoryTitle.en_US}</span>
+          <date>{publishedAt.toLocaleString('en-US')}</date>
+          <span hidden>{categoryTitle}</span>
+          {/* TODO: if not video-add */}
+          {/* TODO: change list */}
+          {!video.deleted ?
+            <section>
+              <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
+            </section> :
+            <section>
+              <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
+              &middot;
+              <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
+            </section>
+          }
         </section>
       </article>
     )
@@ -57,4 +94,4 @@ class VideoItem extends React.Component {
 VideoItem.propTypes = propTypes
 VideoItem.defaultProps = defaultProps
 
-export default VideoItem
+export default connect(null, { editVideo, deleteVideo })(VideoItem)
