@@ -4,6 +4,12 @@
 	height: 100%;
 }
 
+.BoardTitleInput {
+	border: 0;
+	background-color: transparent;
+	font-size: 1.5rem;
+}
+
 .BoardCanvas {
 	position: relative;
 }
