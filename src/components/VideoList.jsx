@@ -69,10 +69,11 @@ class VideoList extends React.Component {
   }
 
   render() {
-    const listName = this.props.list.name
+    const board = this.props.currentBoard
+    const list = this.props.list
     const mapToComponent = vidoes => {
       return vidoes.map(video => {
-        if (video.list === listName && !video.deleted) {
+        if (video.board === board.slug && video.list === list.slug && !video.deleted) {
           return <VideoItem video={video} key={video.data.id} />
         } else {
           return false
@@ -87,7 +88,7 @@ class VideoList extends React.Component {
             <h2
               className="ListName card-title"
               onClick={this.onNameClick}>
-              {listName}
+              {list.name}
             </h2>
             <button className="btn-link" onClick={this.onDeleteClick}>🗑</button>
           </header> :
@@ -107,7 +108,7 @@ class VideoList extends React.Component {
           {mapToComponent(this.props.videoList)}
         </div>
 
-        <VideoAdd listName={listName} />
+        <VideoAdd boardSlug={board.slug} listSlug={list.slug} />
       </article>
     )
   }

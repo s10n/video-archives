@@ -21,13 +21,15 @@ const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  listName: React.PropTypes.string,
+  boardSlug: React.PropTypes.string,
+  listSlug: React.PropTypes.string,
   videoStorage: React.PropTypes.object.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  listName: '',
+  boardSlug: '',
+  listSlug: '',
   videoStorage: {},
   addVideo: () => console.log('addVideo not defined')
 }
@@ -38,7 +40,7 @@ class VideoAdd extends React.Component {
     this.state = {
       videoId: '',
       fetchResult: null,
-      video: { list: this.props.listName, source: 'YouTube', data: {} }
+      video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
     }
     this.onInputChange = this.onInputChange.bind(this)
   }
@@ -58,15 +60,19 @@ class VideoAdd extends React.Component {
   }
 
   onPressEnter() {
-    if (this.state.video.list && !_.isEmpty(this.state.video.data)) {
+    const videoId = this.state.videoId
+    const existVideo = _.find(
+      this.props.videoStorage.videos,
+      video => {return video.data.id === videoId}
+    )
+
+    if (!existVideo && !_.isEmpty(this.state.video.data)) {
       this.props.addVideo(this.state.video)
       this.setState({
         videoId: '',
         fetchResult: null,
         video: { ...this.state.video, data: {} }
       })
-    } else {
-      console.log('List name is required.') // TODO
     }
   }
 
@@ -88,7 +94,8 @@ class VideoAdd extends React.Component {
       return (
         <p className="HelpBlock">
           <small>
-            {ERROR_MESSAGE.videoExists}: {!existVideo.deleted ? `List ${existVideo.list}` : 'Trash'}
+            {ERROR_MESSAGE.videoExists}:
+            {!existVideo.deleted ? `${existVideo.board} - ${existVideo.list}` : 'Trash'}
           </small>
         </p>
       )
@@ -123,12 +130,6 @@ class VideoAdd extends React.Component {
           </section>
         }
 
-        <input
-          type="hidden"
-          onChange={event => this.setState({ listName: event.target.value })}
-          value={this.state.video.list}
-          placeholder="List name"
-        />
         <input
           type="text"
           onChange={this.onInputChange}

@@ -80,7 +80,7 @@ class VideoItem extends React.Component {
               <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
             </section> :
             <section>
-              <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.list}</button>
+              <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.board} - {video.list}</button>
               &middot;
               <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
             </section>
