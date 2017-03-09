@@ -9,6 +9,6 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={FrontPage} />
     <Route path="trash" component={PageTrash} />
-    <Route path=":slug" component={BoardRead} />
+    <Route path=":boardSlug" component={BoardRead} />
   </Route>
 )

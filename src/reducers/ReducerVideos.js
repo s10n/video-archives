@@ -26,7 +26,7 @@ export default function(state = INITIAL_STATE, action) {
       if (!_.find(state.boards, board => {return board.slug === newBoard.slug})) {
         return {
           ...state,
-          boards: [ ...state.boards, { name: newBoard.name, slug: newBoard.slug, lists: [] } ]
+          boards: [ ...state.boards, { title: newBoard.title, slug: newBoard.slug, lists: [] } ]
         }
       } else {
         console.log('FAIL: Board exists')
@@ -43,7 +43,7 @@ export default function(state = INITIAL_STATE, action) {
           ...state,
           boards: state.boards.map(board => {
             if (board === currentBoard) {
-              return { name: board.name, slug: board.slug, lists: [ ...board.lists, newList ] }
+              return { title: board.title, slug: board.slug, lists: [ ...board.lists, newList ] }
             } else {
               return board
             }

@@ -18,7 +18,7 @@ class AppSidebar extends React.Component {
     return (
       <nav className="AppSidebar">
         {this.props.boardsList.map(board => {return (
-          <Link activeClassName="active" to={board.slug} key={board.slug}>{board.name}</Link>
+          <Link activeClassName="active" to={board.slug} key={board.slug}>{board.title}</Link>
         )})}
 
         {this.props.trash &&
