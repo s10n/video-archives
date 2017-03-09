@@ -77,12 +77,18 @@ class VideoItem extends React.Component {
           {/* TODO: change list */}
           {!video.deleted ?
             <section>
-              <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
+              <button className="btn-link" onClick={this.onTrashClick}>
+                🗑
+              </button>
             </section> :
             <section>
-              <button className="btn-link" onClick={this.onRecoverClick}>Recover to {video.board} - {video.list}</button>
+              <button className="btn-link" onClick={this.onRecoverClick}>
+                Recover {video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}
+              </button>
               &middot;
-              <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
+              <button className="btn-link" onClick={this.onDeleteClick}>
+                Delete
+              </button>
             </section>
           }
         </section>

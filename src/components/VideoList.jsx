@@ -103,7 +103,6 @@ class VideoList extends React.Component {
           />
         }
 
-
         <div className="ListScroll">
           {mapToComponent(this.props.videoList)}
         </div>
