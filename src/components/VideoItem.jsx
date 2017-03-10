@@ -52,9 +52,9 @@ class VideoItem extends React.Component {
     const url = `https://www.youtube.com/watch?v=${video.data.id}`
     const publishedAt = new Date(video.data.snippet.publishedAt)
 
+    // TODO: Change thumbnail ratio to 16:9
     return (
       <article className="VideoItem">
-        {/* TODO: Change thumbnail ratio to 16:9 */}
         <img src={video.data.snippet.thumbnails.high.url} role="presentation" height="120" />
 
         <h3 className="VideoTitle">

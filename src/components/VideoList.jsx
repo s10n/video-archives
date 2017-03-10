@@ -39,16 +39,16 @@ class VideoList extends React.Component {
       editingListPart: { ...this.state.editingListPart, name: this.props.list.name }
     })
 
-    // this.listNameInput.focus() // It doesn't work
+    // TODO: focus() on <input>
   }
 
   onInputBlur() {
-    this.setState({ ...this.state, isEditing: false })
+    this.setState({ isEditing: false })
   }
 
   onInputChange(event) {
     const name = event.target.value
-    this.setState({ ...this.state, editingListPart: { ...this.state.editingListPart, name }})
+    this.setState({ editingListPart: { ...this.state.editingListPart, name }})
   }
 
   onPressEnter() {
@@ -57,7 +57,7 @@ class VideoList extends React.Component {
 
     if (name && slug) {
       this.props.editList(this.props.list, { name, slug }, this.props.currentBoard)
-      this.setState({ ...this.state, isEditing: false })
+      this.setState({ isEditing: false })
     } else {
       console.log('List name is required')
     }

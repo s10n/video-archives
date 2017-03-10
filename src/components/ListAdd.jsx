@@ -23,7 +23,7 @@ class ListAdd extends React.Component {
 
   onInputChange(event) {
     const name = event.target.value
-    this.setState({ ...this.state, name })
+    this.setState({ name })
   }
 
   onPressEnter() {

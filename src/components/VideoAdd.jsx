@@ -60,9 +60,9 @@ class VideoAdd extends React.Component {
     }
 
     const videoUri = event.target.value
-    this.setState({ videoUri: videoUri })
+    this.setState({ videoUri })
 
-    // Check URI length
+    /* Check URI length */
     let videoId = ''
     if (videoUri.length === API_INFO.videoIdLength) {
       videoId = videoUri
@@ -78,7 +78,7 @@ class VideoAdd extends React.Component {
       }
     }
 
-    // Find duplications
+    /* Find duplications */
     let existVideo = ''
     if (videoId) {
       existVideo = _.find(
@@ -88,7 +88,7 @@ class VideoAdd extends React.Component {
       this.setState({ errorCode: 'videoExists', existVideo })
     }
 
-    // Fetch video
+    /* Fetch video */
     if (videoId && !existVideo) {
       this.setState({ errorCode: 'fetching' })
 
@@ -105,7 +105,6 @@ class VideoAdd extends React.Component {
     if (this.state.errorCode === 'success') {
       this.props.addVideo(this.state.video)
       this.setState({
-        ...this.state,
         videoUri: '',
         videoId: '',
         errorCode: null,

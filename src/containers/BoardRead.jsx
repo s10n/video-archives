@@ -43,16 +43,16 @@ class BoardRead extends React.Component {
       editingBoardPart: { ...this.state.editingBoardPart, title: currentBoard.title }
     })
 
-    // this.boardTitleInput.focus() // It doesn't work
+    // TODO: focus() on <input>
   }
 
   onInputBlur() {
-    this.setState({ ...this.state, isEditing: false })
+    this.setState({ isEditing: false })
   }
 
   onInputChange(event) {
     const title = event.target.value
-    this.setState({ ...this.state, editingBoardPart: { ...this.state.editingBoardPart, title }})
+    this.setState({ editingBoardPart: { ...this.state.editingBoardPart, title }})
   }
 
   onPressEnter() {
@@ -66,7 +66,7 @@ class BoardRead extends React.Component {
       console.log('FAIL: Reserved board title')
     } else if (title && slug) {
       this.props.editBoard(currentBoard, { title, slug })
-      this.setState({ ...this.state, isEditing: false })
+      this.setState({ isEditing: false })
       this.context.router.push(slug)
     } else {
       console.log('Board title is required')
