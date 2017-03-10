@@ -116,7 +116,9 @@ class BoardRead extends React.Component {
             {
               _.find(
                 this.props.videoStorage.videos,
-                video => {return video.board === currentBoard.title && !video.list}
+                video => {
+                  return video.board === currentBoard.title && !video.list && !video.deleted
+                }
               ) &&
               <div className="VideoWrapper">
                 <VideoList
