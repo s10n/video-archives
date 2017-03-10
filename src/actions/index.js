@@ -1,4 +1,6 @@
 export const FETCH_STORAGE = 'FETCH_STORAGE'
+export const IMPORT_STORAGE = 'IMPORT_STORAGE'
+export const EMPTY_STORAGE = 'EMPTY_STORAGE'
 export const PUSH_STORAGE = 'PUSH_STORAGE'
 
 export const ADD_BOARD = 'ADD_BOARD'
@@ -17,8 +19,16 @@ export const EMPTY_TRASH = 'EMPTY_TRASH'
 
 export function fetchStorage() {
   const localVideoStorage = localStorage.videoStorage
-  const payload = localVideoStorage ? JSON.parse(localVideoStorage) : null
-  return { type: FETCH_STORAGE, payload: payload }
+  const storage = localVideoStorage ? JSON.parse(localVideoStorage) : null
+  return { type: FETCH_STORAGE, payload: storage }
+}
+
+export function importStorage() {
+  return { type: IMPORT_STORAGE }
+}
+
+export function emptyStorage() {
+  return { type: EMPTY_STORAGE }
 }
 
 export function pushStorage(currentVideoStorage, prevVideoStorage) {

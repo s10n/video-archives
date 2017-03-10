@@ -1,7 +1,24 @@
+import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchStorage, importStorage, emptyStorage } from '../actions/index'
 import './PageFront.css'
 
 class PageFront extends React.Component {
+  constructor (props) {
+    super(props)
+    this.handleImportClick = this.handleImportClick.bind(this)
+    this.handleEmptyClick = this.handleEmptyClick.bind(this)
+  }
+
+  handleImportClick () {
+    confirm(`Import storage?`) && this.props.importStorage()
+  }
+
+  handleEmptyClick () {
+    confirm(`Empty storage?`) && this.props.emptyStorage()
+  }
+
   render() {
     return (
       <article className="Page">
@@ -13,14 +30,20 @@ class PageFront extends React.Component {
           <div className="PageContentInner">
             <article className="Card">
               <div className="CardScroll">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                  consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+                <div className="Paragraph">
+                  <p>
+                    Video Archives is an application for managing videos you like.
+                  </p>
+
+                  <ol>
+                    <li>Create new board to start</li>
+                    <li>
+                      Or just import sample data to look around<br />
+                      <button onClick={this.handleImportClick}>Import sample</button>
+                      <button onClick={this.handleEmptyClick}>Empty storage</button>
+                    </li>
+                  </ol>
+                </div>
               </div>
             </article>
           </div>
@@ -30,4 +53,8 @@ class PageFront extends React.Component {
   }
 }
 
-export default PageFront
+function mapStateToProps(state) {
+  return { videoStorage: state.videoStorage }
+}
+
+export default connect(mapStateToProps, { fetchStorage, importStorage, emptyStorage })(PageFront)
