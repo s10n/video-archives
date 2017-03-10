@@ -44,7 +44,7 @@ class ListAdd extends React.Component {
   render() {
     return (
       <input
-        className="ListAddInput card-title"
+        className="CardTitle"
         onChange={this.onInputChange}
         onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
         value={this.state.name}

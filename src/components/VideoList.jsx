@@ -72,6 +72,38 @@ class VideoList extends React.Component {
   render() {
     const board = this.props.currentBoard
     const list = this.props.list
+    const videoList = this.props.videoList
+
+    const VideoHeader = list => {
+      if (!this.state.isEditing) {
+        return (
+          <header className="CardHeader ListHeader">
+            <h2
+              className="CardTitle ListName"
+              onClick={!_.isEmpty(list) && this.onNameClick}>
+              {list.name || '📥'}
+            </h2>
+            {!_.isEmpty(list) &&
+              <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+            }
+          </header>
+        )
+      } else {
+        return (
+          <header className="CardHeader">
+            <input
+              className="CardTitle ListName"
+              type="text"
+              onBlur={this.onInputBlur}
+              onChange={this.onInputChange}
+              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+              value={this.state.editingListPart.name}
+              ref={input => {this.listNameInput = input}}
+            />
+          </header>
+        )
+      }
+    }
 
     const listScroll = vidoes => {
       return vidoes.map(video => {
@@ -87,41 +119,12 @@ class VideoList extends React.Component {
       })
     }
 
-    const VideoHeader = list => {
-      if (!this.state.isEditing) {
-        return (
-          <header className="ListHeader">
-            <h2
-              className="ListName card-title"
-              onClick={!_.isEmpty(list) && this.onNameClick}>
-              {list.name || '📥'}
-            </h2>
-            {!_.isEmpty(list) && <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>}
-          </header>
-        )
-      } else {
-        return (
-          <header className="ListHeader">
-            <input
-              className="ListNameInput card-title"
-              type="text"
-              onBlur={this.onInputBlur}
-              onChange={this.onInputChange}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.editingListPart.name}
-              ref={input => {this.listNameInput = input}}
-            />
-          </header>
-        )
-      }
-    }
-
     return (
-      <article className="VideoList card">
+      <article className="Card">
         {VideoHeader(list)}
 
-        <div className="ListScroll">
-          {listScroll(this.props.videoList)}
+        <div className="CardScroll">
+          {listScroll(videoList)}
         </div>
 
         <VideoAdd boardSlug={board.slug} listSlug={list.slug} />

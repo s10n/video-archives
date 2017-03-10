@@ -1,13 +1,8 @@
-.VideoAdd {
+.CardScroll:not(:empty) + .VideoAdd {
 	margin-top: 10px;
 }
 
-:empty + .VideoAdd {
-	margin-top: 0;
-}
-
 .VideoAdd input {
-	border: 0;
 	padding: 10px 15px;
 	width: 100%;
 }

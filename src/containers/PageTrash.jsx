@@ -41,19 +41,22 @@ class PageTrash extends React.Component {
     }
 
     return (
-      <section className="BoardRead">
-        <h1 className="page-title">Trash</h1>
-        <main className="BoardCanvas page-content">
-          <div className="BoardScroll">
-              <section className="VideoList card">
-                <header className="card-header" style={{ textAlign: 'right' }}>
-                  <button className="btn-link btn-small" onClick={this.onEmptyClick}>Empty</button>
-                </header>
+      <section className="Page">
+        <header className="PageHeader">
+          <h1 className="PageTitle">Trash</h1>
+        </header>
 
-                <section className="ListScroll">
-                  {mapToComponent(this.props.videoStorage.videos)}
-                </section>
-              </section>
+        <main className="PageContent">
+          <div className="PageContentInner">
+            <article className="Card">
+              <header className="CardHeader" style={{ textAlign: 'right' }}>
+                <button className="btn-link btn-small" onClick={this.onEmptyClick}>Empty</button>
+              </header>
+
+              <div className="CardScroll">
+                {mapToComponent(this.props.videoStorage.videos)}
+              </div>
+            </article>
           </div>
         </main>
       </section>

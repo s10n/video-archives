@@ -90,29 +90,32 @@ class BoardRead extends React.Component {
     })
 
     return (
-      <section className="BoardRead">
+      <section className="Page">
         {!this.state.isEditing ?
-          <header className="BoardHeader">
+          <header className="PageHeader BoardHeader">
             <h1
-              className="BoardTitle page-title"
+              className="PageTitle BoardTitle"
               onClick={this.onTitleClick}>
               {currentBoard.title}
             </h1>
             <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
-          </header> :
-          <input
-            className="BoardTitleInput page-title"
-            type="text"
-            onBlur={this.onInputBlur}
-            onChange={this.onInputChange}
-            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-            value={this.state.editingBoardPart.title}
-            ref={input => {this.boardTitleInput = input}}
-          />
+          </header>
+          :
+          <header className="PageHeader BoardHeader">
+            <input
+              className="CardTitle BoardTitle h1"
+              type="text"
+              onBlur={this.onInputBlur}
+              onChange={this.onInputChange}
+              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+              value={this.state.editingBoardPart.title}
+              ref={input => {this.boardTitleInput = input}}
+            />
+          </header>
         }
 
-        <main className="BoardCanvas page-content">
-          <div className="BoardScroll">
+        <main className="PageContent">
+          <div className="PageContentInner BoardScroll">
             {
               _.find(
                 this.props.videoStorage.videos,
@@ -141,8 +144,10 @@ class BoardRead extends React.Component {
             })}
 
             <div className="VideoWrapper">
-              <article className="VideoList card">
-                <ListAdd boardSlug={currentBoard.slug} />
+              <article className="Card">
+                <header className="CardHeader">
+                  <ListAdd boardSlug={currentBoard.slug} />
+                </header>
               </article>
             </div>
           </div>
