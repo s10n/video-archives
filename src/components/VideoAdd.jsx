@@ -83,7 +83,7 @@ class VideoAdd extends React.Component {
       video => {return video.data.id === videoId}
     )
 
-    if (videoId.length !== API_INFO.videoIdLength) {
+    if (videoId.length && videoId.length !== API_INFO.videoIdLength) {
       return (
         <p className="HelpBlock">
           <small>{ERROR_MESSAGE.charLength}</small>

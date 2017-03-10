@@ -43,7 +43,7 @@ class VideoItem extends React.Component {
   }
 
   onMoveClick() {
-    const list = prompt(`Type a name of list`)
+    const list = prompt(`Type a slug of list`)
 
     if (list) {
       this.props.editVideo(this.props.video, { list: list })
@@ -55,7 +55,8 @@ class VideoItem extends React.Component {
   }
 
   onRecoverClick() {
-    this.props.editVideo(this.props.video, { deleted: false })
+    const board = this.props.video.board || prompt(`Type a slug of board`)
+    this.props.editVideo(this.props.video, { board, deleted: false })
   }
 
   onDeleteClick() {

@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { editList, deleteList } from '../actions/index'
@@ -71,9 +72,14 @@ class VideoList extends React.Component {
   render() {
     const board = this.props.currentBoard
     const list = this.props.list
-    const mapToComponent = vidoes => {
+
+    const listScroll = vidoes => {
       return vidoes.map(video => {
-        if (video.board === board.slug && video.list === list.slug && !video.deleted) {
+        const condition = video.board === board.slug &&
+          (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
+          !video.deleted
+
+        if (condition) {
           return <VideoItem video={video} key={video.data.id} />
         } else {
           return false
@@ -81,30 +87,41 @@ class VideoList extends React.Component {
       })
     }
 
-    return (
-      <article className="VideoList card">
-        {!this.state.isEditing ?
+    const VideoHeader = list => {
+      if (!this.state.isEditing) {
+        return (
           <header className="ListHeader">
             <h2
               className="ListName card-title"
-              onClick={this.onNameClick}>
-              {list.name}
+              onClick={!_.isEmpty(list) && this.onNameClick}>
+              {list.name || '📥'}
             </h2>
-            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
-          </header> :
-          <input
-            className="ListNameInput card-title"
-            type="text"
-            onBlur={this.onInputBlur}
-            onChange={this.onInputChange}
-            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-            value={this.state.editingListPart.name}
-            ref={input => {this.listNameInput = input}}
-          />
-        }
+            {!_.isEmpty(list) && <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>}
+          </header>
+        )
+      } else {
+        return (
+          <header className="ListHeader">
+            <input
+              className="ListNameInput card-title"
+              type="text"
+              onBlur={this.onInputBlur}
+              onChange={this.onInputChange}
+              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+              value={this.state.editingListPart.name}
+              ref={input => {this.listNameInput = input}}
+            />
+          </header>
+        )
+      }
+    }
+
+    return (
+      <article className="VideoList card">
+        {VideoHeader(list)}
 
         <div className="ListScroll">
-          {mapToComponent(this.props.videoList)}
+          {listScroll(this.props.videoList)}
         </div>
 
         <VideoAdd boardSlug={board.slug} listSlug={list.slug} />
