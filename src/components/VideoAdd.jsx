@@ -127,7 +127,7 @@ class VideoAdd extends React.Component {
       return (
         <div>
           <p><small className="strong">Press enter key to add this video &crarr;</small></p>
-          <VideoItem video={this.state.video} />
+          <VideoItem video={this.state.video} addingVideo />
         </div>
       )
     } else if (errorCode) {

@@ -5,12 +5,14 @@ import './VideoItem.css'
 
 const propTypes = {
   video: React.PropTypes.object.isRequired,
+  addingVideo: React.PropTypes.bool,
   editVideo: React.PropTypes.func.isRequired,
   deleteVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   video: {},
+  addingVideo: false,
   editVideo: () => console.log('editVideo not defined'),
   deleteVideo: () => console.log('deleteVideo not defined')
 }
@@ -61,28 +63,29 @@ class VideoItem extends React.Component {
 
         <section className="VideoMeta">
           <date>{publishedAt.toLocaleString('en-US')}</date>
-          {/* TODO: if not video-add */}
           {
-            !video.deleted ?
-              <section>
-                <button className="btn-link" onClick={this.onMoveClick}>
-                  Move
-                </button>
-                &middot;
-                <button className="btn-link" onClick={this.onTrashClick}>
-                  🗑
-                </button>
-              </section>
-            :
-              <section>
-                <button className="btn-link" onClick={this.onRecoverClick}>
-                  Recover {video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}
-                </button>
-                &middot;
-                <button className="btn-link" onClick={this.onDeleteClick}>
-                  Delete
-                </button>
-              </section>
+            !this.props.addingVideo && (
+              !video.deleted ?
+                <section>
+                  <button className="btn-link" onClick={this.onMoveClick}>
+                    Move
+                  </button>
+                  &middot;
+                  <button className="btn-link" onClick={this.onTrashClick}>
+                    🗑
+                  </button>
+                </section>
+              :
+                <section>
+                  <button className="btn-link" onClick={this.onRecoverClick}>
+                    Recover {video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}
+                  </button>
+                  &middot;
+                  <button className="btn-link" onClick={this.onDeleteClick}>
+                    Delete
+                  </button>
+                </section>
+            )
           }
         </section>
       </article>
