@@ -113,6 +113,19 @@ class BoardRead extends React.Component {
 
         <main className="BoardCanvas page-content">
           <div className="BoardScroll">
+            {
+              _.find(
+                this.props.videoStorage.videos,
+                video => {return video.board === currentBoard.title && !video.list}
+              ) &&
+              <div className="VideoWrapper">
+                <VideoList
+                  videoList={this.props.videoStorage.videos}
+                  currentBoard={currentBoard}
+                />
+              </div>
+            }
+
             {currentBoard.lists.map(list => {
               return (
                 <div className="VideoWrapper" key={list.slug}>
