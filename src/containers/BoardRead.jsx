@@ -37,16 +37,18 @@ class BoardRead extends React.Component {
     const currentBoard = _.find(this.props.videoStorage.boards, board => {
       return board.slug === this.props.params.boardSlug
     })
-    const title = currentBoard.title
-    const slug = currentBoard.slug
+    const { title, slug } = currentBoard
 
     this.setState({ isEditing: true, title, slug })
-
-    // TODO: focus() on <input>
   }
 
   onInputBlur() {
-    this.setState({ isEditing: false })
+    const currentBoard = _.find(this.props.videoStorage.boards, board => {
+      return board.slug === this.props.params.boardSlug
+    })
+    const { title, slug } = currentBoard
+
+    this.setState({ isEditing: false, title, slug, error: null })
   }
 
   onInputChange(event) {
@@ -77,7 +79,7 @@ class BoardRead extends React.Component {
     if (title && slug && !error) {
       this.props.editBoard(currentBoard, { title, slug })
       this.context.router.push(slug)
-      this.setState({ isEditing: false })
+      this.boardTitleInput.blur()
     }
   }
 
@@ -99,32 +101,23 @@ class BoardRead extends React.Component {
 
     return (
       <section className="Page">
-        {!this.state.isEditing ?
-          <header className="PageHeader BoardHeader">
-            <h1
-              className="PageTitle BoardTitle"
-              onClick={this.onTitleClick}>
-              {currentBoard.title}
-            </h1>
-            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
-          </header>
-          :
-          <header className="PageHeader BoardHeader">
-            <input
-              className="CardTitle BoardTitle h1"
-              type="text"
-              onBlur={this.onInputBlur}
-              onChange={this.onInputChange}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.title}
-              ref={input => {this.boardTitleInput = input}}
-            />
+        <header className="PageHeader BoardHeader">
+          <input
+            className="PageTitle BoardTitle h1"
+            type="text"
+            onFocus={this.onTitleClick}
+            onBlur={this.onInputBlur}
+            onChange={this.onInputChange}
+            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+            value={!this.state.isEditing ? currentBoard.title : this.state.title}
+            ref={input => {this.boardTitleInput = input}}
+          />
 
-            {this.state.error &&
-              <small>{this.state.error}</small>
-            }
-          </header>
-        }
+          <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+          {this.state.error &&
+            <small>{this.state.error}</small>
+          }
+        </header>
 
         <main className="PageContent">
           <div className="PageContentInner BoardScroll">

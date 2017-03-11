@@ -34,16 +34,15 @@ class VideoList extends React.Component {
   }
 
   onNameClick() {
-    const name = this.props.list.name
-    const slug = this.props.list.slug
+    const { name, slug } = this.props.list
 
     this.setState({ isEditing: true, name, slug })
-
-    // TODO: focus() on <input>
   }
 
   onInputBlur() {
-    this.setState({ isEditing: false })
+    const { name, slug } = this.props.list
+
+    this.setState({ isEditing: false, name, slug, error: null })
   }
 
   onInputChange(event) {
@@ -65,7 +64,7 @@ class VideoList extends React.Component {
 
     if (name && slug && !error) {
       this.props.editList(list, { name, slug }, this.props.currentBoard)
-      this.setState({ isEditing: false })
+      this.listNameInput.blur()
     }
   }
 
@@ -83,38 +82,29 @@ class VideoList extends React.Component {
     const videoList = this.props.videoList
 
     const VideoHeader = list => {
-      if (!this.state.isEditing) {
-        return (
-          <header className="CardHeader ListHeader">
-            <h2
-              className="CardTitle ListName"
-              onClick={!_.isEmpty(list) && this.onNameClick}>
-              {list.name || '📥'}
-            </h2>
-            {!_.isEmpty(list) &&
-              <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
-            }
-          </header>
-        )
-      } else {
-        return (
-          <header className="CardHeader">
-            <input
-              className="CardTitle ListName"
-              type="text"
-              onBlur={this.onInputBlur}
-              onChange={this.onInputChange}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.name}
-              ref={input => {this.listNameInput = input}}
-            />
+      return (
+        <header className="CardHeader ListHeader">
+          <input
+            className="CardTitle ListName"
+            type="text"
+            onFocus={!_.isEmpty(list) && this.onNameClick}
+            onBlur={this.onInputBlur}
+            onChange={this.onInputChange}
+            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+            value={!this.state.isEditing ? (list.name || '📥') : this.state.name}
+            ref={input => {this.listNameInput = input}}
+            readOnly={_.isEmpty(list)}
+          />
 
-            {this.state.error &&
-              <small>{this.state.error}</small>
-            }
-          </header>
-        )
-      }
+          {!_.isEmpty(list) &&
+            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+          }
+
+          {this.state.error &&
+            <small>{this.state.error}</small>
+          }
+        </header>
+      )
     }
 
     const listScroll = vidoes => {
