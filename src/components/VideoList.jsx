@@ -25,7 +25,7 @@ const defaultProps = {
 class VideoList extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { isEditing: false, editingListPart: { name: '', slug: '' } }
+    this.state = { isEditing: false, name: '', slug: '', error: null }
     this.onNameClick = this.onNameClick.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
@@ -37,10 +37,7 @@ class VideoList extends React.Component {
     const name = this.props.list.name
     const slug = this.props.list.slug
 
-    this.setState({
-      isEditing: true,
-      editingListPart: { ...this.state.editingListPart, name, slug }
-    })
+    this.setState({ isEditing: true, name, slug })
 
     // TODO: focus() on <input>
   }
@@ -52,15 +49,21 @@ class VideoList extends React.Component {
   onInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-    this.setState({ editingListPart: { ...this.state.editingListPart, name, slug }})
+    const listExists = _.find(
+      this.props.currentBoard.lists,
+      list => {return list.slug === slug && list.slug !== this.props.list.slug}
+    )
+    const error = listExists && 'List exists'
+
+    this.setState({ name, slug, error })
   }
 
   onPressEnter() {
     const list = this.props.list
-    const name = this.state.editingListPart.name.trim()
-    const slug = this.state.editingListPart.slug
+    const name = this.state.name.trim()
+    const { slug, error } = this.state
 
-    if (name && slug) {
+    if (name && slug && !error) {
       this.props.editList(list, { name, slug }, this.props.currentBoard)
       this.setState({ isEditing: false })
     }
@@ -69,7 +72,7 @@ class VideoList extends React.Component {
   onDeleteClick() {
     const list = this.props.list
 
-    if (confirm(`Delete ${list.name}?`)) {
+    if (confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
       this.props.deleteList(list, this.props.currentBoard)
     }
   }
@@ -102,9 +105,13 @@ class VideoList extends React.Component {
               onBlur={this.onInputBlur}
               onChange={this.onInputChange}
               onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.editingListPart.name}
+              value={this.state.name}
               ref={input => {this.listNameInput = input}}
             />
+
+            {this.state.error &&
+              <small>{this.state.error}</small>
+            }
           </header>
         )
       }
@@ -112,7 +119,8 @@ class VideoList extends React.Component {
 
     const listScroll = vidoes => {
       return vidoes.map(video => {
-        const condition = video.board === board.slug &&
+        const condition =
+          video.board === board.slug &&
           (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
           !video.deleted
 

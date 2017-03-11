@@ -25,11 +25,7 @@ const INITIAL_STATE = { boards: [], videos: [] }
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case FETCH_STORAGE:
-      if (action.payload) {
-        return action.payload
-      } else {
-        return INITIAL_STATE
-      }
+      return action.payload || INITIAL_STATE
 
     case IMPORT_STORAGE:
       return SAMPLE_STORAGE
@@ -38,42 +34,24 @@ export default function(state = INITIAL_STATE, action) {
       return INITIAL_STATE
 
     case ADD_BOARD:
-      const newBoard = action.payload
+      const addingBoard = action.payload
 
-      if (!_.find(state.boards, board => {return board.slug === newBoard.slug})) {
-        return {
-          ...state,
-          boards: [ ...state.boards, { title: newBoard.title, slug: newBoard.slug, lists: [] } ]
-        }
-      } else {
-        console.log('FAIL: Board exists')
-        return state
+      return {
+        ...state,
+        boards: [ ...state.boards, { title: addingBoard.title, slug: addingBoard.slug, lists: [] } ]
       }
 
     case EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
 
-      if (!_.find(state.boards, board => {return board.slug === editingBoardPart.slug})) {
-        return {
-          ...state,
-          boards: state.boards.map(board => {
-            if (board === editingBoard) {
-              return Object.assign({}, board, editingBoardPart)
-            } else {
-              return board
-            }
-          }),
-          videos: state.videos.map(video => {
-            if (video.board === editingBoard.slug) {
-              return Object.assign({}, video, { board: editingBoardPart.slug })
-            } else {
-              return video
-            }
-          })
-        }
-      } else {
-        console.log('FAIL: Board exists')
-        return state
+      return {
+        ...state,
+        boards: state.boards.map(board => {return board === editingBoard ?
+          Object.assign({}, board, editingBoardPart) : board
+        }),
+        videos: state.videos.map(video => {return video.board === editingBoard.slug ?
+          Object.assign({}, video, { board: editingBoardPart.slug }) : video
+        })
       }
 
     case DELETE_BOARD:
@@ -82,63 +60,34 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         boards: state.boards.filter(board => {return board !== deletingBoard}),
-        videos: state.videos.map(video => {
-          if (video.board === deletingBoard.slug) {
-            return Object.assign({}, video, { board: null, list: null, deleted: true })
-          } else {
-            return video
-          }
+        videos: state.videos.map(video => {return video.board === deletingBoard.slug ?
+          Object.assign({}, video, { board: null, list: null, deleted: true }) : video
         })
       }
 
     case ADD_LIST:
-      const { newList, boardSlug } = action.payload
-      const currentBoard = _.find(state.boards, board => {return board.slug === boardSlug})
+      const { addingList, addingListCurrentBoard } = action.payload
 
-      if (!_.find(currentBoard.lists, list => {return list.slug === newList.slug})) {
-        return {
-          // TODO: optimize
-          ...state,
-          boards: state.boards.map(board => {
-            if (board === currentBoard) {
-              return { title: board.title, slug: board.slug, lists: [ ...board.lists, newList ] }
-            } else {
-              return board
-            }
-          })
-        }
-      } else {
-        console.log('FAIL: List exists')
-        return state
+      return {
+        ...state,
+        boards: state.boards.map(board => {return board === addingListCurrentBoard ?
+          { ...board, lists: [ ...board.lists, addingList ] } : board
+        })
       }
 
     case EDIT_LIST:
       const { editingList, editingListPart, editingListCurrentBoard } = action.payload
 
-      if (!_.find(editingListCurrentBoard.lists, list => {return list.slug === editingListPart.slug})) {
-        return {
-          ...state,
-          boards: state.boards.map(board => {
-            if (board === editingListCurrentBoard) {
-              return {
-                ...board,
-                lists: board.lists.map(list => {return list === editingList ? editingListPart : list})
-              }
-            } else {
-              return board
-            }
-          }),
-          videos: state.videos.map(video => {
-            if (video.list === editingList.slug) {
-              return Object.assign({}, video, { list: editingListPart.slug })
-            } else {
-              return video
-            }
-          })
-        }
-      } else {
-        console.log('FAIL: List exists')
-        return state
+      return {
+        ...state,
+        boards: state.boards.map(board => {return board === editingListCurrentBoard ?
+          { ...board,
+            lists: board.lists.map(list => {return list === editingList ? editingListPart : list})
+          } : board
+        }),
+        videos: state.videos.map(video => {return video.list === editingList.slug ?
+          Object.assign({}, video, { list: editingListPart.slug }) : video
+        })
       }
 
     case DELETE_LIST:
@@ -146,28 +95,22 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state,
-        boards: state.boards.map(board => {
-          if (board === deletingListCurrentBoard) {
-            return { ...board, lists: board.lists.filter(list => {return list !== deletingList}) }
-          } else {
-            return board
-          }
+        boards: state.boards.map(board => {return board === deletingListCurrentBoard ?
+          { ...board, lists: board.lists.filter(list => {return list !== deletingList}) } :
+          board
         }),
         videos: state.videos.map(video => {
-          if (video.board === deletingListCurrentBoard.slug && video.list === deletingList.slug) {
-            return Object.assign({}, video, { list: null, deleted: true })
-          } else {
-            return video
-          }
+          return video.board === deletingListCurrentBoard.slug && video.list === deletingList.slug ?
+            Object.assign({}, video, { list: null, deleted: true }) : video
         })
       }
 
     case ADD_VIDEO:
-      const newVideo = action.payload
+      const addingVideo = action.payload
 
       return {
         ...state,
-        videos: [ ...state.videos, newVideo ]
+        videos: [ ...state.videos, addingVideo ]
       }
 
     case EDIT_VIDEO:
@@ -175,12 +118,8 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state,
-        videos: state.videos.map(video => {
-          if (video === editingVideo) {
-            return Object.assign({}, video, editingVideoPart)
-          } else {
-            return video
-          }
+        videos: state.videos.map(video => {return video === editingVideo ?
+          Object.assign({}, video, editingVideoPart) : video
         })
       }
 

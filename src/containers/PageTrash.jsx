@@ -25,8 +25,10 @@ class PageTrash extends React.Component {
   }
 
   onEmptyClick() {
-    this.props.emptyTrash()
-    this.context.router.push('/')
+    if (confirm(`Empty trash?`)) {
+      this.props.emptyTrash()
+      this.context.router.push('/')
+    }
   }
 
   render() {
