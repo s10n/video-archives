@@ -15,7 +15,3 @@
 .ListHeader:hover .BtnTrash {
 	display: inline-block;
 }
-
-.VideoList .VideoAdd {
-	flex: 0 0 auto;
-}

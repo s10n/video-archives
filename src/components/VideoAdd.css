@@ -2,7 +2,12 @@
 	margin-top: 10px;
 }
 
+.VideoAdd {
+	flex: 0 0 auto;
+}
+
 .VideoAdd input {
+	line-height: 20px;
 	padding: 10px 15px;
 	width: 100%;
 }
