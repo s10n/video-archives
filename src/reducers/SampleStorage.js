@@ -6,11 +6,11 @@ export const SAMPLE_STORAGE = {
       "lists": [
         {
           "name": "AC/DC",
-          "slug": "ac/dc"
+          "slug": "ac-dc"
         },
         {
           "name": "Guns N' Roses",
-          "slug": "guns-n'-roses"
+          "slug": "guns-n-roses"
         },
         {
           "name": "OK Go",
@@ -40,7 +40,7 @@ export const SAMPLE_STORAGE = {
   "videos": [
     {
       "board": "music",
-      "list": "ac/dc",
+      "list": "ac-dc",
       "source": "YouTube",
       "data": {
         "id": "pAgnJDJN4VA",
@@ -80,7 +80,7 @@ export const SAMPLE_STORAGE = {
     },
     {
       "board": "music",
-      "list": "ac/dc",
+      "list": "ac-dc",
       "source": "YouTube",
       "data": {
         "id": "l482T0yNkeo",
@@ -125,7 +125,7 @@ export const SAMPLE_STORAGE = {
     },
     {
       "board": "music",
-      "list": "ac/dc",
+      "list": "ac-dc",
       "source": "YouTube",
       "data": {
         "id": "xRQnJyP77tY",
@@ -165,7 +165,7 @@ export const SAMPLE_STORAGE = {
     },
     {
       "board": "music",
-      "list": "guns-n'-roses",
+      "list": "guns-n-roses",
       "source": "YouTube",
       "data": {
         "id": "1w7OgIMMRc4",
@@ -210,7 +210,7 @@ export const SAMPLE_STORAGE = {
     },
     {
       "board": "music",
-      "list": "guns-n'-roses",
+      "list": "guns-n-roses",
       "source": "YouTube",
       "data": {
         "id": "8SbUC-UaAxE",
@@ -255,7 +255,7 @@ export const SAMPLE_STORAGE = {
     },
     {
       "board": "music",
-      "list": "guns-n'-roses",
+      "list": "guns-n-roses",
       "source": "YouTube",
       "data": {
         "id": "o1tj2zJ2Wvg",

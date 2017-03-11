@@ -54,6 +54,7 @@ class BoardRead extends React.Component {
   onInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
     const boardExists = _.find(
       this.props.videoStorage.boards,
       board => {return slug === board.slug && slug !== this.props.params.boardSlug}
