@@ -11,7 +11,7 @@
 }
 
 .PageContent {
-	flex-grow: 1;
+	flex: 1;
 	position: relative;
 }
 

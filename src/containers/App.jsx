@@ -44,7 +44,9 @@ class Index extends React.Component {
 
         <section className="AppWrapper">
           <AppSidebar boardsList={videoStorage.boards} trash={trash} />
-          <main className="AppMain">{this.props.children}</main>
+          <main className="AppMain">
+            <div className="PageWrapper">{this.props.children}</div>
+          </main>
         </section>
       </div>
     )
