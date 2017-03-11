@@ -123,11 +123,17 @@ class VideoList extends React.Component {
       })
     }
 
+    const styleIE = () => {
+      const ua = window.navigator.userAgent
+      return (ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0) ?
+        { maxHeight: window.innerHeight - 480 } : {}
+    }
+
     return (
       <article className="Card">
         {VideoHeader(list)}
 
-        <div className="CardScroll">
+        <div className="CardScroll" style={styleIE()}>
           {listScroll(videoList)}
         </div>
 
