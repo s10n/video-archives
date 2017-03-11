@@ -38,8 +38,8 @@ export function pushStorage(currentVideoStorage, prevVideoStorage) {
   return { type: PUSH_STORAGE }
 }
 
-export function addBoard(newBoard) {
-  return { type: ADD_BOARD, payload: newBoard }
+export function addBoard(addingBoard) {
+  return { type: ADD_BOARD, payload: addingBoard }
 }
 
 export function editBoard(editingBoard, editingBoardPart) {
@@ -50,8 +50,8 @@ export function deleteBoard(deletingBoard) {
   return { type: DELETE_BOARD, payload: deletingBoard }
 }
 
-export function addList(newList, boardSlug) {
-  return { type: ADD_LIST, payload: { newList, boardSlug } }
+export function addList(addingList, addingListCurrentBoard) {
+  return { type: ADD_LIST, payload: { addingList, addingListCurrentBoard } }
 }
 
 export function editList(editingList, editingListPart, editingListCurrentBoard) {
@@ -62,8 +62,8 @@ export function deleteList(deletingList, deletingListCurrentBoard) {
   return { type: DELETE_LIST, payload: { deletingList, deletingListCurrentBoard } }
 }
 
-export function addVideo(newVideo) {
-  return { type: ADD_VIDEO, payload: newVideo }
+export function addVideo(addingVideo) {
+  return { type: ADD_VIDEO, payload: addingVideo }
 }
 
 export function editVideo(editingVideo, editingVideoPart) {

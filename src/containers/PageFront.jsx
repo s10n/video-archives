@@ -12,7 +12,7 @@ class PageFront extends React.Component {
   }
 
   handleImportClick () {
-    confirm(`Import storage?`) && this.props.importStorage()
+    confirm(`Import sample?`) && this.props.importStorage()
   }
 
   handleEmptyClick () {

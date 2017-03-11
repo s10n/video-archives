@@ -1,13 +1,16 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { addBoard } from '../actions/index'
 import './BoardAdd.css'
 
 const propTypes = {
+  boards: React.PropTypes.array.isRequired,
   addBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
+  boards: [],
   addBoard: () => console.error('addBoard not defined')
 }
 
@@ -26,7 +29,16 @@ class BoardAdd extends React.Component {
   onInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-    this.setState({ title, slug, error: slug === 'trash' && 'Reserved board title' })
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+    let error = null
+
+    if (slug === 'trash') {
+      error = 'Reserved board title'
+    } else if (_.find(this.props.boards, board => {return slug === board.slug})) {
+      error = 'Board already exists'
+    }
+
+    this.setState({ title, slug, error })
   }
 
   onPressEnter() {
@@ -34,8 +46,8 @@ class BoardAdd extends React.Component {
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      const newBoard = { title, slug }
-      this.props.addBoard(newBoard)
+      const board = { title, slug }
+      this.props.addBoard(board)
       this.context.router.push(slug)
       this.setState({ title: '', slug: '' })
     }
@@ -62,7 +74,11 @@ class BoardAdd extends React.Component {
   }
 }
 
+function mapStateToProps(state) {
+  return { boards: state.videoStorage.boards }
+}
+
 BoardAdd.propTypes = propTypes
 BoardAdd.defaultProps = defaultProps
 
-export default connect(null, { addBoard })(BoardAdd)
+export default connect(mapStateToProps, { addBoard })(BoardAdd)

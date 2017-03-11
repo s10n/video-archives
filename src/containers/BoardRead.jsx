@@ -25,7 +25,7 @@ class BoardRead extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { isEditing: false, editingBoardPart: { title: '', slug: '', error: null } }
+    this.state = { isEditing: false, title: '', slug: '', error: null }
     this.onTitleClick = this.onTitleClick.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
@@ -37,45 +37,50 @@ class BoardRead extends React.Component {
     const currentBoard = _.find(this.props.videoStorage.boards, board => {
       return board.slug === this.props.params.boardSlug
     })
-    const title = currentBoard.title
-    const slug = currentBoard.slug
+    const { title, slug } = currentBoard
 
-    this.setState({
-      isEditing: true,
-      editingBoardPart: { ...this.state.editingBoardPart, title, slug }
-    })
-
-    // TODO: focus() on <input>
+    this.setState({ isEditing: true, title, slug })
   }
 
   onInputBlur() {
-    this.setState({ isEditing: false })
+    const currentBoard = _.find(this.props.videoStorage.boards, board => {
+      return board.slug === this.props.params.boardSlug
+    })
+    const { title, slug } = currentBoard
+
+    this.setState({ isEditing: false, title, slug, error: null })
   }
 
   onInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-    this.setState({
-      editingBoardPart: {
-        ...this.state.editingBoardPart,
-        title,
-        slug,
-        error: slug === 'trash' && 'Reserved board title'
-      }
-    })
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+    const boardExists = _.find(
+      this.props.videoStorage.boards,
+      board => {return slug === board.slug && slug !== this.props.params.boardSlug}
+    )
+    let error = null
+
+    if (slug === 'trash') {
+      error = 'Reserved board title'
+    } else if (boardExists) {
+      error = 'Board already exists'
+    }
+
+    this.setState({ title, slug, error })
   }
 
   onPressEnter() {
     const currentBoard = _.find(this.props.videoStorage.boards, board => {
       return board.slug === this.props.params.boardSlug
     })
-    const title = this.state.editingBoardPart.title.trim()
-    const { slug, error } = this.state.editingBoardPart
+    const title = this.state.title.trim()
+    const { slug, error } = this.state
 
     if (title && slug && !error) {
       this.props.editBoard(currentBoard, { title, slug })
       this.context.router.push(slug)
-      this.setState({ isEditing: false })
+      this.boardTitleInput.blur()
     }
   }
 
@@ -84,7 +89,7 @@ class BoardRead extends React.Component {
       return board.slug === this.props.params.boardSlug
     })
 
-    if (confirm(`Delete ${currentBoard.title}?`)) {
+    if (confirm(`Delete ${currentBoard.title}?\nAll lists and videos will be deleted.`)) {
       this.props.deleteBoard(currentBoard)
       this.context.router.push('/')
     }
@@ -97,29 +102,23 @@ class BoardRead extends React.Component {
 
     return (
       <section className="Page">
-        {!this.state.isEditing ?
-          <header className="PageHeader BoardHeader">
-            <h1
-              className="PageTitle BoardTitle"
-              onClick={this.onTitleClick}>
-              {currentBoard.title}
-            </h1>
-            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
-          </header>
-          :
-          <header className="PageHeader BoardHeader">
-            <input
-              className="CardTitle BoardTitle h1"
-              type="text"
-              onBlur={this.onInputBlur}
-              onChange={this.onInputChange}
-              onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-              value={this.state.editingBoardPart.title}
-              ref={input => {this.boardTitleInput = input}}
-            />
-            <small>{this.state.editingBoardPart.error}</small>
-          </header>
-        }
+        <header className="PageHeader BoardHeader">
+          <input
+            className="PageTitle BoardTitle h1"
+            type="text"
+            onFocus={this.onTitleClick}
+            onBlur={this.onInputBlur}
+            onChange={this.onInputChange}
+            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+            value={!this.state.isEditing ? currentBoard.title : this.state.title}
+            ref={input => {this.boardTitleInput = input}}
+          />
+
+          <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+          {this.state.error &&
+            <small>{this.state.error}</small>
+          }
+        </header>
 
         <main className="PageContent">
           <div className="PageContentInner BoardScroll">
@@ -127,7 +126,7 @@ class BoardRead extends React.Component {
               _.find(
                 this.props.videoStorage.videos,
                 video => {
-                  return video.board === currentBoard.title && !video.list && !video.deleted
+                  return video.board === currentBoard.slug && !video.list && !video.deleted
                 }
               ) &&
               <div className="VideoWrapper">
@@ -153,7 +152,7 @@ class BoardRead extends React.Component {
             <div className="VideoWrapper">
               <article className="Card">
                 <header className="CardHeader">
-                  <ListAdd boardSlug={currentBoard.slug} />
+                  <ListAdd board={currentBoard} />
                 </header>
               </article>
             </div>

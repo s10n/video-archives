@@ -48,6 +48,8 @@ class VideoAdd extends React.Component {
   }
 
   onInputChange(event) {
+    const fetchUrl = `${API_INFO.url}` +
+      `?part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`
     const getParams = uri => {
       let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
       let params = {}
@@ -92,7 +94,7 @@ class VideoAdd extends React.Component {
     if (videoId && !existVideo) {
       this.setState({ errorCode: 'fetching' })
 
-      fetch(`${API_INFO.url}?id=${videoId}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
+      fetch(`${fetchUrl}&id=${videoId}`)
         .then(response => response.json())
         .then(({items}) => this.setState(items.length ?
           { errorCode: 'success', video: { ...this.state.video, data: items[0] } } :

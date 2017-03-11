@@ -1,20 +1,27 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { editVideo, deleteVideo } from '../actions/index'
+import { editVideo, deleteVideo, addBoard, addList } from '../actions/index'
 import './VideoItem.css'
 
 const propTypes = {
   video: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.array.isRequired,
   addingVideo: React.PropTypes.bool,
   editVideo: React.PropTypes.func.isRequired,
-  deleteVideo: React.PropTypes.func.isRequired
+  deleteVideo: React.PropTypes.func.isRequired,
+  addBoard: React.PropTypes.func.isRequired,
+  addList: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   video: {},
+  boards: [],
   addingVideo: false,
   editVideo: () => console.log('editVideo not defined'),
-  deleteVideo: () => console.log('deleteVideo not defined')
+  deleteVideo: () => console.log('deleteVideo not defined'),
+  addBoard: () => console.log('addBoard not defined'),
+  addList: () => console.log('addList not defined')
 }
 
 class VideoItem extends React.Component {
@@ -27,10 +34,21 @@ class VideoItem extends React.Component {
   }
 
   onMoveClick() {
-    const list = prompt(`Type a slug of list`)
+    const name = prompt(`Type a name or slug of list`).trim()
+    const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
-    if (list) {
-      this.props.editVideo(this.props.video, { list: list })
+    if (name && slug) {
+      const board = _.find(
+        this.props.boards,
+        board => {return board.slug === this.props.video.board}
+      )
+      const listExists = _.find(
+        board.lists,
+        list => {return list.slug === slug}
+      )
+      const list = { name, slug }
+      listExists || this.props.addList(list, board)
+      this.props.editVideo(this.props.video, { list: slug })
     }
   }
 
@@ -39,8 +57,18 @@ class VideoItem extends React.Component {
   }
 
   onRecoverClick() {
-    const board = this.props.video.board || prompt(`Type a slug of board`)
-    this.props.editVideo(this.props.video, { board, deleted: false })
+    const title = this.props.video.board || prompt(`Type a name or slug of board`).trim()
+    const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+
+    if (title && slug) {
+      const boardExists = _.find(
+        this.props.boards,
+        board => {return board.slug === slug}
+      )
+      const board = { title, slug }
+      boardExists || this.props.addBoard(board)
+      this.props.editVideo(this.props.video, { board: slug, deleted: false })
+    }
   }
 
   onDeleteClick() {
@@ -93,7 +121,11 @@ class VideoItem extends React.Component {
   }
 }
 
+function mapStateToProps(state) {
+  return { boards: state.videoStorage.boards }
+}
+
 VideoItem.propTypes = propTypes
 VideoItem.defaultProps = defaultProps
 
-export default connect(null, { editVideo, deleteVideo })(VideoItem)
+export default connect(mapStateToProps, { editVideo, deleteVideo, addBoard, addList })(VideoItem)

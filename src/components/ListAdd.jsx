@@ -1,22 +1,23 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { addList } from '../actions/index'
 import './ListAdd.css'
 
 const propTypes = {
-  boardSlug: React.PropTypes.string.isRequired,
+  board: React.PropTypes.object.isRequired,
   addList: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boardSlug: '',
+  boardSlug: {},
   addList: () => console.log('addList not defined')
 }
 
 class ListAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { name: '', slug: '' }
+    this.state = { name: '', slug: '', error: null }
     this.onInputChange = this.onInputChange.bind(this)
     this.onPressEnter = this.onPressEnter.bind(this)
   }
@@ -24,30 +25,39 @@ class ListAdd extends React.Component {
   onInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-    this.setState({ name, slug })
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+    const listExists = _.find(this.props.board.lists, list => {return list.slug === slug})
+
+    this.setState({ name, slug, error: listExists && 'List exists' })
   }
 
   onPressEnter() {
-    const boardSlug = this.props.boardSlug
+    const board = this.props.board
     const name = this.state.name.trim()
-    const slug = this.state.slug
+    const { slug, error } = this.state
 
-    if (name && slug) {
-      const newList = { name, slug }
-      this.props.addList(newList, boardSlug)
-      this.setState({ name: '', slug: '' })
+    if (name && slug && !error) {
+      const list = { name, slug }
+      this.props.addList(list, board)
+      this.setState({ name: '', slug: '', error: null })
     }
   }
 
   render() {
     return (
-      <input
-        className="CardTitle"
-        onChange={this.onInputChange}
-        onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-        value={this.state.name}
-        placeholder="Add a list..."
-      />
+      <div>
+        <input
+          className="CardTitle"
+          onChange={this.onInputChange}
+          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          value={this.state.name}
+          placeholder="Add a list..."
+        />
+
+        {this.state.error &&
+          <small className="HelpBlock">{this.state.error}</small>
+        }
+      </div>
     )
   }
 }
