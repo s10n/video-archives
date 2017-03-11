@@ -15,7 +15,9 @@ h2,
 	font-size: 1rem;
 }
 
-p {
+p,
+ul,
+ol {
 	margin: 0;
 }
 
