@@ -14,8 +14,8 @@
 .BoardScroll {
 	overflow-x: auto;
 	margin-bottom: 15px;
-	padding-left: calc(24px - 5px);
-	padding-right: calc(24px - 5px);
+	padding-left: calc(24px - 10px);
+	padding-right: calc(24px - 10px);
 	padding-bottom: 15px;
 	white-space: nowrap;
 }
@@ -44,7 +44,7 @@
 .VideoWrapper {
 	display: inline-block;
 	height: 100%;
-	margin: 0 5px;
+	margin: 0 10px;
 	vertical-align: top;
 	width: calc(160px + 30px + 6px);
 }

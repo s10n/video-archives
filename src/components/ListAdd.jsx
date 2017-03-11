@@ -23,22 +23,20 @@ class ListAdd extends React.Component {
 
   onInputChange(event) {
     const name = event.target.value
-    this.setState({ ...this.state, name })
+    const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    this.setState({ name, slug })
   }
 
   onPressEnter() {
     const boardSlug = this.props.boardSlug
     const name = this.state.name.trim()
-    const slug = name.toString().toLowerCase().replace(/\s+/g, '-')
+    const slug = this.state.slug
 
     if (name && slug) {
       const newList = { name, slug }
       this.props.addList(newList, boardSlug)
-    } else {
-      console.log('List name is required')
+      this.setState({ name: '', slug: '' })
     }
-
-    this.setState({ name: '', slug: '' })
   }
 
   render() {

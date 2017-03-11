@@ -34,38 +34,43 @@ class VideoList extends React.Component {
   }
 
   onNameClick() {
+    const name = this.props.list.name
+    const slug = this.props.list.slug
+
     this.setState({
       isEditing: true,
-      editingListPart: { ...this.state.editingListPart, name: this.props.list.name }
+      editingListPart: { ...this.state.editingListPart, name, slug }
     })
 
-    // this.listNameInput.focus() // It doesn't work
+    // TODO: focus() on <input>
   }
 
   onInputBlur() {
-    this.setState({ ...this.state, isEditing: false })
+    this.setState({ isEditing: false })
   }
 
   onInputChange(event) {
     const name = event.target.value
-    this.setState({ ...this.state, editingListPart: { ...this.state.editingListPart, name }})
+    const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    this.setState({ editingListPart: { ...this.state.editingListPart, name, slug }})
   }
 
   onPressEnter() {
+    const list = this.props.list
     const name = this.state.editingListPart.name.trim()
-    const slug = name.toString().toLowerCase().replace(/\s+/g, '-')
+    const slug = this.state.editingListPart.slug
 
     if (name && slug) {
-      this.props.editList(this.props.list, { name, slug }, this.props.currentBoard)
-      this.setState({ ...this.state, isEditing: false })
-    } else {
-      console.log('List name is required')
+      this.props.editList(list, { name, slug }, this.props.currentBoard)
+      this.setState({ isEditing: false })
     }
   }
 
   onDeleteClick() {
-    if (confirm(`Delete ${this.props.list.name}?`)) {
-      this.props.deleteList(this.props.list, this.props.currentBoard)
+    const list = this.props.list
+
+    if (confirm(`Delete ${list.name}?`)) {
+      this.props.deleteList(list, this.props.currentBoard)
     }
   }
 

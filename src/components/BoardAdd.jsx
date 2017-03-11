@@ -18,53 +18,27 @@ class BoardAdd extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { title: '', slug: '' }
+    this.state = { title: '', slug: '', error: null }
     this.onInputChange = this.onInputChange.bind(this)
     this.onPressEnter = this.onPressEnter.bind(this)
   }
 
   onInputChange(event) {
     const title = event.target.value
-    this.setState({ ...this.state, title})
+    const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    this.setState({ title, slug, error: slug === 'trash' && 'Reserved board title' })
   }
 
   onPressEnter() {
-    /*
-      Slugify issue: support CJK
-
-      Rules
-      * RFC 3986 (https://tools.ietf.org/html/rfc3986#section-2.2)
-      * Reserved character
-        : / ? # [ ] @ ! $ & ' ( ) * + , ; =
-      * Unicode - More than alphanumeric, Support emoji
-      * CJK
-
-      References
-      * http://stackoverflow.com/a/19751054
-      * WordPress - https://core.trac.wordpress.org/browser/tags/4.7.3/src/wp-includes/formatting.php
-      * JavaScript from https://gist.github.com/mathewbyrne/1280286
-        ```
-        .replace(/\s+/g, '-')           // Replace spaces with hyphen
-        .replace(/\-\-+/g, '-')         // Replace multiple hyphen with single hyphen
-        .replace(/^-+/, '')             // Trim hyphen from start of text
-        .replace(/-+$/, '');            // Trim hyphen from end of text
-        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-        ````
-    */
     const title = this.state.title.trim()
-    const slug = title.toString().toLowerCase().replace(/\s+/g, '-')
+    const { slug, error } = this.state
 
-    if (slug === 'trash') {
-      console.log('FAIL: Reserved board title')
-    } else if (title && slug) {
+    if (title && slug && !error) {
       const newBoard = { title, slug }
       this.props.addBoard(newBoard)
       this.context.router.push(slug)
-    } else {
-      console.log('Board title is required')
+      this.setState({ title: '', slug: '' })
     }
-
-    this.setState({ title: '', slug: '' })
   }
 
   render() {
@@ -80,7 +54,7 @@ class BoardAdd extends React.Component {
 
         {this.state.title.length > 0 &&
           <p className="HelpBlock">
-            <small>Press enter key to create &crarr;</small>
+            <small>{this.state.error || `Press enter key to create ↵`}</small>
           </p>
         }
       </section>

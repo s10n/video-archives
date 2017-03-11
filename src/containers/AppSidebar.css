@@ -21,3 +21,14 @@
 	background-color: hsl(358, 79%, 45%);
 	color: white;
 }
+
+@media (max-width: 480px) {
+	.AppSidebar {
+		border: 0;
+	}
+
+	.AppSidebar a {
+		display: inline-block;
+		width: auto;
+	}
+}

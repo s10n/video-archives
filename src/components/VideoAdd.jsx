@@ -15,7 +15,8 @@ const API_INFO = {
 }
 
 const ERROR_MESSAGE = {
-  charLength: 'Type 11 characters',
+  invalid: 'Type valid url',
+  fetching: 'Fetching...',
   noResults: 'No results',
   videoExists: 'Video exists'
 }
@@ -38,85 +39,103 @@ class VideoAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      videoUri: '',
       videoId: '',
-      fetchResult: null,
+      errorCode: null,
       video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
     }
     this.onInputChange = this.onInputChange.bind(this)
   }
 
   onInputChange(event) {
-    const video_id = event.target.value
-    this.setState({ ...this.state, videoId: event.target.value })
+    const getParams = uri => {
+      let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
+      let params = {}
+      hashes.map(hash => {
+        let [key, value] = hash.split('=')
+        params[key] = decodeURIComponent(value)
+        return null
+      })
+      return params
+    }
 
-    if (video_id.length === API_INFO.videoIdLength) {
-      fetch(`${API_INFO.url}?id=${video_id}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
+    const videoUri = event.target.value
+    this.setState({ videoUri })
+
+    /* Check URI length */
+    let videoId = ''
+    if (videoUri.length === API_INFO.videoIdLength) {
+      videoId = videoUri
+    } else if (!videoUri.length) {
+      this.setState({ errorCode: null })
+    } else {
+      let params = getParams(videoUri)
+
+      if (params.hasOwnProperty('v') && params.v.length === API_INFO.videoIdLength) {
+        videoId = params.v
+      } else {
+        this.setState({ errorCode: 'invalid' })
+      }
+    }
+
+    /* Find duplications */
+    let existVideo = ''
+    if (videoId) {
+      existVideo = _.find(
+        this.props.videoStorage.videos,
+        video => {return video.data.id === videoId}
+      )
+      this.setState({ errorCode: 'videoExists', existVideo })
+    }
+
+    /* Fetch video */
+    if (videoId && !existVideo) {
+      this.setState({ errorCode: 'fetching' })
+
+      fetch(`${API_INFO.url}?id=${videoId}&part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`)
         .then(response => response.json())
         .then(({items}) => this.setState(items.length ?
-          { ...this.state, fetchResult: true, video: { ...this.state.video, data: items[0] } } :
-          { ...this.state, fetchResult: false }
+          { errorCode: 'success', video: { ...this.state.video, data: items[0] } } :
+          { errorCode: 'noResults' }
         ))
     }
   }
 
   onPressEnter() {
-    const videoId = this.state.videoId
-    const existVideo = _.find(
-      this.props.videoStorage.videos,
-      video => {return video.data.id === videoId}
-    )
-
-    if (!existVideo && !_.isEmpty(this.state.video.data)) {
+    if (this.state.errorCode === 'success') {
       this.props.addVideo(this.state.video)
       this.setState({
+        videoUri: '',
         videoId: '',
-        fetchResult: null,
+        errorCode: null,
         video: { ...this.state.video, data: {} }
       })
     }
   }
 
   showFetchResult() {
-    const videoId = this.state.videoId
-    const existVideo = _.find(
-      this.props.videoStorage.videos,
-      video => {return video.data.id === videoId}
-    )
+    const errorCode = this.state.errorCode
 
-    if (videoId.length && videoId.length !== API_INFO.videoIdLength) {
-      return (
-        <p className="HelpBlock">
-          <small>{ERROR_MESSAGE.charLength}</small>
-        </p>
-      )
-    } else if (existVideo) {
-      /* TODO: If existVideo is in Trash, just recover it to current list */
-      return (
-        <p className="HelpBlock">
-          <small>
-            {ERROR_MESSAGE.videoExists}:
-            {!existVideo.deleted ? `${existVideo.board} - ${existVideo.list}` : 'Trash'}
-          </small>
-        </p>
-      )
-    } else if (this.state.fetchResult === false) {
-      return (
-        <p className="HelpBlock">
-          <small>{ERROR_MESSAGE.noResults}</small>
-        </p>
-      )
-    } else if (!this.state.video.data.hasOwnProperty('id')) {
-      return (
-        <p className="HelpBlock">
-          <small>Fetching...</small>
-        </p>
-      )
-    } else {
+    // TODO: If existVideo is in Trash, just recover it to current list
+    const existVideo = this.state.existVideo
+    const additionalMessage = (errorCode === 'videoExists') ?
+      (!existVideo.deleted ? ` : ${existVideo.board} - ${existVideo.list}` : ' : Trash') :
+      ''
+
+    if (errorCode === 'success') {
       return (
         <div>
           <p><small className="strong">Press enter key to add this video &crarr;</small></p>
-          <VideoItem video={this.state.video} />
+          <VideoItem video={this.state.video} addingVideo />
         </div>
+      )
+    } else if (errorCode) {
+      return (
+        <p className="HelpBlock">
+          <small>
+            {ERROR_MESSAGE[errorCode] + additionalMessage}
+          </small>
+        </p>
       )
     }
   }
@@ -124,7 +143,7 @@ class VideoAdd extends React.Component {
   render() {
     return (
       <section className="VideoAdd">
-        {this.state.videoId.length > 0 &&
+        {this.state.errorCode &&
           <section className="FetchResult">
             {this.showFetchResult()}
           </section>
@@ -134,7 +153,7 @@ class VideoAdd extends React.Component {
           type="text"
           onChange={this.onInputChange}
           onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
-          value={this.state.videoId}
+          value={this.state.videoUri}
           placeholder="Add a video..."
         />
       </section>

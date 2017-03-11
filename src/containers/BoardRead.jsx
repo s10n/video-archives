@@ -25,7 +25,7 @@ class BoardRead extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { isEditing: false, editingBoardPart: { title: '', slug: '' } }
+    this.state = { isEditing: false, editingBoardPart: { title: '', slug: '', error: null } }
     this.onTitleClick = this.onTitleClick.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
@@ -37,22 +37,32 @@ class BoardRead extends React.Component {
     const currentBoard = _.find(this.props.videoStorage.boards, board => {
       return board.slug === this.props.params.boardSlug
     })
+    const title = currentBoard.title
+    const slug = currentBoard.slug
 
     this.setState({
       isEditing: true,
-      editingBoardPart: { ...this.state.editingBoardPart, title: currentBoard.title }
+      editingBoardPart: { ...this.state.editingBoardPart, title, slug }
     })
 
-    // this.boardTitleInput.focus() // It doesn't work
+    // TODO: focus() on <input>
   }
 
   onInputBlur() {
-    this.setState({ ...this.state, isEditing: false })
+    this.setState({ isEditing: false })
   }
 
   onInputChange(event) {
     const title = event.target.value
-    this.setState({ ...this.state, editingBoardPart: { ...this.state.editingBoardPart, title }})
+    const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    this.setState({
+      editingBoardPart: {
+        ...this.state.editingBoardPart,
+        title,
+        slug,
+        error: slug === 'trash' && 'Reserved board title'
+      }
+    })
   }
 
   onPressEnter() {
@@ -60,16 +70,12 @@ class BoardRead extends React.Component {
       return board.slug === this.props.params.boardSlug
     })
     const title = this.state.editingBoardPart.title.trim()
-    const slug = title.toString().toLowerCase().replace(/\s+/g, '-')
+    const { slug, error } = this.state.editingBoardPart
 
-    if (slug === 'trash') {
-      console.log('FAIL: Reserved board title')
-    } else if (title && slug) {
+    if (title && slug && !error) {
       this.props.editBoard(currentBoard, { title, slug })
-      this.setState({ ...this.state, isEditing: false })
       this.context.router.push(slug)
-    } else {
-      console.log('Board title is required')
+      this.setState({ isEditing: false })
     }
   }
 
@@ -111,6 +117,7 @@ class BoardRead extends React.Component {
               value={this.state.editingBoardPart.title}
               ref={input => {this.boardTitleInput = input}}
             />
+            <small>{this.state.editingBoardPart.error}</small>
           </header>
         }
 

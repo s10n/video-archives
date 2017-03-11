@@ -11,7 +11,7 @@
 }
 
 .PageContent {
-	flex-grow: 1;
+	flex: 1;
 	position: relative;
 }
 
@@ -24,4 +24,8 @@
 	padding-left: 24px;
 	padding-right: 24px;
 	padding-bottom: 24px;
+}
+
+.Paragraph {
+	line-height: 1.5;
 }

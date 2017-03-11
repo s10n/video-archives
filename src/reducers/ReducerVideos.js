@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import {
   FETCH_STORAGE,
+  IMPORT_STORAGE,
+  EMPTY_STORAGE,
 
   ADD_BOARD,
   EDIT_BOARD,
@@ -16,6 +18,7 @@ import {
 
   EMPTY_TRASH
 } from '../actions/index'
+import { SAMPLE_STORAGE } from './SampleStorage'
 
 const INITIAL_STATE = { boards: [], videos: [] }
 
@@ -27,6 +30,12 @@ export default function(state = INITIAL_STATE, action) {
       } else {
         return INITIAL_STATE
       }
+
+    case IMPORT_STORAGE:
+      return SAMPLE_STORAGE
+
+    case EMPTY_STORAGE:
+      return INITIAL_STATE
 
     case ADD_BOARD:
       const newBoard = action.payload
