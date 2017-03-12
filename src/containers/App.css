@@ -1,0 +1,53 @@
+html,
+body,
+#app,
+.AppContainer {
+	height: 100%;
+}
+
+body {
+	overflow: hidden;
+}
+
+.AppContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+.AppHeader {
+	flex: none;
+	height: 50px;
+}
+
+.AppWrapper {
+	flex: 1;
+	display: flex;
+}
+
+.AppSidebar {
+	flex: none;
+	width: 200px;
+}
+
+.AppMain {
+	flex: 1;
+	background-color: hsl(0, 0%, 95%);
+	position: relative;
+}
+
+.PageWrapper {
+	position: absolute;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+}
+
+@media (max-width: 480px) {
+	.AppWrapper {
+		flex-direction: column;
+	}
+
+	.AppSidebar {
+		width: 100%;
+		height: auto;
+	}
+}

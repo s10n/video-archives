@@ -1,0 +1,34 @@
+.AppSidebar {
+	border-right: 1px solid hsl(0, 0%, 90%);
+}
+
+.AppSidebar a,
+.AppSidebar input {
+	color: black;
+	display: block;
+	line-height: 20px;
+	padding: 10px 24px;
+	width: 100%;
+}
+
+.AppSidebar a:hover,
+.AppSidebar input:hover {
+	background-color: hsl(0, 0%, 95%);
+}
+
+.AppSidebar .active,
+.AppSidebar .active:hover {
+	background-color: hsl(358, 79%, 45%);
+	color: white;
+}
+
+@media (max-width: 480px) {
+	.AppSidebar {
+		border: 0;
+	}
+
+	.AppSidebar a {
+		display: inline-block;
+		width: auto;
+	}
+}

@@ -1,0 +1,31 @@
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	font-weight: normal;
+	line-height: 1.25;
+	margin: 0;
+}
+
+h1,
+.h1 {
+	font-size: 1.5rem;
+}
+
+h2,
+.h2 {
+	font-size: 1rem;
+}
+
+p,
+ul,
+ol {
+	margin: 0;
+}
+
+a {
+	color: hsl(206, 80%, 43%);
+	text-decoration: none;
+}
+
+.strong {
+	font-weight: bold;
+}

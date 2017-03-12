@@ -1,0 +1,17 @@
+.ListHeader {
+	padding-bottom: 10px;
+}
+
+.ListName {
+	display: inline-block;
+	max-width: 140px;
+}
+
+.ListHeader .BtnTrash {
+	display: none;
+	margin-left: 10px;
+}
+
+.ListHeader:hover .BtnTrash {
+	display: inline-block;
+}
