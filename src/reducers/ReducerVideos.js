@@ -1,39 +1,21 @@
 import _ from 'lodash'
-import {
-  FETCH_STORAGE,
-  IMPORT_STORAGE,
-  EMPTY_STORAGE,
-
-  ADD_BOARD,
-  EDIT_BOARD,
-  DELETE_BOARD,
-
-  ADD_LIST,
-  EDIT_LIST,
-  DELETE_LIST,
-
-  ADD_VIDEO,
-  EDIT_VIDEO,
-  DELETE_VIDEO,
-
-  EMPTY_TRASH
-} from '../actions/index'
+import * as types from '../actions/types'
 import { SAMPLE_STORAGE } from './SampleStorage'
 
-const INITIAL_STATE = { boards: [], videos: [] }
+const initialState = { boards: [], videos: [] }
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = initialState, action) {
   switch(action.type) {
-    case FETCH_STORAGE:
-      return action.payload || INITIAL_STATE
+    case types.FETCH_STORAGE:
+      return action.payload || initialState
 
-    case IMPORT_STORAGE:
+    case types.IMPORT_STORAGE:
       return SAMPLE_STORAGE
 
-    case EMPTY_STORAGE:
-      return INITIAL_STATE
+    case types.EMPTY_STORAGE:
+      return initialState
 
-    case ADD_BOARD:
+    case types.ADD_BOARD:
       const addingBoard = action.payload
 
       return {
@@ -41,7 +23,7 @@ export default function(state = INITIAL_STATE, action) {
         boards: [ ...state.boards, { title: addingBoard.title, slug: addingBoard.slug, lists: [] } ]
       }
 
-    case EDIT_BOARD:
+    case types.EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
 
       return {
@@ -54,7 +36,7 @@ export default function(state = INITIAL_STATE, action) {
         })
       }
 
-    case DELETE_BOARD:
+    case types.DELETE_BOARD:
       const deletingBoard = action.payload
 
       return {
@@ -65,7 +47,7 @@ export default function(state = INITIAL_STATE, action) {
         })
       }
 
-    case ADD_LIST:
+    case types.ADD_LIST:
       const { addingList, addingListCurrentBoard } = action.payload
 
       return {
@@ -75,7 +57,7 @@ export default function(state = INITIAL_STATE, action) {
         })
       }
 
-    case EDIT_LIST:
+    case types.EDIT_LIST:
       const { editingList, editingListPart, editingListCurrentBoard } = action.payload
 
       return {
@@ -90,7 +72,7 @@ export default function(state = INITIAL_STATE, action) {
         })
       }
 
-    case DELETE_LIST:
+    case types.DELETE_LIST:
       const { deletingList, deletingListCurrentBoard } = action.payload
 
       return {
@@ -105,7 +87,7 @@ export default function(state = INITIAL_STATE, action) {
         })
       }
 
-    case ADD_VIDEO:
+    case types.ADD_VIDEO:
       const addingVideo = action.payload
 
       return {
@@ -113,7 +95,7 @@ export default function(state = INITIAL_STATE, action) {
         videos: [ ...state.videos, addingVideo ]
       }
 
-    case EDIT_VIDEO:
+    case types.EDIT_VIDEO:
       const { editingVideo, editingVideoPart } = action.payload
 
       return {
@@ -123,7 +105,7 @@ export default function(state = INITIAL_STATE, action) {
         })
       }
 
-    case DELETE_VIDEO:
+    case types.DELETE_VIDEO:
       const deletingVideo = action.payload
 
       return {
@@ -131,7 +113,7 @@ export default function(state = INITIAL_STATE, action) {
         videos: state.videos.filter(video => {return video !== deletingVideo})
       }
 
-    case EMPTY_TRASH:
+    case types.EMPTY_TRASH:
       return {
         ...state,
         videos: state.videos.filter(video => {return video.deleted !== true})

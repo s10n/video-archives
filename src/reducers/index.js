@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux'
-import videosReducer from './ReducerVideos'
+import videoStorage from './ReducerVideos'
 
-const rootReducer = combineReducers({
-  videoStorage: videosReducer
-})
+const rootReducer = combineReducers({ videoStorage })
 
 export default rootReducer
