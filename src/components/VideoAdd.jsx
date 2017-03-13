@@ -26,14 +26,16 @@ const ERROR_MESSAGE = {
 const propTypes = {
   boardSlug: React.PropTypes.string,
   listSlug: React.PropTypes.string,
-  videoStorage: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.array.isRequired,
+  videos: React.PropTypes.array.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   boardSlug: '',
   listSlug: '',
-  videoStorage: {},
+  boards: [],
+  videos: [],
   addVideo: () => console.warn('addVideo not defined')
 }
 
@@ -86,7 +88,7 @@ class VideoAdd extends React.Component {
     let existVideo = ''
     if (videoId) {
       existVideo = _.find(
-        this.props.videoStorage.videos,
+        this.props.videos,
         video => {return video.data.id === videoId}
       )
       this.setState({ errorCode: 'videoExists', existVideo })
@@ -168,7 +170,7 @@ class VideoAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videoStorage: state.videoStorage }
+  return { boards: state.boards, videos: state.videos }
 }
 
 function mapDispatchToProps(dispatch) {

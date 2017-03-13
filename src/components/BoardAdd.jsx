@@ -76,7 +76,7 @@ class BoardAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { boards: state.videoStorage.boards }
+  return { boards: state.boards }
 }
 
 function mapDispatchToProps(dispatch) {

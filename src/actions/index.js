@@ -1,9 +1,13 @@
 import * as types from './types'
 
-export function fetchStorage() {
-  const localVideoStorage = localStorage.videoStorage
-  const storage = localVideoStorage ? JSON.parse(localVideoStorage) : null
-  return { type: types.FETCH_STORAGE, payload: storage }
+export function fetchBoards() {
+  const boards = localStorage.boards ? JSON.parse(localStorage.boards) : null
+  return { type: types.FETCH_BOARDS, payload: boards }
+}
+
+export function fetchVideos() {
+  const videos = localStorage.videos ? JSON.parse(localStorage.videos) : null
+  return { type: types.FETCH_VIDEOS, payload: videos }
 }
 
 export function importStorage() {
@@ -14,10 +18,15 @@ export function emptyStorage() {
   return { type: types.EMPTY_STORAGE }
 }
 
-export function pushStorage(currentVideoStorage, prevVideoStorage) {
-  if (JSON.stringify(prevVideoStorage) !== JSON.stringify(currentVideoStorage)) {
-    localStorage.videoStorage = JSON.stringify(currentVideoStorage)
+export function pushStorage(props, prevProps) {
+  if (JSON.stringify(prevProps.boards) !== JSON.stringify(props.boards)) {
+    localStorage.boards = JSON.stringify(props.boards)
   }
+
+  if (JSON.stringify(prevProps.videos) !== JSON.stringify(props.videos)) {
+    localStorage.videos = JSON.stringify(props.videos)
+  }
+
   return { type: types.PUSH_STORAGE }
 }
 

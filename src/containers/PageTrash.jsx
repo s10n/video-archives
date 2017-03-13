@@ -6,12 +6,14 @@ import './PageTrash.css'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
-  videoStorage: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.array.isRequired,
+  videos: React.PropTypes.array.isRequired,
   emptyTrash: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  videoStorage: {},
+  boards: [],
+  videos: [],
   emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
@@ -57,7 +59,7 @@ class PageTrash extends React.Component {
               </header>
 
               <div className="CardScroll">
-                {mapToComponent(this.props.videoStorage.videos)}
+                {mapToComponent(this.props.videos)}
               </div>
             </article>
           </div>
@@ -68,7 +70,7 @@ class PageTrash extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videoStorage: state.videoStorage }
+  return { boards: state.boards, videos: state.videos }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,4 +1,5 @@
-export const FETCH_STORAGE = 'FETCH_STORAGE'
+export const FETCH_BOARDS = 'FETCH_BOARDS'
+export const FETCH_VIDEOS = 'FETCH_VIDEOS'
 export const IMPORT_STORAGE = 'IMPORT_STORAGE'
 export const EMPTY_STORAGE = 'EMPTY_STORAGE'
 export const PUSH_STORAGE = 'PUSH_STORAGE'
