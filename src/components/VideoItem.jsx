@@ -18,10 +18,10 @@ const defaultProps = {
   video: {},
   boards: [],
   addingVideo: false,
-  editVideo: () => console.log('editVideo not defined'),
-  deleteVideo: () => console.log('deleteVideo not defined'),
-  addBoard: () => console.log('addBoard not defined'),
-  addList: () => console.log('addList not defined')
+  editVideo: () => console.warn('editVideo not defined'),
+  deleteVideo: () => console.warn('deleteVideo not defined'),
+  addBoard: () => console.warn('addBoard not defined'),
+  addList: () => console.warn('addList not defined')
 }
 
 class VideoItem extends React.Component {

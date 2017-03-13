@@ -11,7 +11,7 @@ const propTypes = {
 
 const defaultProps = {
   boardSlug: {},
-  addList: () => console.log('addList not defined')
+  addList: () => console.warn('addList not defined')
 }
 
 class ListAdd extends React.Component {

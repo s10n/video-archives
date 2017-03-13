@@ -14,8 +14,8 @@ const propTypes = {
 
 const defaultProps = {
   videoStorage: {},
-  editBoard: () => console.log('editBoard not defined'),
-  deleteBoard: () => console.log('deleteBoard not defined')
+  editBoard: () => console.warn('editBoard not defined'),
+  deleteBoard: () => console.warn('deleteBoard not defined')
 }
 
 class BoardRead extends React.Component {

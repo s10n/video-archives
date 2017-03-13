@@ -21,8 +21,8 @@ const propTypes = {
 
 const defaultProps = {
   videoStorage: {},
-  fetchStorage: () => console.log('fetchStorage not defined'),
-  pushStorage: () => console.log('pushStorage not defined')
+  fetchStorage: () => console.warn('fetchStorage not defined'),
+  pushStorage: () => console.warn('pushStorage not defined')
 }
 
 class Index extends React.Component {

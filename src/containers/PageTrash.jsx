@@ -11,7 +11,7 @@ const propTypes = {
 
 const defaultProps = {
   videoStorage: {},
-  emptyTrash: () => console.log('emptyTrash not defined')
+  emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
 class PageTrash extends React.Component {

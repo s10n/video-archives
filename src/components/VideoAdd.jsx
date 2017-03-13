@@ -32,7 +32,7 @@ const defaultProps = {
   boardSlug: '',
   listSlug: '',
   videoStorage: {},
-  addVideo: () => console.log('addVideo not defined')
+  addVideo: () => console.warn('addVideo not defined')
 }
 
 class VideoAdd extends React.Component {
@@ -96,7 +96,7 @@ class VideoAdd extends React.Component {
 
       fetch(`${fetchUrl}&id=${videoId}`)
         .then(response => response.json())
-        .then(({items}) => this.setState(items.length ?
+        .then(({ items }) => this.setState(items.length ?
           { errorCode: 'success', video: { ...this.state.video, data: items[0] } } :
           { errorCode: 'noResults' }
         ))

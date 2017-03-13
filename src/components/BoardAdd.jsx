@@ -11,7 +11,7 @@ const propTypes = {
 
 const defaultProps = {
   boards: [],
-  addBoard: () => console.error('addBoard not defined')
+  addBoard: () => console.warn('addBoard not defined')
 }
 
 class BoardAdd extends React.Component {

@@ -18,8 +18,8 @@ const defaultProps = {
   list: {},
   videoList: [],
   currentBoard: {},
-  editList: () => console.log('editList not defined'),
-  deleteList: () => console.log('deleteList not defined')
+  editList: () => console.warn('editList not defined'),
+  deleteList: () => console.warn('deleteList not defined')
 }
 
 class VideoList extends React.Component {
