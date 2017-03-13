@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { emptyTrash } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { emptyTrash } from '../actions'
 import './PageTrash.css'
 import VideoItem from '../components/VideoItem'
 
@@ -70,7 +71,11 @@ function mapStateToProps(state) {
   return { videoStorage: state.videoStorage }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ emptyTrash }, dispatch)
+}
+
 PageTrash.propTypes = propTypes
 PageTrash.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { emptyTrash })(PageTrash)
+export default connect(mapStateToProps, mapDispatchToProps)(PageTrash)

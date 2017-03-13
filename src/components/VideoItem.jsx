@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { editVideo, deleteVideo, addBoard, addList } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { editVideo, deleteVideo, addBoard, addList } from '../actions'
 import './VideoItem.css'
 
 const propTypes = {
@@ -125,7 +126,11 @@ function mapStateToProps(state) {
   return { boards: state.videoStorage.boards }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ editVideo, deleteVideo, addBoard, addList }, dispatch)
+}
+
 VideoItem.propTypes = propTypes
 VideoItem.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { editVideo, deleteVideo, addBoard, addList })(VideoItem)
+export default connect(mapStateToProps, mapDispatchToProps)(VideoItem)

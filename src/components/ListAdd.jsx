@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { addList } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { addList } from '../actions'
 import './ListAdd.css'
 
 const propTypes = {
@@ -62,7 +63,11 @@ class ListAdd extends React.Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addList }, dispatch)
+}
+
 ListAdd.propTypes = propTypes
 ListAdd.defaultProps = defaultProps
 
-export default connect(null, { addList })(ListAdd)
+export default connect(null, mapDispatchToProps)(ListAdd)

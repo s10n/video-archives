@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchStorage, pushStorage } from '../actions/index'
+import { fetchStorage, pushStorage } from '../actions'
 import 'normalize.css'
 import '../style/reboot.css'
 import '../style/type.css'

@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchStorage, importStorage, emptyStorage } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { fetchStorage, importStorage, emptyStorage } from '../actions'
 import './PageFront.css'
 
 class PageFront extends React.Component {
@@ -110,4 +111,8 @@ function mapStateToProps(state) {
   return { videoStorage: state.videoStorage }
 }
 
-export default connect(mapStateToProps, { fetchStorage, importStorage, emptyStorage })(PageFront)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchStorage, importStorage, emptyStorage }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageFront)

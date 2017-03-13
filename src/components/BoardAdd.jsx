@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { addBoard } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { addBoard } from '../actions'
 import './BoardAdd.css'
 
 const propTypes = {
@@ -78,7 +79,11 @@ function mapStateToProps(state) {
   return { boards: state.videoStorage.boards }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addBoard }, dispatch)
+}
+
 BoardAdd.propTypes = propTypes
 BoardAdd.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { addBoard })(BoardAdd)
+export default connect(mapStateToProps, mapDispatchToProps)(BoardAdd)

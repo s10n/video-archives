@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { editBoard, deleteBoard } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { editBoard, deleteBoard } from '../actions'
 import './BoardRead.css'
 import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
@@ -167,7 +168,11 @@ function mapStateToProps(state) {
   return { videoStorage: state.videoStorage }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ editBoard, deleteBoard }, dispatch)
+}
+
 BoardRead.propTypes = propTypes
 BoardRead.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { editBoard, deleteBoard })(BoardRead)
+export default connect(mapStateToProps, mapDispatchToProps)(BoardRead)
