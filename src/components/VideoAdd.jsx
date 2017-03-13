@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import axios from 'axios'
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -95,12 +96,14 @@ class VideoAdd extends React.Component {
     if (videoId && !existVideo) {
       this.setState({ errorCode: 'fetching' })
 
-      fetch(`${fetchUrl}&id=${videoId}`)
-        .then(response => response.json())
-        .then(({ items }) => this.setState(items.length ?
+      const request = axios.get(`${fetchUrl}&id=${videoId}`)
+      request.then(({ data }) => {
+        const { items } = data
+        this.setState(items.length ?
           { errorCode: 'success', video: { ...this.state.video, data: items[0] } } :
           { errorCode: 'noResults' }
-        ))
+        )
+      })
     }
   }
 
