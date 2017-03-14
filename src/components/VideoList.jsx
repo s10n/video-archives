@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { editList, deleteList } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { editList, deleteList } from '../actions'
 import './VideoList.css'
 import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
@@ -18,8 +19,8 @@ const defaultProps = {
   list: {},
   videoList: [],
   currentBoard: {},
-  editList: () => console.log('editList not defined'),
-  deleteList: () => console.log('deleteList not defined')
+  editList: () => console.warn('editList not defined'),
+  deleteList: () => console.warn('deleteList not defined')
 }
 
 class VideoList extends React.Component {
@@ -143,7 +144,11 @@ class VideoList extends React.Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ editList, deleteList }, dispatch)
+}
+
 VideoList.propTypes = propTypes
 VideoList.defaultProps = defaultProps
 
-export default connect(null, { editList, deleteList })(VideoList)
+export default connect(null, mapDispatchToProps)(VideoList)

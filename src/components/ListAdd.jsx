@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { addList } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { addList } from '../actions'
 import './ListAdd.css'
 
 const propTypes = {
@@ -11,7 +12,7 @@ const propTypes = {
 
 const defaultProps = {
   boardSlug: {},
-  addList: () => console.log('addList not defined')
+  addList: () => console.warn('addList not defined')
 }
 
 class ListAdd extends React.Component {
@@ -26,7 +27,7 @@ class ListAdd extends React.Component {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
-    const listExists = _.find(this.props.board.lists, list => {return list.slug === slug})
+    const listExists = _.find(this.props.board.lists, ['slug', slug])
 
     this.setState({ name, slug, error: listExists && 'List exists' })
   }
@@ -62,7 +63,11 @@ class ListAdd extends React.Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addList }, dispatch)
+}
+
 ListAdd.propTypes = propTypes
 ListAdd.defaultProps = defaultProps
 
-export default connect(null, { addList })(ListAdd)
+export default connect(null, mapDispatchToProps)(ListAdd)

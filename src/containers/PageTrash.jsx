@@ -1,17 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { emptyTrash } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { emptyTrash } from '../actions'
 import './PageTrash.css'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
-  videoStorage: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.array.isRequired,
+  videos: React.PropTypes.array.isRequired,
   emptyTrash: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  videoStorage: {},
-  emptyTrash: () => console.log('emptyTrash not defined')
+  boards: [],
+  videos: [],
+  emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
 class PageTrash extends React.Component {
@@ -56,7 +59,7 @@ class PageTrash extends React.Component {
               </header>
 
               <div className="CardScroll">
-                {mapToComponent(this.props.videoStorage.videos)}
+                {mapToComponent(this.props.videos)}
               </div>
             </article>
           </div>
@@ -67,10 +70,14 @@ class PageTrash extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videoStorage: state.videoStorage }
+  return { boards: state.boards, videos: state.videos }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ emptyTrash }, dispatch)
 }
 
 PageTrash.propTypes = propTypes
 PageTrash.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { emptyTrash })(PageTrash)
+export default connect(mapStateToProps, mapDispatchToProps)(PageTrash)

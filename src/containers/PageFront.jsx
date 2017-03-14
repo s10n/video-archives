@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchStorage, importStorage, emptyStorage } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { importStorage, emptyStorage } from '../actions'
 import './PageFront.css'
 
 class PageFront extends React.Component {
@@ -43,9 +44,10 @@ class PageFront extends React.Component {
             <article className="Card">
               <div className="CardScroll">
                 <section className="Paragraph">
-                  <h2>Video Archives is an application for managing videos you like</h2>
+                  <h2>Video Archives is an application for managing <a
+                    href="https://www.youtube.com" target="_blank">YouTube</a> videos you like</h2>
                   <ol>
-                    <li>Create new board to start</li>
+                    <li>Create a new board to start</li>
                     <li>Or just import sample data to look around<br />
                       <button onClick={this.handleImportClick}>Import sample</button>
                       <button onClick={this.handleEmptyClick}>Empty storage</button>
@@ -63,8 +65,8 @@ class PageFront extends React.Component {
                       {storageTest() ? `And your browser supports localStorage.` :
                         `But your browser doesn't support localStorage.`})<br />
                       So you don't need to sign up.
-                      But if you change browser or empty browser storage, you will be not able to
-                      access videos you stored.
+                      But if you change your browser or empty your browser storage,
+                      you will not be able to access videos you stored.
                     </li>
                   </ul>
                 </section>
@@ -76,13 +78,13 @@ class PageFront extends React.Component {
                       href="https://github.com/facebookincubator/create-react-app" target="_blank">
                       Create React App</a>.
                     </li>
-                    <li>This app is built with <a
+                    <li>This app is being built with <a
                       href="https://facebook.github.io/react/" target="_blank">React</a>, <a
                       href="http://redux.js.org/" target="_blank">Redux</a> and <a
                       href="https://reacttraining.com/react-router/" target="_blank">React Router</a>.
                     </li>
                     <li>
-                      Codes are on <a href="https://github.com/s10n/video-archives"
+                      Codes are at <a href="https://github.com/s10n/video-archives"
                       target="_blank">GitHub repository</a>.
                     </li>
                   </ul>
@@ -107,7 +109,11 @@ class PageFront extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videoStorage: state.videoStorage }
+  return { boards: state.boards, videos: state.videos }
 }
 
-export default connect(mapStateToProps, { fetchStorage, importStorage, emptyStorage })(PageFront)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ importStorage, emptyStorage }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageFront)

@@ -1,7 +1,9 @@
 import _ from 'lodash'
+import axios from 'axios'
 import React from 'react'
 import { connect } from 'react-redux'
-import { addVideo } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { addVideo } from '../actions'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
@@ -24,15 +26,17 @@ const ERROR_MESSAGE = {
 const propTypes = {
   boardSlug: React.PropTypes.string,
   listSlug: React.PropTypes.string,
-  videoStorage: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.array.isRequired,
+  videos: React.PropTypes.array.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   boardSlug: '',
   listSlug: '',
-  videoStorage: {},
-  addVideo: () => console.log('addVideo not defined')
+  boards: [],
+  videos: [],
+  addVideo: () => console.warn('addVideo not defined')
 }
 
 class VideoAdd extends React.Component {
@@ -83,10 +87,7 @@ class VideoAdd extends React.Component {
     /* Find duplications */
     let existVideo = ''
     if (videoId) {
-      existVideo = _.find(
-        this.props.videoStorage.videos,
-        video => {return video.data.id === videoId}
-      )
+      existVideo = _.find(this.props.videos, video => {return video.data.id === videoId})
       this.setState({ errorCode: 'videoExists', existVideo })
     }
 
@@ -94,12 +95,14 @@ class VideoAdd extends React.Component {
     if (videoId && !existVideo) {
       this.setState({ errorCode: 'fetching' })
 
-      fetch(`${fetchUrl}&id=${videoId}`)
-        .then(response => response.json())
-        .then(({items}) => this.setState(items.length ?
+      const request = axios.get(`${fetchUrl}&id=${videoId}`)
+      request.then(({ data }) => {
+        const { items } = data
+        this.setState(items.length ?
           { errorCode: 'success', video: { ...this.state.video, data: items[0] } } :
           { errorCode: 'noResults' }
-        ))
+        )
+      })
     }
   }
 
@@ -164,10 +167,14 @@ class VideoAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videoStorage: state.videoStorage }
+  return { boards: state.boards, videos: state.videos }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addVideo }, dispatch)
 }
 
 VideoAdd.propTypes = propTypes
 VideoAdd.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { addVideo })(VideoAdd)
+export default connect(mapStateToProps, mapDispatchToProps)(VideoAdd)

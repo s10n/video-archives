@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { editVideo, deleteVideo, addBoard, addList } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { editVideo, deleteVideo, addBoard, addList } from '../actions'
 import './VideoItem.css'
 
 const propTypes = {
@@ -18,10 +19,10 @@ const defaultProps = {
   video: {},
   boards: [],
   addingVideo: false,
-  editVideo: () => console.log('editVideo not defined'),
-  deleteVideo: () => console.log('deleteVideo not defined'),
-  addBoard: () => console.log('addBoard not defined'),
-  addList: () => console.log('addList not defined')
+  editVideo: () => console.warn('editVideo not defined'),
+  deleteVideo: () => console.warn('deleteVideo not defined'),
+  addBoard: () => console.warn('addBoard not defined'),
+  addList: () => console.warn('addList not defined')
 }
 
 class VideoItem extends React.Component {
@@ -38,14 +39,8 @@ class VideoItem extends React.Component {
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
     if (name && slug) {
-      const board = _.find(
-        this.props.boards,
-        board => {return board.slug === this.props.video.board}
-      )
-      const listExists = _.find(
-        board.lists,
-        list => {return list.slug === slug}
-      )
+      const board = _.find(this.props.boards, ['slug', this.props.video.board])
+      const listExists = _.find(board.lists, ['slug', slug])
       const list = { name, slug }
       listExists || this.props.addList(list, board)
       this.props.editVideo(this.props.video, { list: slug })
@@ -61,10 +56,7 @@ class VideoItem extends React.Component {
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
     if (title && slug) {
-      const boardExists = _.find(
-        this.props.boards,
-        board => {return board.slug === slug}
-      )
+      const boardExists = _.find(this.props.boards, ['slug', slug])
       const board = { title, slug }
       boardExists || this.props.addBoard(board)
       this.props.editVideo(this.props.video, { board: slug, deleted: false })
@@ -72,7 +64,7 @@ class VideoItem extends React.Component {
   }
 
   onDeleteClick() {
-    this.props.deleteVideo(this.props.video)
+    confirm(`Delete?`) && this.props.deleteVideo(this.props.video)
   }
 
   render() {
@@ -122,10 +114,14 @@ class VideoItem extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { boards: state.videoStorage.boards }
+  return { boards: state.boards }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ editVideo, deleteVideo, addBoard, addList }, dispatch)
 }
 
 VideoItem.propTypes = propTypes
 VideoItem.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { editVideo, deleteVideo, addBoard, addList })(VideoItem)
+export default connect(mapStateToProps, mapDispatchToProps)(VideoItem)
