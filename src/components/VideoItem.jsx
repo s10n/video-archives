@@ -64,7 +64,7 @@ class VideoItem extends React.Component {
   }
 
   onDeleteClick() {
-    this.props.deleteVideo(this.props.video)
+    confirm(`Delete?`) && this.props.deleteVideo(this.props.video)
   }
 
   render() {
