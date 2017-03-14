@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux'
-import videosReducer from './ReducerVideos'
+import boards from './ReducerBoards'
+import videos from './ReducerVideos'
 
-const rootReducer = combineReducers({
-  videoStorage: videosReducer
-})
+const rootReducer = combineReducers({ boards, videos })
 
 export default rootReducer

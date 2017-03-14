@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { addBoard } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { addBoard } from '../actions'
 import './BoardAdd.css'
 
 const propTypes = {
@@ -11,7 +12,7 @@ const propTypes = {
 
 const defaultProps = {
   boards: [],
-  addBoard: () => console.error('addBoard not defined')
+  addBoard: () => console.warn('addBoard not defined')
 }
 
 class BoardAdd extends React.Component {
@@ -34,7 +35,7 @@ class BoardAdd extends React.Component {
 
     if (slug === 'trash') {
       error = 'Reserved board title'
-    } else if (_.find(this.props.boards, board => {return slug === board.slug})) {
+    } else if (_.find(this.props.boards, ['slug', slug])) {
       error = 'Board already exists'
     }
 
@@ -75,10 +76,14 @@ class BoardAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { boards: state.videoStorage.boards }
+  return { boards: state.boards }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addBoard }, dispatch)
 }
 
 BoardAdd.propTypes = propTypes
 BoardAdd.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { addBoard })(BoardAdd)
+export default connect(mapStateToProps, mapDispatchToProps)(BoardAdd)

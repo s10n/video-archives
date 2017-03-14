@@ -1,21 +1,24 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { editBoard, deleteBoard } from '../actions/index'
+import { bindActionCreators } from 'redux'
+import { editBoard, deleteBoard } from '../actions'
 import './BoardRead.css'
 import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  videoStorage: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.array.isRequired,
+  videos: React.PropTypes.array.isRequired,
   editBoard: React.PropTypes.func.isRequired,
   deleteBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  videoStorage: {},
-  editBoard: () => console.log('editBoard not defined'),
-  deleteBoard: () => console.log('deleteBoard not defined')
+  boards: [],
+  videos: [],
+  editBoard: () => console.warn('editBoard not defined'),
+  deleteBoard: () => console.warn('deleteBoard not defined')
 }
 
 class BoardRead extends React.Component {
@@ -34,18 +37,14 @@ class BoardRead extends React.Component {
   }
 
   onTitleClick() {
-    const currentBoard = _.find(this.props.videoStorage.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
     const { title, slug } = currentBoard
 
     this.setState({ isEditing: true, title, slug })
   }
 
   onInputBlur() {
-    const currentBoard = _.find(this.props.videoStorage.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
     const { title, slug } = currentBoard
 
     this.setState({ isEditing: false, title, slug, error: null })
@@ -56,7 +55,7 @@ class BoardRead extends React.Component {
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
     const boardExists = _.find(
-      this.props.videoStorage.boards,
+      this.props.boards,
       board => {return slug === board.slug && slug !== this.props.params.boardSlug}
     )
     let error = null
@@ -71,9 +70,7 @@ class BoardRead extends React.Component {
   }
 
   onPressEnter() {
-    const currentBoard = _.find(this.props.videoStorage.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
@@ -85,9 +82,7 @@ class BoardRead extends React.Component {
   }
 
   onDeleteClick() {
-    const currentBoard = _.find(this.props.videoStorage.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
 
     if (confirm(`Delete ${currentBoard.title}?\nAll lists and videos will be deleted.`)) {
       this.props.deleteBoard(currentBoard)
@@ -96,9 +91,7 @@ class BoardRead extends React.Component {
   }
 
   render() {
-    const currentBoard = _.find(this.props.videoStorage.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
 
     return (
       <section className="Page">
@@ -124,14 +117,14 @@ class BoardRead extends React.Component {
           <div className="PageContentInner BoardScroll">
             {
               _.find(
-                this.props.videoStorage.videos,
+                this.props.videos,
                 video => {
                   return video.board === currentBoard.slug && !video.list && !video.deleted
                 }
               ) &&
               <div className="VideoWrapper">
                 <VideoList
-                  videoList={this.props.videoStorage.videos}
+                  videoList={this.props.videos}
                   currentBoard={currentBoard}
                 />
               </div>
@@ -142,7 +135,7 @@ class BoardRead extends React.Component {
                 <div className="VideoWrapper" key={list.slug}>
                   <VideoList
                     list={list}
-                    videoList={this.props.videoStorage.videos}
+                    videoList={this.props.videos}
                     currentBoard={currentBoard}
                   />
                 </div>
@@ -164,10 +157,14 @@ class BoardRead extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videoStorage: state.videoStorage }
+  return { boards: state.boards, videos: state.videos }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ editBoard, deleteBoard }, dispatch)
 }
 
 BoardRead.propTypes = propTypes
 BoardRead.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { editBoard, deleteBoard })(BoardRead)
+export default connect(mapStateToProps, mapDispatchToProps)(BoardRead)
