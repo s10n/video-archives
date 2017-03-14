@@ -27,7 +27,7 @@ export default function (state = initialState, action) {
 
     case types.DELETE_BOARD:
       const deletingBoard = action.payload
-      return state.filter(board => {return board !== deletingBoard})
+      return _.without(state, deletingBoard)
 
     case types.ADD_LIST:
       const { addingList, addingListCurrentBoard } = action.payload
@@ -46,8 +46,7 @@ export default function (state = initialState, action) {
     case types.DELETE_LIST:
       const { deletingList, deletingListCurrentBoard } = action.payload
       return state.map(board => {return board === deletingListCurrentBoard ?
-        { ...board, lists: board.lists.filter(list => {return list !== deletingList}) } :
-        board
+        { ...board, lists: _.without(board.lists, deletingList) } : board
       })
 
     default:

@@ -27,7 +27,7 @@ class ListAdd extends React.Component {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
-    const listExists = _.find(this.props.board.lists, list => {return list.slug === slug})
+    const listExists = _.find(this.props.board.lists, ['slug', slug])
 
     this.setState({ name, slug, error: listExists && 'List exists' })
   }

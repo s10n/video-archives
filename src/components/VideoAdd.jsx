@@ -87,10 +87,7 @@ class VideoAdd extends React.Component {
     /* Find duplications */
     let existVideo = ''
     if (videoId) {
-      existVideo = _.find(
-        this.props.videos,
-        video => {return video.data.id === videoId}
-      )
+      existVideo = _.find(this.props.videos, video => {return video.data.id === videoId})
       this.setState({ errorCode: 'videoExists', existVideo })
     }
 

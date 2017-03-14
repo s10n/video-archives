@@ -39,14 +39,8 @@ class VideoItem extends React.Component {
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
     if (name && slug) {
-      const board = _.find(
-        this.props.boards,
-        board => {return board.slug === this.props.video.board}
-      )
-      const listExists = _.find(
-        board.lists,
-        list => {return list.slug === slug}
-      )
+      const board = _.find(this.props.boards, ['slug', this.props.video.board])
+      const listExists = _.find(board.lists, ['slug', slug])
       const list = { name, slug }
       listExists || this.props.addList(list, board)
       this.props.editVideo(this.props.video, { list: slug })
@@ -62,10 +56,7 @@ class VideoItem extends React.Component {
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
     if (title && slug) {
-      const boardExists = _.find(
-        this.props.boards,
-        board => {return board.slug === slug}
-      )
+      const boardExists = _.find(this.props.boards, ['slug', slug])
       const board = { title, slug }
       boardExists || this.props.addBoard(board)
       this.props.editVideo(this.props.video, { board: slug, deleted: false })

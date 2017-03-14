@@ -35,7 +35,7 @@ class BoardAdd extends React.Component {
 
     if (slug === 'trash') {
       error = 'Reserved board title'
-    } else if (_.find(this.props.boards, board => {return slug === board.slug})) {
+    } else if (_.find(this.props.boards, ['slug', slug])) {
       error = 'Board already exists'
     }
 

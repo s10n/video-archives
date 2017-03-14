@@ -37,18 +37,14 @@ class BoardRead extends React.Component {
   }
 
   onTitleClick() {
-    const currentBoard = _.find(this.props.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
     const { title, slug } = currentBoard
 
     this.setState({ isEditing: true, title, slug })
   }
 
   onInputBlur() {
-    const currentBoard = _.find(this.props.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
     const { title, slug } = currentBoard
 
     this.setState({ isEditing: false, title, slug, error: null })
@@ -74,9 +70,7 @@ class BoardRead extends React.Component {
   }
 
   onPressEnter() {
-    const currentBoard = _.find(this.props.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
@@ -88,9 +82,7 @@ class BoardRead extends React.Component {
   }
 
   onDeleteClick() {
-    const currentBoard = _.find(this.props.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
 
     if (confirm(`Delete ${currentBoard.title}?\nAll lists and videos will be deleted.`)) {
       this.props.deleteBoard(currentBoard)
@@ -99,9 +91,7 @@ class BoardRead extends React.Component {
   }
 
   render() {
-    const currentBoard = _.find(this.props.boards, board => {
-      return board.slug === this.props.params.boardSlug
-    })
+    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
 
     return (
       <section className="Page">
