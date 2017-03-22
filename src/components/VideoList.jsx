@@ -49,7 +49,7 @@ class VideoList extends React.Component {
   onInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const listExists = _.find(
       this.props.currentBoard.lists,
       list => {return list.slug === slug && list.slug !== this.props.list.slug}
