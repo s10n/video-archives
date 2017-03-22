@@ -50,7 +50,7 @@ class ListAdd extends React.Component {
         <input
           className="CardTitle"
           onChange={this.onInputChange}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
           value={this.state.name}
           placeholder="Add a list..."
         />

@@ -92,7 +92,7 @@ class VideoList extends React.Component {
             onFocus={!_.isEmpty(list) && this.onNameClick}
             onBlur={this.onInputBlur}
             onChange={this.onInputChange}
-            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+            onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
             value={!this.state.isEditing ? (list.name || '📥') : this.state.name}
             ref={input => {this.listNameInput = input}}
             readOnly={_.isEmpty(list)}
@@ -116,11 +116,7 @@ class VideoList extends React.Component {
           (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
           !video.deleted
 
-        if (condition) {
-          return <VideoItem video={video} key={video.data.id} />
-        } else {
-          return false
-        }
+        return condition && <VideoItem video={video} key={video.data.id} />
       })
     }
 
