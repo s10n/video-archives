@@ -39,7 +39,7 @@ class Index extends React.Component {
 
   render() {
     const { boards, videos } = this.props
-    const trash = _.find(videos, 'deleted')
+    const trash = _.find(videos, 'deleted') && true
 
     return (
       <div className="AppContainer">

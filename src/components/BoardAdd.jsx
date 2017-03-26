@@ -30,7 +30,7 @@ class BoardAdd extends React.Component {
   onInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     let error = null
 
     if (slug === 'trash') {
@@ -60,7 +60,7 @@ class BoardAdd extends React.Component {
         <input
           type="text"
           onChange={this.onInputChange}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
           value={this.state.title}
           placeholder="Create new board..."
         />

@@ -26,7 +26,7 @@ class ListAdd extends React.Component {
   onInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const listExists = _.find(this.props.board.lists, ['slug', slug])
 
     this.setState({ name, slug, error: listExists && 'List exists' })
@@ -50,7 +50,7 @@ class ListAdd extends React.Component {
         <input
           className="CardTitle"
           onChange={this.onInputChange}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
           value={this.state.name}
           placeholder="Add a list..."
         />

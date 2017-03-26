@@ -75,7 +75,7 @@ class VideoItem extends React.Component {
     // TODO: Change thumbnail ratio to 16:9
     return (
       <article className="VideoItem">
-        <img src={video.data.snippet.thumbnails.high.url} role="presentation" height="120" />
+        <img src={video.data.snippet.thumbnails.high.url} alt="" role="presentation" height="120" />
 
         <h3 className="VideoTitle">
           <a href={url} target="_blank">{video.data.snippet.title}</a>

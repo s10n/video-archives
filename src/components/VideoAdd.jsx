@@ -157,7 +157,7 @@ class VideoAdd extends React.Component {
         <input
           type="text"
           onChange={this.onInputChange}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
           value={this.state.videoUri}
           placeholder="Add a video..."
         />

@@ -53,7 +53,7 @@ class BoardRead extends React.Component {
   onInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const boardExists = _.find(
       this.props.boards,
       board => {return slug === board.slug && slug !== this.props.params.boardSlug}
@@ -102,7 +102,7 @@ class BoardRead extends React.Component {
             onFocus={this.onTitleClick}
             onBlur={this.onInputBlur}
             onChange={this.onInputChange}
-            onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+            onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
             value={!this.state.isEditing ? currentBoard.title : this.state.title}
             ref={input => {this.boardTitleInput = input}}
           />
