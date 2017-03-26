@@ -2,18 +2,16 @@ import _ from 'lodash'
 import * as types from '../actions/types'
 import { SAMPLE_BOARDS } from './SampleStorage'
 
-const initialState = []
-
-export default function (state = initialState, action) {
+export default function (state = [], action) {
   switch(action.type) {
     case types.FETCH_BOARDS:
-      return action.payload || initialState
+      return action.payload
 
     case types.IMPORT_STORAGE:
       return SAMPLE_BOARDS
 
     case types.EMPTY_STORAGE:
-      return initialState
+      return []
 
     case types.ADD_BOARD:
       const addingBoard = action.payload

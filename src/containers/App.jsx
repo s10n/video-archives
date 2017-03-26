@@ -29,8 +29,10 @@ const defaultProps = {
 
 class App extends React.Component {
   componentWillMount() {
-    this.props.fetchBoards()
-    this.props.fetchVideos()
+    const boards = localStorage.boards && JSON.parse(localStorage.boards)
+    const videos = localStorage.videos && JSON.parse(localStorage.videos)
+    boards && this.props.fetchBoards(boards)
+    videos && this.props.fetchVideos(videos)
   }
 
   componentDidUpdate(prevProps) {

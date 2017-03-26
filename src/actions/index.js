@@ -1,12 +1,10 @@
 import * as types from './types'
 
-export function fetchBoards() {
-  const boards = localStorage.boards ? JSON.parse(localStorage.boards) : null
+export function fetchBoards(boards) {
   return { type: types.FETCH_BOARDS, payload: boards }
 }
 
-export function fetchVideos() {
-  const videos = localStorage.videos ? JSON.parse(localStorage.videos) : null
+export function fetchVideos(videos) {
   return { type: types.FETCH_VIDEOS, payload: videos }
 }
 
