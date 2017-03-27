@@ -25,7 +25,7 @@ const defaultProps = {
   addList: () => console.warn('addList not defined')
 }
 
-class VideoItem extends React.Component {
+export class VideoItem extends React.Component {
   constructor(props) {
     super(props)
     this.onMoveClick = this.onMoveClick.bind(this)
@@ -42,7 +42,7 @@ class VideoItem extends React.Component {
       const board = _.find(this.props.boards, ['slug', this.props.video.board])
       const listExists = _.find(board.lists, ['slug', slug])
       const list = { name, slug }
-      listExists || this.props.addList(list, board)
+      listExists || this.props.addList(list, board.slug)
       this.props.editVideo(this.props.video, { list: slug })
     }
   }
@@ -72,6 +72,26 @@ class VideoItem extends React.Component {
     const url = `https://www.youtube.com/watch?v=${video.data.id}`
     const publishedAt = new Date(video.data.snippet.publishedAt)
 
+    const videoItemFunctions = () => {
+      const location = (
+        <span>{video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}</span>
+      )
+      return (
+        !video.deleted ?
+          <section>
+            <button className="btn-link" onClick={this.onMoveClick}>Move</button>
+            &middot;
+            <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
+          </section>
+        :
+          <section>
+            <button className="btn-link" onClick={this.onRecoverClick}>Recover {location}</button>
+            &middot;
+            <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
+          </section>
+      )
+    }
+
     // TODO: Change thumbnail ratio to 16:9
     return (
       <article className="VideoItem">
@@ -83,30 +103,7 @@ class VideoItem extends React.Component {
 
         <section className="VideoMeta">
           <date>{publishedAt.toLocaleString('en-US')}</date>
-          {
-            !this.props.addingVideo && (
-              !video.deleted ?
-                <section>
-                  <button className="btn-link" onClick={this.onMoveClick}>
-                    Move
-                  </button>
-                  &middot;
-                  <button className="btn-link" onClick={this.onTrashClick}>
-                    🗑
-                  </button>
-                </section>
-              :
-                <section>
-                  <button className="btn-link" onClick={this.onRecoverClick}>
-                    Recover {video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}
-                  </button>
-                  &middot;
-                  <button className="btn-link" onClick={this.onDeleteClick}>
-                    Delete
-                  </button>
-                </section>
-            )
-          }
+          {!this.props.addingVideo && videoItemFunctions()}
         </section>
       </article>
     )
