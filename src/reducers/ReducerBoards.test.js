@@ -52,8 +52,8 @@ describe('Boards reducer', () => {
   /* List */
   it('should handle ADD_LIST', () => {
     const addingList = { name: 'Daft Punk', slug: 'daft-punk' }
-    const addingListCurrentBoard = SAMPLE_BOARDS[0]
-    const action = { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoard } }
+    const addingListCurrentBoardSlug = SAMPLE_BOARDS[0].slug
+    const action = { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoardSlug } }
     expect(boards(SAMPLE_BOARDS, action)[0].lists).toContain(addingList)
   })
 

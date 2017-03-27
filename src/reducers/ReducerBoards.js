@@ -28,8 +28,8 @@ export default function (state = [], action) {
       return _.without(state, deletingBoard)
 
     case types.ADD_LIST:
-      const { addingList, addingListCurrentBoard } = action.payload
-      return state.map(board => {return board === addingListCurrentBoard ?
+      const { addingList, addingListCurrentBoardSlug } = action.payload
+      return state.map(board => {return board.slug === addingListCurrentBoardSlug ?
         { ...board, lists: [ ...board.lists, addingList ] } : board
       })
 

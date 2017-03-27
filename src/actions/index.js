@@ -40,8 +40,8 @@ export function deleteBoard(deletingBoard) {
   return { type: types.DELETE_BOARD, payload: deletingBoard }
 }
 
-export function addList(addingList, addingListCurrentBoard) {
-  return { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoard } }
+export function addList(addingList, addingListCurrentBoardSlug) {
+  return { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoardSlug } }
 }
 
 export function editList(editingList, editingListPart, editingListCurrentBoard) {

@@ -56,11 +56,11 @@ describe('actions', () => {
     })
 
     it('addList', () => {
-      expect(actions.addList('addingList', 'addingListCurrentBoard')).toEqual({
+      expect(actions.addList('addingList', 'addingListCurrentBoardSlug')).toEqual({
         type: types.ADD_LIST,
         payload: {
           addingList: 'addingList',
-          addingListCurrentBoard: 'addingListCurrentBoard'
+          addingListCurrentBoardSlug: 'addingListCurrentBoardSlug'
         }
       })
     })
