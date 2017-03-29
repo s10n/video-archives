@@ -5,17 +5,21 @@ import { bindActionCreators } from 'redux'
 import { addList } from '../actions'
 import './ListAdd.css'
 
+export const ERROR_MESSAGE = {
+  exists: 'List exists'
+}
+
 const propTypes = {
   board: React.PropTypes.object.isRequired,
   addList: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boardSlug: {},
+  board: {},
   addList: () => console.warn('addList not defined')
 }
 
-class ListAdd extends React.Component {
+export class ListAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = { name: '', slug: '', error: null }
@@ -26,10 +30,10 @@ class ListAdd extends React.Component {
   onInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/\-\-+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const listExists = _.find(this.props.board.lists, ['slug', slug])
 
-    this.setState({ name, slug, error: listExists && 'List exists' })
+    this.setState({ name, slug, error: listExists && ERROR_MESSAGE.exists })
   }
 
   onPressEnter() {
@@ -39,7 +43,7 @@ class ListAdd extends React.Component {
 
     if (name && slug && !error) {
       const list = { name, slug }
-      this.props.addList(list, board)
+      this.props.addList(list, board.slug)
       this.setState({ name: '', slug: '', error: null })
     }
   }
@@ -48,9 +52,10 @@ class ListAdd extends React.Component {
     return (
       <div>
         <input
+          type="text"
           className="CardTitle"
           onChange={this.onInputChange}
-          onKeyPress={event => {if (event.key === 'Enter') this.onPressEnter()}}
+          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
           value={this.state.name}
           placeholder="Add a list..."
         />

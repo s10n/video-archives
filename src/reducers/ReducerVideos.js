@@ -2,18 +2,16 @@ import _ from 'lodash'
 import * as types from '../actions/types'
 import { SAMPLE_VIDEOS } from './SampleStorage'
 
-const initialState = []
-
-export default function (state = initialState, action) {
+export default function (state = [], action) {
   switch(action.type) {
     case types.FETCH_VIDEOS:
-      return action.payload || initialState
+      return action.payload
 
     case types.IMPORT_STORAGE:
       return SAMPLE_VIDEOS
 
     case types.EMPTY_STORAGE:
-      return initialState
+      return []
 
     case types.EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
