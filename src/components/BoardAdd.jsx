@@ -5,6 +5,12 @@ import { bindActionCreators } from 'redux'
 import { addBoard } from '../actions'
 import './BoardAdd.css'
 
+export const ERROR_MESSAGE = {
+  valid: 'Press enter key to create ↵',
+  reserved: 'Reserved board title',
+  exists: 'Board already exists'
+}
+
 const propTypes = {
   boards: React.PropTypes.array.isRequired,
   addBoard: React.PropTypes.func.isRequired
@@ -15,7 +21,7 @@ const defaultProps = {
   addBoard: () => console.warn('addBoard not defined')
 }
 
-class BoardAdd extends React.Component {
+export class BoardAdd extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object
   }
@@ -34,9 +40,9 @@ class BoardAdd extends React.Component {
     let error = null
 
     if (slug === 'trash') {
-      error = 'Reserved board title'
+      error = ERROR_MESSAGE.reserved
     } else if (_.find(this.props.boards, ['slug', slug])) {
-      error = 'Board already exists'
+      error = ERROR_MESSAGE.exists
     }
 
     this.setState({ title, slug, error })
@@ -67,7 +73,7 @@ class BoardAdd extends React.Component {
 
         {this.state.title.length > 0 &&
           <p className="HelpBlock">
-            <small>{this.state.error || `Press enter key to create ↵`}</small>
+            <small>{this.state.error || ERROR_MESSAGE.valid}</small>
           </p>
         }
       </section>

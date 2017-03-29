@@ -7,26 +7,26 @@ import { addVideo } from '../actions'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
-const API_INFO = {
+export const API_INFO = {
   url    : 'https://www.googleapis.com/youtube/v3/videos',
   key    : 'AIzaSyBOMBvSTv2siglJCEOybx5MD_KzerZ1WLg',
   part   : 'snippet,contentDetails',
   fields : 'items(id,snippet(publishedAt,channelId,title,thumbnails,channelTitle,categoryId),' +
            'contentDetails(duration))',
-  videoIdLength : 11
+  videoIDLength : 11
 }
 
-const ERROR_MESSAGE = {
+export const ERROR_MESSAGE = {
   invalid: 'Type valid url',
+  exists: 'Video exists',
   fetching: 'Fetching...',
   noResults: 'No results',
-  videoExists: 'Video exists'
+  success: 'Press enter key to add this video ↵'
 }
 
 const propTypes = {
   boardSlug: React.PropTypes.string,
   listSlug: React.PropTypes.string,
-  boards: React.PropTypes.array.isRequired,
   videos: React.PropTypes.array.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
@@ -34,26 +34,23 @@ const propTypes = {
 const defaultProps = {
   boardSlug: '',
   listSlug: '',
-  boards: [],
   videos: [],
   addVideo: () => console.warn('addVideo not defined')
 }
 
-class VideoAdd extends React.Component {
+export class VideoAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      videoUri: '',
-      videoId: '',
-      errorCode: null,
+      videoURI: '',
+      videoID: '',
+      error: null,
       video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
     }
     this.onInputChange = this.onInputChange.bind(this)
   }
 
   onInputChange(event) {
-    const fetchUrl = `${API_INFO.url}` +
-      `?part=${API_INFO.part}&fields=${API_INFO.fields}&key=${API_INFO.key}`
     const getParams = uri => {
       let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
       let params = {}
@@ -65,81 +62,87 @@ class VideoAdd extends React.Component {
       return params
     }
 
-    const videoUri = event.target.value
-    this.setState({ videoUri })
+    const videoURI = event.target.value
+    this.setState({ videoURI })
 
     /* Check URI length */
-    let videoId = ''
-    if (videoUri.length === API_INFO.videoIdLength) {
-      videoId = videoUri
-    } else if (!videoUri.length) {
-      this.setState({ errorCode: null })
+    let videoID = ''
+    if (videoURI.length === API_INFO.videoIDLength) {
+      videoID = videoURI
+    } else if (!videoURI.length) {
+      this.setState({ error: null })
     } else {
-      let params = getParams(videoUri)
+      let params = getParams(videoURI)
 
-      if (params.hasOwnProperty('v') && params.v.length === API_INFO.videoIdLength) {
-        videoId = params.v
+      if (params.hasOwnProperty('v') && params.v.length === API_INFO.videoIDLength) {
+        videoID = params.v
       } else {
-        this.setState({ errorCode: 'invalid' })
+        this.setState({ error: 'invalid' })
       }
     }
 
     /* Find duplications */
     let existVideo = ''
-    if (videoId) {
-      existVideo = _.find(this.props.videos, video => {return video.data.id === videoId})
-      this.setState({ errorCode: 'videoExists', existVideo })
+    if (videoID) {
+      existVideo = _.find(this.props.videos, video => {return video.data.id === videoID})
+      this.setState({ error: 'exists', existVideo })
     }
 
     /* Fetch video */
-    if (videoId && !existVideo) {
-      this.setState({ errorCode: 'fetching' })
+    if (videoID && !existVideo) {
+      this.setState({ error: 'fetching' })
 
-      const request = axios.get(`${fetchUrl}&id=${videoId}`)
+      const params = {
+        key: API_INFO.key,
+        part: API_INFO.part,
+        fields: API_INFO.fields,
+        id: videoID
+      }
+      const request = axios.get(API_INFO.url, { params })
       request.then(({ data }) => {
         const { items } = data
         this.setState(items.length ?
-          { errorCode: 'success', video: { ...this.state.video, data: items[0] } } :
-          { errorCode: 'noResults' }
+          { error: 'success', video: { ...this.state.video, data: items[0] } } :
+          { error: 'noResults' }
         )
       })
     }
   }
 
   onPressEnter() {
-    if (this.state.errorCode === 'success') {
+    if (this.state.error === 'success') {
       this.props.addVideo(this.state.video)
       this.setState({
-        videoUri: '',
-        videoId: '',
-        errorCode: null,
+        videoURI: '',
+        videoID: '',
+        error: null,
         video: { ...this.state.video, data: {} }
       })
     }
   }
 
   showFetchResult() {
-    const errorCode = this.state.errorCode
+    const error = this.state.error
 
     // TODO: If existVideo is in Trash, just recover it to current list
     const existVideo = this.state.existVideo
-    const additionalMessage = (errorCode === 'videoExists') ?
-      (!existVideo.deleted ? ` : ${existVideo.board} - ${existVideo.list}` : ' : Trash') :
+    const additionalMessage = (error === 'exists') ?
+      (!existVideo.deleted ? `: ${existVideo.board} - ${existVideo.list}` : ' : Trash') :
       ''
 
-    if (errorCode === 'success') {
+    if (error === 'success') {
       return (
         <div>
-          <p><small className="strong">Press enter key to add this video &crarr;</small></p>
+          <p className="HelpBlock success strong">
+            <small>{ERROR_MESSAGE[error] + additionalMessage}</small>
+          </p>
           <VideoItem video={this.state.video} addingVideo />
         </div>
       )
-    } else if (errorCode) {
+    } else if (error) {
       return (
-        <p className="HelpBlock">
-          <small>
-            {ERROR_MESSAGE[errorCode] + additionalMessage}
-          </small>
+        <p className="HelpBlock error">
+          <small>{ERROR_MESSAGE[error] + additionalMessage}</small>
         </p>
       )
     }
@@ -148,7 +151,7 @@ class VideoAdd extends React.Component {
   render() {
     return (
       <section className="VideoAdd">
-        {this.state.errorCode &&
+        {this.state.error &&
           <section className="FetchResult">
             {this.showFetchResult()}
           </section>
@@ -158,7 +161,7 @@ class VideoAdd extends React.Component {
           type="text"
           onChange={this.onInputChange}
           onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
-          value={this.state.videoUri}
+          value={this.state.videoURI}
           placeholder="Add a video..."
         />
       </section>
@@ -167,7 +170,7 @@ class VideoAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { boards: state.boards, videos: state.videos }
+  return { videos: state.videos }
 }
 
 function mapDispatchToProps(dispatch) {

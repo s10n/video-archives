@@ -1,12 +1,10 @@
 import * as types from './types'
 
-export function fetchBoards() {
-  const boards = localStorage.boards ? JSON.parse(localStorage.boards) : null
+export function fetchBoards(boards) {
   return { type: types.FETCH_BOARDS, payload: boards }
 }
 
-export function fetchVideos() {
-  const videos = localStorage.videos ? JSON.parse(localStorage.videos) : null
+export function fetchVideos(videos) {
   return { type: types.FETCH_VIDEOS, payload: videos }
 }
 
@@ -42,8 +40,8 @@ export function deleteBoard(deletingBoard) {
   return { type: types.DELETE_BOARD, payload: deletingBoard }
 }
 
-export function addList(addingList, addingListCurrentBoard) {
-  return { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoard } }
+export function addList(addingList, addingListCurrentBoardSlug) {
+  return { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoardSlug } }
 }
 
 export function editList(editingList, editingListPart, editingListCurrentBoard) {

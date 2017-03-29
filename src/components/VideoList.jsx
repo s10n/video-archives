@@ -23,7 +23,7 @@ const defaultProps = {
   deleteList: () => console.warn('deleteList not defined')
 }
 
-class VideoList extends React.Component {
+export class VideoList extends React.Component {
   constructor(props) {
     super(props)
     this.state = { isEditing: false, name: '', slug: '', error: null }
@@ -83,7 +83,7 @@ class VideoList extends React.Component {
     const list = this.props.list
     const videoList = this.props.videoList
 
-    const VideoHeader = list => {
+    const ListHeader = list => {
       return (
         <header className="CardHeader ListHeader">
           <input
@@ -103,7 +103,7 @@ class VideoList extends React.Component {
           }
 
           {this.state.error &&
-            <small>{this.state.error}</small>
+            <small className="HelpBlock">{this.state.error}</small>
           }
         </header>
       )
@@ -128,7 +128,7 @@ class VideoList extends React.Component {
 
     return (
       <article className="Card">
-        {VideoHeader(list)}
+        {ListHeader(list)}
 
         <div className="CardScroll" style={styleIE()}>
           {listScroll(videoList)}
