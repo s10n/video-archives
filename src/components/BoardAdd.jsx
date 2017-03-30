@@ -21,11 +21,11 @@ const defaultProps = {
   addBoard: () => console.warn('addBoard not defined')
 }
 
-export class BoardAdd extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+const contextTypes = {
+  router: React.PropTypes.object
+}
 
+export class BoardAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = { title: '', slug: '', error: null }
@@ -91,5 +91,6 @@ function mapDispatchToProps(dispatch) {
 
 BoardAdd.propTypes = propTypes
 BoardAdd.defaultProps = defaultProps
+BoardAdd.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardAdd)

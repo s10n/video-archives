@@ -21,11 +21,11 @@ const defaultProps = {
   deleteBoard: () => console.warn('deleteBoard not defined')
 }
 
-class BoardRead extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+const contextTypes = {
+  router: React.PropTypes.object
+}
 
+class BoardRead extends React.Component {
   constructor(props) {
     super(props)
     this.state = { isEditing: false, title: '', slug: '', error: null }
@@ -166,5 +166,6 @@ function mapDispatchToProps(dispatch) {
 
 BoardRead.propTypes = propTypes
 BoardRead.defaultProps = defaultProps
+BoardRead.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardRead)

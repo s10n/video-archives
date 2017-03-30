@@ -17,11 +17,11 @@ const defaultProps = {
   emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
-class PageTrash extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+const contextTypes = {
+  router: React.PropTypes.object
+}
 
+class PageTrash extends React.Component {
   constructor(props) {
     super(props)
     this.onEmptyClick = this.onEmptyClick.bind(this)
@@ -75,5 +75,6 @@ function mapDispatchToProps(dispatch) {
 
 PageTrash.propTypes = propTypes
 PageTrash.defaultProps = defaultProps
+PageTrash.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageTrash)
