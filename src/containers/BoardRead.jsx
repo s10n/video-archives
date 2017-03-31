@@ -130,17 +130,15 @@ class BoardRead extends React.Component {
               </div>
             }
 
-            {currentBoard.lists.map(list => {
-              return (
-                <div className="VideoWrapper" key={list.slug}>
-                  <VideoList
-                    list={list}
-                    videoList={this.props.videos}
-                    currentBoard={currentBoard}
-                  />
-                </div>
-              )
-            })}
+            {currentBoard.lists.map(list =>
+              <div className="VideoWrapper" key={list.slug}>
+                <VideoList
+                  list={list}
+                  videoList={this.props.videos}
+                  currentBoard={currentBoard}
+                />
+              </div>
+            )}
 
             <div className="VideoWrapper">
               <article className="Card">
