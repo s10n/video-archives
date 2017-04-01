@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { emptyTrash } from '../actions'
 import './PageTrash.css'
+import Page from './Page'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
@@ -42,25 +43,17 @@ class PageTrash extends React.Component {
     }
 
     return (
-      <section className="Page">
-        <header className="PageHeader">
-          <h1 className="PageTitle">Trash</h1>
-        </header>
+      <Page page="Trash" title="Trash">
+        <article className="Card">
+          <header className="CardHeader" style={{ textAlign: 'right' }}>
+            <button className="btn-link btn-small" onClick={this.handleEmptyClick}>Empty</button>
+          </header>
 
-        <main className="PageContent">
-          <div className="PageContentInner">
-            <article className="Card">
-              <header className="CardHeader" style={{ textAlign: 'right' }}>
-                <button className="btn-link btn-small" onClick={this.handleEmptyClick}>Empty</button>
-              </header>
-
-              <div className="CardScroll">
-                {mapToComponent(this.props.videos)}
-              </div>
-            </article>
+          <div className="CardScroll">
+            {mapToComponent(this.props.videos)}
           </div>
-        </main>
-      </section>
+        </article>
+      </Page>
     )
   }
 }
