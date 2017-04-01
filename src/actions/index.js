@@ -1,4 +1,23 @@
+import { hashHistory } from 'react-router'
+import * as firebase from 'firebase'
 import * as types from './types'
+
+export function signupUser({ email, password }) {
+  return function(dispatch) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(response => {
+        dispatch({ type: types.AUTH_USER })
+        hashHistory.push('/')
+      })
+      .catch(error => {
+        dispatch(authError(error.message))
+      })
+  }
+}
+
+export function authError(error) {
+  return { type: types.AUTH_ERROR, payload: error }
+}
 
 export function fetchBoards(boards) {
   return { type: types.FETCH_BOARDS, payload: boards }
