@@ -158,6 +158,7 @@ export class VideoAdd extends React.Component {
         }
 
         <input
+          className="borderless-input"
           type="text"
           onChange={this.handleInputChange}
           onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}

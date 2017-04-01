@@ -64,6 +64,7 @@ export class BoardAdd extends React.Component {
     return (
       <section className="BoardAdd">
         <input
+          className="borderless-input"
           type="text"
           onChange={this.handleInputChange}
           onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}

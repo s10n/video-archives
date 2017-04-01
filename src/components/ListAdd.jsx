@@ -53,7 +53,7 @@ export class ListAdd extends React.Component {
       <div>
         <input
           type="text"
-          className="CardTitle"
+          className="CardTitle borderless-input"
           onChange={this.handleInputChange}
           onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.name}

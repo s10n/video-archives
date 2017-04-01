@@ -97,7 +97,7 @@ class BoardRead extends React.Component {
       <section className="Page">
         <header className="PageHeader BoardHeader">
           <input
-            className="PageTitle BoardTitle h1"
+            className="PageTitle BoardTitle h1 borderless-input"
             type="text"
             onFocus={this.handleTitleClick}
             onBlur={this.handleInputBlur}

@@ -87,7 +87,7 @@ export class VideoList extends React.Component {
       return (
         <header className="CardHeader ListHeader">
           <input
-            className="CardTitle ListName"
+            className="CardTitle ListName borderless-input"
             type="text"
             onFocus={!_.isEmpty(list) && this.handleNameClick}
             onBlur={this.handleInputBlur}
