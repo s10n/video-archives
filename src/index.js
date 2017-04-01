@@ -7,9 +7,9 @@ import { Router, hashHistory } from 'react-router'
 import reducers from './reducers'
 import routes from './routes'
 import * as firebase from 'firebase'
+import { firebaseConfig } from './config'
 
-const config = {}
-firebase.initializeApp(config)
+firebase.initializeApp(firebaseConfig)
 
 const createStoreWithMiddleware = applyMiddleware(
   ReduxPromise

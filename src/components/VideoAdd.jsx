@@ -4,12 +4,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addVideo } from '../actions'
+import { youtubeAPIKey } from '../config'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
 export const API_INFO = {
   url    : 'https://www.googleapis.com/youtube/v3/videos',
-  key    : 'AIzaSyBOMBvSTv2siglJCEOybx5MD_KzerZ1WLg',
+  key    : youtubeAPIKey,
   part   : 'snippet,contentDetails',
   fields : 'items(id,snippet(publishedAt,channelId,title,thumbnails,channelTitle,categoryId),' +
            'contentDetails(duration))',
