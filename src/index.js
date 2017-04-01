@@ -6,6 +6,10 @@ import ReduxPromise from 'redux-promise'
 import { Router, hashHistory } from 'react-router'
 import reducers from './reducers'
 import routes from './routes'
+import * as firebase from 'firebase'
+
+const config = {}
+firebase.initializeApp(config)
 
 const createStoreWithMiddleware = applyMiddleware(
   ReduxPromise
