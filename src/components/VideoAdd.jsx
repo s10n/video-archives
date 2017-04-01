@@ -47,10 +47,10 @@ export class VideoAdd extends React.Component {
       error: null,
       video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
     }
-    this.onInputChange = this.onInputChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const getParams = uri => {
       let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
       let params = {}
@@ -109,7 +109,7 @@ export class VideoAdd extends React.Component {
     }
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     if (this.state.error === 'success') {
       this.props.addVideo(this.state.video)
       this.setState({
@@ -159,8 +159,8 @@ export class VideoAdd extends React.Component {
 
         <input
           type="text"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.videoURI}
           placeholder="Add a video..."
         />

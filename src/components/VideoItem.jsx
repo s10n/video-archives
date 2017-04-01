@@ -28,13 +28,13 @@ const defaultProps = {
 export class VideoItem extends React.Component {
   constructor(props) {
     super(props)
-    this.onMoveClick = this.onMoveClick.bind(this)
-    this.onTrashClick = this.onTrashClick.bind(this)
-    this.onRecoverClick = this.onRecoverClick.bind(this)
-    this.onDeleteClick = this.onDeleteClick.bind(this)
+    this.handleMoveClick = this.handleMoveClick.bind(this)
+    this.handleTrashClick = this.handleTrashClick.bind(this)
+    this.handleRecoverClick = this.handleRecoverClick.bind(this)
+    this.handleDeleteClick = this.handleDeleteClick.bind(this)
   }
 
-  onMoveClick() {
+  handleMoveClick() {
     const name = prompt(`Type a name or slug of list`).trim()
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
@@ -47,11 +47,11 @@ export class VideoItem extends React.Component {
     }
   }
 
-  onTrashClick() {
+  handleTrashClick() {
     this.props.editVideo(this.props.video, { deleted: true })
   }
 
-  onRecoverClick() {
+  handleRecoverClick() {
     const title = this.props.video.board || prompt(`Type a name or slug of board`).trim()
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
@@ -63,7 +63,7 @@ export class VideoItem extends React.Component {
     }
   }
 
-  onDeleteClick() {
+  handleDeleteClick() {
     confirm(`Delete?`) && this.props.deleteVideo(this.props.video)
   }
 
@@ -79,15 +79,15 @@ export class VideoItem extends React.Component {
       return (
         !video.deleted ?
           <section>
-            <button className="btn-link" onClick={this.onMoveClick}>Move</button>
+            <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
             &middot;
-            <button className="btn-link" onClick={this.onTrashClick}>🗑</button>
+            <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
           </section>
         :
           <section>
-            <button className="btn-link" onClick={this.onRecoverClick}>Recover {location}</button>
+            <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
             &middot;
-            <button className="btn-link" onClick={this.onDeleteClick}>Delete</button>
+            <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
           </section>
       )
     }

@@ -24,10 +24,10 @@ const contextTypes = {
 class PageTrash extends React.Component {
   constructor(props) {
     super(props)
-    this.onEmptyClick = this.onEmptyClick.bind(this)
+    this.handleEmptyClick = this.handleEmptyClick.bind(this)
   }
 
-  onEmptyClick() {
+  handleEmptyClick() {
     if (confirm(`Empty trash?`)) {
       this.props.emptyTrash()
       this.context.router.push('/')
@@ -51,7 +51,7 @@ class PageTrash extends React.Component {
           <div className="PageContentInner">
             <article className="Card">
               <header className="CardHeader" style={{ textAlign: 'right' }}>
-                <button className="btn-link btn-small" onClick={this.onEmptyClick}>Empty</button>
+                <button className="btn-link btn-small" onClick={this.handleEmptyClick}>Empty</button>
               </header>
 
               <div className="CardScroll">

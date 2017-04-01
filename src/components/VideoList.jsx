@@ -27,26 +27,26 @@ export class VideoList extends React.Component {
   constructor(props) {
     super(props)
     this.state = { isEditing: false, name: '', slug: '', error: null }
-    this.onNameClick = this.onNameClick.bind(this)
-    this.onInputBlur = this.onInputBlur.bind(this)
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
-    this.onDeleteClick = this.onDeleteClick.bind(this)
+    this.handleNameClick = this.handleNameClick.bind(this)
+    this.handleInputBlur = this.handleInputBlur.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
+    this.handleDeleteClick = this.handleDeleteClick.bind(this)
   }
 
-  onNameClick() {
+  handleNameClick() {
     const { name, slug } = this.props.list
 
     this.setState({ isEditing: true, name, slug })
   }
 
-  onInputBlur() {
+  handleInputBlur() {
     const { name, slug } = this.props.list
 
     this.setState({ isEditing: false, name, slug, error: null })
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
@@ -59,7 +59,7 @@ export class VideoList extends React.Component {
     this.setState({ name, slug, error })
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     const list = this.props.list
     const name = this.state.name.trim()
     const { slug, error } = this.state
@@ -70,7 +70,7 @@ export class VideoList extends React.Component {
     }
   }
 
-  onDeleteClick() {
+  handleDeleteClick() {
     const list = this.props.list
 
     if (confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
@@ -89,17 +89,17 @@ export class VideoList extends React.Component {
           <input
             className="CardTitle ListName"
             type="text"
-            onFocus={!_.isEmpty(list) && this.onNameClick}
-            onBlur={this.onInputBlur}
-            onChange={this.onInputChange}
-            onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+            onFocus={!_.isEmpty(list) && this.handleNameClick}
+            onBlur={this.handleInputBlur}
+            onChange={this.handleInputChange}
+            onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
             value={!this.state.isEditing ? (list.name || '📥') : this.state.name}
             ref={input => {this.listNameInput = input}}
             readOnly={_.isEmpty(list)}
           />
 
           {!_.isEmpty(list) &&
-            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+            <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>🗑</button>
           }
 
           {this.state.error &&
