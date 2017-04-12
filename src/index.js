@@ -16,11 +16,11 @@ const store = createStoreWithMiddleware(reducers)
 firebase.initializeApp(firebaseConfig)
 firebase.auth().onAuthStateChanged(user => {
   user ? store.dispatch({ type: AUTH_USER }) : store.dispatch({ type: UNAUTH_USER })
-})
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={hashHistory} routes={routes} />
-  </Provider>,
-  document.getElementById('app')
-)
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={hashHistory} routes={routes} />
+    </Provider>,
+    document.getElementById('app')
+  )
+})
