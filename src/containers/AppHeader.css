@@ -9,7 +9,8 @@
 }
 
 .AppTitle a,
-.AppNav a {
+.AppNav a,
+.AppNav span {
 	display: inline-block;
 	line-height: 30px;
 	padding: 10px 24px;
@@ -28,7 +29,8 @@
 	flex-direction: row;
 }
 
-.AppNav a {
+.AppNav a,
+.AppNav span {
 	color: hsl(0, 0%, 50%);
 }
 
