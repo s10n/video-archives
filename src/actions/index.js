@@ -15,6 +15,19 @@ export function signupUser({ email, password }) {
   }
 }
 
+export function signinUser({ email, password }) {
+  return function(dispatch) {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(response => {
+        dispatch({ type: types.AUTH_USER })
+        hashHistory.push('/')
+      })
+      .catch(error => {
+        dispatch(authError(error.message))
+      })
+  }
+}
+
 export function authError(error) {
   return { type: types.AUTH_ERROR, payload: error }
 }
