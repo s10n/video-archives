@@ -28,6 +28,18 @@ export function signinUser({ email, password }) {
   }
 }
 
+export function signoutUser() {
+  return function(dispatch) {
+    firebase.auth().signOut()
+      .then(response => {
+        dispatch({ type: types.UNAUTH_USER })
+      })
+      .catch(error => {
+        dispatch(authError(error.message))
+      })
+  }
+}
+
 export function authError(error) {
   return { type: types.AUTH_ERROR, payload: error }
 }
