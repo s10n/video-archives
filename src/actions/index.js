@@ -3,7 +3,7 @@ import * as firebase from 'firebase'
 import * as types from './types'
 
 export function signupUser({ email, password }) {
-  return function(dispatch) {
+  return dispatch => {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
@@ -16,7 +16,7 @@ export function signupUser({ email, password }) {
 }
 
 export function signinUser({ email, password }) {
-  return function(dispatch) {
+  return dispatch => {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
@@ -29,7 +29,7 @@ export function signinUser({ email, password }) {
 }
 
 export function signoutUser() {
-  return function(dispatch) {
+  return dispatch => {
     firebase.auth().signOut()
       .then(response => {
         dispatch({ type: types.UNAUTH_USER })
