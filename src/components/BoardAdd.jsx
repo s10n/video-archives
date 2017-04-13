@@ -21,19 +21,19 @@ const defaultProps = {
   addBoard: () => console.warn('addBoard not defined')
 }
 
-export class BoardAdd extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+const contextTypes = {
+  router: React.PropTypes.object
+}
 
+export class BoardAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = { title: '', slug: '', error: null }
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
@@ -48,7 +48,7 @@ export class BoardAdd extends React.Component {
     this.setState({ title, slug, error })
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
@@ -64,9 +64,10 @@ export class BoardAdd extends React.Component {
     return (
       <section className="BoardAdd">
         <input
+          className="borderless-input"
           type="text"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.title}
           placeholder="Create new board..."
         />
@@ -91,5 +92,6 @@ function mapDispatchToProps(dispatch) {
 
 BoardAdd.propTypes = propTypes
 BoardAdd.defaultProps = defaultProps
+BoardAdd.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardAdd)

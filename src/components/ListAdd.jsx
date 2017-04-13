@@ -23,11 +23,11 @@ export class ListAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = { name: '', slug: '', error: null }
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
@@ -36,7 +36,7 @@ export class ListAdd extends React.Component {
     this.setState({ name, slug, error: listExists && ERROR_MESSAGE.exists })
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     const board = this.props.board
     const name = this.state.name.trim()
     const { slug, error } = this.state
@@ -53,9 +53,9 @@ export class ListAdd extends React.Component {
       <div>
         <input
           type="text"
-          className="CardTitle"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          className="CardTitle borderless-input"
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.name}
           placeholder="Add a list..."
         />

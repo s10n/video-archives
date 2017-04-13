@@ -4,12 +4,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addVideo } from '../actions'
+import { youtubeAPIKey } from '../config'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
 export const API_INFO = {
   url    : 'https://www.googleapis.com/youtube/v3/videos',
-  key    : 'AIzaSyBOMBvSTv2siglJCEOybx5MD_KzerZ1WLg',
+  key    : youtubeAPIKey,
   part   : 'snippet,contentDetails',
   fields : 'items(id,snippet(publishedAt,channelId,title,thumbnails,channelTitle,categoryId),' +
            'contentDetails(duration))',
@@ -47,10 +48,10 @@ export class VideoAdd extends React.Component {
       error: null,
       video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
     }
-    this.onInputChange = this.onInputChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const getParams = uri => {
       let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
       let params = {}
@@ -109,7 +110,7 @@ export class VideoAdd extends React.Component {
     }
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     if (this.state.error === 'success') {
       this.props.addVideo(this.state.video)
       this.setState({
@@ -158,9 +159,10 @@ export class VideoAdd extends React.Component {
         }
 
         <input
+          className="borderless-input"
           type="text"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.videoURI}
           placeholder="Add a video..."
         />

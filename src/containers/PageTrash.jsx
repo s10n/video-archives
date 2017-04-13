@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { emptyTrash } from '../actions'
 import './PageTrash.css'
+import Page from './Page'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
@@ -17,17 +18,17 @@ const defaultProps = {
   emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
-class PageTrash extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+const contextTypes = {
+  router: React.PropTypes.object
+}
 
+class PageTrash extends React.Component {
   constructor(props) {
     super(props)
-    this.onEmptyClick = this.onEmptyClick.bind(this)
+    this.handleEmptyClick = this.handleEmptyClick.bind(this)
   }
 
-  onEmptyClick() {
+  handleEmptyClick() {
     if (confirm(`Empty trash?`)) {
       this.props.emptyTrash()
       this.context.router.push('/')
@@ -42,25 +43,17 @@ class PageTrash extends React.Component {
     }
 
     return (
-      <section className="Page">
-        <header className="PageHeader">
-          <h1 className="PageTitle">Trash</h1>
-        </header>
+      <Page page="Trash" title="Trash">
+        <article className="Card">
+          <header className="CardHeader" style={{ textAlign: 'right' }}>
+            <button className="btn-link btn-small" onClick={this.handleEmptyClick}>Empty</button>
+          </header>
 
-        <main className="PageContent">
-          <div className="PageContentInner">
-            <article className="Card">
-              <header className="CardHeader" style={{ textAlign: 'right' }}>
-                <button className="btn-link btn-small" onClick={this.onEmptyClick}>Empty</button>
-              </header>
-
-              <div className="CardScroll">
-                {mapToComponent(this.props.videos)}
-              </div>
-            </article>
+          <div className="CardScroll">
+            {mapToComponent(this.props.videos)}
           </div>
-        </main>
-      </section>
+        </article>
+      </Page>
     )
   }
 }
@@ -75,5 +68,6 @@ function mapDispatchToProps(dispatch) {
 
 PageTrash.propTypes = propTypes
 PageTrash.defaultProps = defaultProps
+PageTrash.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageTrash)

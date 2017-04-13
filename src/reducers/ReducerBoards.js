@@ -20,7 +20,7 @@ export default function (state = [], action) {
     case types.EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
       return state.map(board => {return board === editingBoard ?
-        Object.assign({}, board, editingBoardPart) : board
+        { ...board, ...editingBoardPart } : board
       })
 
     case types.DELETE_BOARD:

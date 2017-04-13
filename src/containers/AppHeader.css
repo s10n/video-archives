@@ -1,8 +1,18 @@
 .AppHeader {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: space-between;
 	border-bottom: 1px solid hsl(0, 0%, 90%);
+	height: 51px;
 }
 
-.AppTitle {
+.AppTitle a,
+.AppNav a,
+.AppNav span {
+	display: inline-block;
+	line-height: 30px;
 	padding: 10px 24px;
 }
 
@@ -12,4 +22,18 @@
 
 .AppTitle small {
 	color: silver;
+}
+
+.AppNav {
+	display: flex;
+	flex-direction: row;
+}
+
+.AppNav a,
+.AppNav span {
+	color: hsl(0, 0%, 50%);
+}
+
+.AppNav a:hover {
+	color: black;
 }
