@@ -120,13 +120,14 @@ class BoardRead extends React.Component {
               _.find(
                 this.props.videos,
                 video => {
-                  return video.board === board.slug && !video.list && !video.deleted
+                  return video.board === boardKey && !video.list && !video.deleted
                 }
               ) &&
               <div className="VideoWrapper">
                 <VideoList
                   videoList={this.props.videos}
                   board={board}
+                  boardKey={boardKey}
                 />
               </div>
             }
@@ -135,8 +136,10 @@ class BoardRead extends React.Component {
               <div className="VideoWrapper" key={key}>
                 <VideoList
                   list={board.lists[key]}
+                  listKey={key}
                   videoList={this.props.videos}
                   board={board}
+                  boardKey={boardKey}
                 />
               </div>
             )}

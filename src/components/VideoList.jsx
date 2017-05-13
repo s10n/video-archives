@@ -8,17 +8,21 @@ import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
 
 const propTypes = {
-  list: React.PropTypes.object.isRequired,
-  videoList: React.PropTypes.object.isRequired,
   board: React.PropTypes.object.isRequired,
+  boardKey: React.PropTypes.string.isRequired,
+  list: React.PropTypes.object.isRequired,
+  listKey: React.PropTypes.string.isRequired,
+  videoList: React.PropTypes.object.isRequired,
   editList: React.PropTypes.func.isRequired,
   deleteList: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  list: {},
-  videoList: {},
   board: {},
+  boardKey: '',
+  list: {},
+  listKey: '',
+  videoList: {},
   editList: () => console.warn('editList not defined'),
   deleteList: () => console.warn('deleteList not defined')
 }
@@ -79,7 +83,6 @@ export class VideoList extends React.Component {
   }
 
   render() {
-    const board = this.props.board
     const list = this.props.list
     const videoList = this.props.videoList
 
@@ -113,8 +116,8 @@ export class VideoList extends React.Component {
       return Object.keys(videos).map(key => {
         const video = videos[key]
         const condition =
-          video.board === board.slug &&
-          (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
+          video.board === this.props.boardKey &&
+          (_.isEmpty(list) ? !video.list : video.list === this.props.listKey) &&
           !video.deleted
 
         return condition && <VideoItem video={video} key={video.data.id} />
@@ -135,7 +138,7 @@ export class VideoList extends React.Component {
           {listScroll(videoList)}
         </div>
 
-        <VideoAdd boardSlug={board.slug} listSlug={list.slug} />
+        <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />
       </article>
     )
   }

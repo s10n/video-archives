@@ -26,15 +26,15 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  boardSlug: React.PropTypes.string,
-  listSlug: React.PropTypes.string,
+  boardKey: React.PropTypes.string,
+  listKey: React.PropTypes.string,
   videos: React.PropTypes.object.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boardSlug: '',
-  listSlug: '',
+  boardKey: '',
+  listKey: '',
   videos: {},
   addVideo: () => console.warn('addVideo not defined')
 }
@@ -46,7 +46,7 @@ export class VideoAdd extends React.Component {
       videoURI: '',
       videoID: '',
       error: null,
-      video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
+      video: { board: this.props.boardKey, list: this.props.listKey, source: 'YouTube', data: {} }
     }
     this.handleInputChange = this.handleInputChange.bind(this)
   }
