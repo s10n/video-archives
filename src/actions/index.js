@@ -81,8 +81,22 @@ export function pushStorage(props, prevProps) {
   return { type: types.PUSH_STORAGE }
 }
 
-export function addBoard(addingBoard) {
-  return { type: types.ADD_BOARD, payload: addingBoard }
+export function addBoard(board) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    // TODO: Add type to types.js
+    // TODO: Optimistic updates
+    dispatch({ type: 'ADD_BOARD_REQUESTED', board })
+
+    database.ref(`/boards/${user.uid}/${board.slug}`).set(board)
+      .then(() => {
+        dispatch({ type: 'ADD_BOARD_FULFILLED' })
+        hashHistory.push(board.slug)
+      })
+      .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
+  }
 }
 
 export function editBoard(editingBoard, editingBoardPart) {

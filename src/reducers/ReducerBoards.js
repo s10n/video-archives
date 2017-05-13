@@ -16,9 +16,8 @@ export default function (state = {}, action) {
     case types.EMPTY_STORAGE:
       return []
 
-    case types.ADD_BOARD:
-      const addingBoard = action.payload
-      return [ ...state, { title: addingBoard.title, slug: addingBoard.slug, lists: [] } ]
+    case 'ADD_BOARD_REQUESTED':
+      return { ...state, [action.board.slug]: action.board }
 
     case types.EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
