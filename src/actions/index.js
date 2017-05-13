@@ -128,21 +128,51 @@ export function addBoard(board) {
     const newBoardKey = boardsRef.push().key
 
     dispatch({ type: 'ADD_BOARD_REQUESTED', newBoardKey, board })
+    hashHistory.push(board.slug)
     boardsRef.child(newBoardKey).set(board)
-      .then(() => {
-        dispatch({ type: 'ADD_BOARD_FULFILLED' })
-        hashHistory.push(board.slug)
-      })
+      .then(() => { dispatch({ type: 'ADD_BOARD_FULFILLED' }) })
       .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
   }
 }
 
-export function editBoard(editingBoard, editingBoardPart) {
-  return { type: types.EDIT_BOARD, payload: { editingBoard, editingBoardPart } }
+export function editBoard(boardKey, newBoard) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    const boardsRef = database.ref(`/boards/${user.uid}`)
+
+    dispatch({ type: 'EDIT_BOARD_REQUESTED', boardKey, newBoard })
+    hashHistory.push(newBoard.slug)
+    boardsRef.child(boardKey).update(newBoard)
+      .then(() => { dispatch({ type: 'EDIT_BOARD_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'EDIT_BOARD_REJECTED' }) })
+  }
 }
 
-export function deleteBoard(deletingBoard) {
-  return { type: types.DELETE_BOARD, payload: deletingBoard }
+export function deleteBoard(boardKey, videos) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    const ref = database.ref()
+    const newVideo = { board: null, list: null, deleted: true }
+    let updates = { [`/boards/${user.uid}/${boardKey}`]: null }
+
+    videos.map(videoKey => {
+      updates[`/videos/${user.uid}/${videoKey}/board`] = null
+      updates[`/videos/${user.uid}/${videoKey}/list`] = null
+      updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+      dispatch({ type: 'EDIT_VIDEO_REQUESTED', videoKey, newVideo })
+      return false
+    })
+
+    dispatch({ type: 'DELETE_BOARD_REQUESTED', boardKey })
+    hashHistory.push('/')
+    ref.update(updates)
+      .then(() => { dispatch({ type: 'DELETE_BOARD_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'DELETE_BOARD_REJECTED' }) })
+  }
 }
 
 export function addList(list, boardKey) {

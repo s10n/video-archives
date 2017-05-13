@@ -21,10 +21,6 @@ const defaultProps = {
   deleteBoard: () => console.warn('deleteBoard not defined')
 }
 
-const contextTypes = {
-  router: React.PropTypes.object
-}
-
 class BoardRead extends React.Component {
   constructor(props) {
     super(props)
@@ -37,15 +33,19 @@ class BoardRead extends React.Component {
   }
 
   handleTitleClick() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
-    const { title, slug } = currentBoard
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
+
+    const { title, slug } = board
 
     this.setState({ isEditing: true, title, slug })
   }
 
   handleInputBlur() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
-    const { title, slug } = currentBoard
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
+
+    const { title, slug } = board
 
     this.setState({ isEditing: false, title, slug, error: null })
   }
@@ -70,23 +70,24 @@ class BoardRead extends React.Component {
   }
 
   handlePressEnter() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      this.props.editBoard(currentBoard, { title, slug })
-      this.context.router.push(slug)
+      this.props.editBoard(boardKey, { title, slug })
       this.boardTitleInput.blur()
     }
   }
 
   handleDeleteClick() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
+    const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
 
-    if (confirm(`Delete ${currentBoard.title}?\nAll lists and videos will be deleted.`)) {
-      this.props.deleteBoard(currentBoard)
-      this.context.router.push('/')
+    if (confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
+      this.props.deleteBoard(boardKey, videos)
     }
   }
 
@@ -168,6 +169,5 @@ function mapDispatchToProps(dispatch) {
 
 BoardRead.propTypes = propTypes
 BoardRead.defaultProps = defaultProps
-BoardRead.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardRead)

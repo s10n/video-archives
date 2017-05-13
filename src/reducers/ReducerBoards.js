@@ -19,15 +19,11 @@ export default function (state = {}, action) {
     case 'ADD_BOARD_REQUESTED':
       return { ...state, [action.newBoardKey]: action.board }
 
-    case types.EDIT_BOARD:
-      const { editingBoard, editingBoardPart } = action.payload
-      return state.map(board => {return board === editingBoard ?
-        { ...board, ...editingBoardPart } : board
-      })
+    case 'EDIT_BOARD_REQUESTED':
+      return dotProp.merge(state, action.boardKey, action.newBoard)
 
-    case types.DELETE_BOARD:
-      const deletingBoard = action.payload
-      return _.without(state, deletingBoard)
+    case 'DELETE_BOARD_REQUESTED':
+      return dotProp.delete(state, action.boardKey)
 
     case 'ADD_LIST_REQUESTED':
       return dotProp.set(state, `${action.boardKey}.lists.${action.newListKey}`, action.list)

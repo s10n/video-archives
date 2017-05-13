@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import dotProp from 'dot-prop-immutable'
 import * as types from '../actions/types'
 
 export default function (state = {}, action) {
@@ -14,18 +15,6 @@ export default function (state = {}, action) {
 
     case 'EMPTY_STORAGE_REQUESTED':
       return {}
-
-    case types.EDIT_BOARD:
-      const { editingBoard, editingBoardPart } = action.payload
-      return state.map(video => {return video.board === editingBoard.slug ?
-        { ...video, board: editingBoardPart.slug } : video
-      })
-
-    case types.DELETE_BOARD:
-      const deletingBoard = action.payload
-      return state.map(video => {return video.board === deletingBoard.slug ?
-        { ...video, board: null, list: null, deleted: true } : video
-      })
 
     case types.EDIT_LIST:
       const { editingList, editingListPart } = action.payload
@@ -43,11 +32,8 @@ export default function (state = {}, action) {
     case 'ADD_VIDEO_REQUESTED':
       return { ...state, [action.newVideoKey]: action.video }
 
-    case types.EDIT_VIDEO:
-      const { editingVideo, editingVideoPart } = action.payload
-      return state.map(video => {return video === editingVideo ?
-        { ...video, ...editingVideoPart } : video
-      })
+    case 'EDIT_VIDEO_REQUESTED':
+      return dotProp.merge(state, action.videoKey, action.newVideo)
 
     case types.DELETE_VIDEO:
       const deletingVideo = action.payload
