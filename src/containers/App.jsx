@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { fetchBoards, fetchVideos, pushStorage } from '../actions'
 import 'normalize.css'
 import '../style/reboot.css'
@@ -62,7 +63,11 @@ function mapStateToProps(state) {
   return { boards: state.boards, videos: state.videos }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
+}
+
 App.propTypes = propTypes
 App.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { fetchBoards, fetchVideos, pushStorage })(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
