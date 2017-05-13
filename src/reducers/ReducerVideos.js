@@ -4,8 +4,11 @@ import { SAMPLE_VIDEOS } from './SampleStorage'
 
 export default function (state = {}, action) {
   switch(action.type) {
-    case types.FETCH_VIDEOS:
-      return action.payload || {}
+    case 'FETCH_VIDEOS_REQUESTED':
+      return action.videos || {}
+
+    case 'FETCH_VIDEOS_FULFILLED':
+      return action.videos || {}
 
     case types.IMPORT_STORAGE:
       return SAMPLE_VIDEOS

@@ -57,8 +57,17 @@ export function fetchBoards(localBoards) {
   }
 }
 
-export function fetchVideos(videos) {
-  return { type: types.FETCH_VIDEOS, payload: videos }
+export function fetchVideos(localVideos) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    dispatch({ type: 'FETCH_VIDEOS_REQUESTED', videos: localVideos })
+
+    return database.ref(`/videos/${user.uid}`)
+      .once('value', snap => { dispatch({ type: 'FETCH_VIDEOS_FULFILLED', videos: snap.val() }) })
+      .catch(error => { dispatch({ type: 'FETCH_VIDEOS_REJECTED' }) })
+  }
 }
 
 export function importStorage() {
