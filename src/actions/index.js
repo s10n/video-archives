@@ -139,8 +139,19 @@ export function deleteList(deletingList, deletingListCurrentBoard) {
   return { type: types.DELETE_LIST, payload: { deletingList, deletingListCurrentBoard } }
 }
 
-export function addVideo(addingVideo) {
-  return { type: types.ADD_VIDEO, payload: addingVideo }
+export function addVideo(video) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    // TODO: Add type to types.js
+    // TODO: Optimistic updates
+    dispatch({ type: 'ADD_VIDEO_REQUESTED', video })
+
+    database.ref(`/videos/${user.uid}/${video.data.id}`).set(video)
+      .then(() => { dispatch({ type: 'ADD_VIDEO_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'ADD_VIDEO_REJECTED' }) })
+  }
 }
 
 export function editVideo(editingVideo, editingVideoPart) {

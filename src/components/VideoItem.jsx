@@ -7,7 +7,7 @@ import './VideoItem.css'
 
 const propTypes = {
   video: React.PropTypes.object.isRequired,
-  boards: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
   addingVideo: React.PropTypes.bool,
   editVideo: React.PropTypes.func.isRequired,
   deleteVideo: React.PropTypes.func.isRequired,
@@ -17,7 +17,7 @@ const propTypes = {
 
 const defaultProps = {
   video: {},
-  boards: [],
+  boards: {},
   addingVideo: false,
   editVideo: () => console.warn('editVideo not defined'),
   deleteVideo: () => console.warn('deleteVideo not defined'),

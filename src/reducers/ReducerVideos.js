@@ -41,9 +41,8 @@ export default function (state = {}, action) {
           { ...video, list: null, deleted: true } : video
       })
 
-    case types.ADD_VIDEO:
-      const addingVideo = action.payload
-      return [ ...state, addingVideo ]
+    case 'ADD_VIDEO_REQUESTED':
+      return { ...state, [action.video.data.id]: action.video }
 
     case types.EDIT_VIDEO:
       const { editingVideo, editingVideoPart } = action.payload

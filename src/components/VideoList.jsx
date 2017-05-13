@@ -110,14 +110,15 @@ export class VideoList extends React.Component {
     }
 
     const listScroll = videos => {
-      // return videos.map(video => {
-      //   const condition =
-      //     video.board === board.slug &&
-      //     (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
-      //     !video.deleted
+      return Object.keys(videos).map(key => {
+        const video = videos[key]
+        const condition =
+          video.board === board.slug &&
+          (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
+          !video.deleted
 
-      //   return condition && <VideoItem video={video} key={video.data.id} />
-      // })
+        return condition && <VideoItem video={video} key={video.data.id} />
+      })
     }
 
     const styleIE = () => {
