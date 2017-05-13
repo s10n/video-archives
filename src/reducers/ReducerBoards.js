@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import dotProp from 'dot-prop-immutable'
 import * as types from '../actions/types'
 import { SAMPLE_BOARDS } from './SampleStorage'
 
@@ -30,14 +31,7 @@ export default function (state = {}, action) {
       return _.without(state, deletingBoard)
 
     case 'ADD_LIST_REQUESTED':
-      const { list, boardSlug } = action.payload
-      return {
-        ...state,
-        [boardSlug]: {
-          ...state[boardSlug],
-          lists: { ...state[boardSlug].lists, [list.slug]: list }
-        }
-      }
+      return dotProp.set(state, `${action.boardSlug}.lists.${action.list.slug}`, action.list)
 
     case types.EDIT_LIST:
       const { editingList, editingListPart, editingListCurrentBoard } = action.payload

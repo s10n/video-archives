@@ -114,7 +114,7 @@ export function addList(list, boardSlug) {
   return dispatch => {
     // TODO: Add type to types.js
     // TODO: Optimistic updates
-    dispatch({ type: 'ADD_LIST_REQUESTED', payload: { list, boardSlug } })
+    dispatch({ type: 'ADD_LIST_REQUESTED', list, boardSlug })
 
     database.ref(`/boards/${user.uid}/${boardSlug}/lists/${list.slug}`).set(list)
       .then(() => { dispatch({ type: 'ADD_LIST_FULFILLED' }) })
