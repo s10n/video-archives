@@ -91,7 +91,8 @@ class BoardRead extends React.Component {
   }
 
   render() {
-    const currentBoard = this.props.boards[this.props.params.boardSlug]
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
 
     return (
       <section className="Page">
@@ -103,7 +104,7 @@ class BoardRead extends React.Component {
             onBlur={this.handleInputBlur}
             onChange={this.handleInputChange}
             onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
-            value={!this.state.isEditing ? currentBoard.title : this.state.title}
+            value={!this.state.isEditing ? board.title : this.state.title}
             ref={input => {this.boardTitleInput = input}}
           />
 
@@ -119,23 +120,23 @@ class BoardRead extends React.Component {
               _.find(
                 this.props.videos,
                 video => {
-                  return video.board === currentBoard.slug && !video.list && !video.deleted
+                  return video.board === board.slug && !video.list && !video.deleted
                 }
               ) &&
               <div className="VideoWrapper">
                 <VideoList
                   videoList={this.props.videos}
-                  currentBoard={currentBoard}
+                  board={board}
                 />
               </div>
             }
 
-            {currentBoard.lists && Object.keys(currentBoard.lists).map(key =>
+            {board.lists && Object.keys(board.lists).map(key =>
               <div className="VideoWrapper" key={key}>
                 <VideoList
-                  list={currentBoard.lists[key]}
+                  list={board.lists[key]}
                   videoList={this.props.videos}
-                  currentBoard={currentBoard}
+                  board={board}
                 />
               </div>
             )}
@@ -143,7 +144,7 @@ class BoardRead extends React.Component {
             <div className="VideoWrapper">
               <article className="Card">
                 <header className="CardHeader">
-                  <ListAdd board={currentBoard} />
+                  <ListAdd boardKey={boardKey} board={board} />
                 </header>
               </article>
             </div>

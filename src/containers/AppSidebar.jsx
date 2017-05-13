@@ -4,22 +4,23 @@ import './AppSidebar.css'
 import BoardAdd from '../components/BoardAdd'
 
 const propTypes = {
-  boardsList: React.PropTypes.object.isRequired,
+  boards: React.PropTypes.object.isRequired,
   trash: React.PropTypes.bool.isRequired
 }
 
 const defaultProps = {
-  boardsList: {},
+  boards: {},
   trash: false
 }
 
 class AppSidebar extends React.Component {
   render() {
-    const { boardsList } = this.props
+    const { boards } = this.props
+
     return (
       <nav className="AppSidebar">
-        {Object.keys(boardsList).map(key =>
-          <Link activeClassName="active" to={key} key={key}>{boardsList[key].title}</Link>
+        {Object.keys(boards).map(key =>
+          <Link activeClassName="active" to={boards[key].slug} key={key}>{boards[key].title}</Link>
         )}
 
         {this.props.trash &&

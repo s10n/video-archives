@@ -18,7 +18,7 @@ export default function (state = {}, action) {
       return []
 
     case 'ADD_BOARD_REQUESTED':
-      return { ...state, [action.board.slug]: action.board }
+      return { ...state, [action.newBoardKey]: action.board }
 
     case types.EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
@@ -31,7 +31,7 @@ export default function (state = {}, action) {
       return _.without(state, deletingBoard)
 
     case 'ADD_LIST_REQUESTED':
-      return dotProp.set(state, `${action.boardSlug}.lists.${action.list.slug}`, action.list)
+      return dotProp.set(state, `${action.boardKey}.lists.${action.newListKey}`, action.list)
 
     case types.EDIT_LIST:
       const { editingList, editingListPart, editingListCurrentBoard } = action.payload

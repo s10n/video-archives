@@ -42,7 +42,7 @@ export default function (state = {}, action) {
       })
 
     case 'ADD_VIDEO_REQUESTED':
-      return { ...state, [action.video.data.id]: action.video }
+      return { ...state, [action.newVideoKey]: action.video }
 
     case types.EDIT_VIDEO:
       const { editingVideo, editingVideoPart } = action.payload

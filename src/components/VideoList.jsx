@@ -10,7 +10,7 @@ import VideoAdd from './VideoAdd'
 const propTypes = {
   list: React.PropTypes.object.isRequired,
   videoList: React.PropTypes.object.isRequired,
-  currentBoard: React.PropTypes.object.isRequired,
+  board: React.PropTypes.object.isRequired,
   editList: React.PropTypes.func.isRequired,
   deleteList: React.PropTypes.func.isRequired
 }
@@ -18,7 +18,7 @@ const propTypes = {
 const defaultProps = {
   list: {},
   videoList: {},
-  currentBoard: {},
+  board: {},
   editList: () => console.warn('editList not defined'),
   deleteList: () => console.warn('deleteList not defined')
 }
@@ -51,7 +51,7 @@ export class VideoList extends React.Component {
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const listExists = _.find(
-      this.props.currentBoard.lists,
+      this.props.board.lists,
       list => {return list.slug === slug && list.slug !== this.props.list.slug}
     )
     const error = listExists && 'List exists'
@@ -65,7 +65,7 @@ export class VideoList extends React.Component {
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      this.props.editList(list, { name, slug }, this.props.currentBoard)
+      this.props.editList(list, { name, slug }, this.props.board)
       this.listNameInput.blur()
     }
   }
@@ -74,12 +74,12 @@ export class VideoList extends React.Component {
     const list = this.props.list
 
     if (confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
-      this.props.deleteList(list, this.props.currentBoard)
+      this.props.deleteList(list, this.props.board)
     }
   }
 
   render() {
-    const board = this.props.currentBoard
+    const board = this.props.board
     const list = this.props.list
     const videoList = this.props.videoList
 

@@ -11,11 +11,13 @@ export const ERROR_MESSAGE = {
 
 const propTypes = {
   board: React.PropTypes.object.isRequired,
+  boardKey: React.PropTypes.string.isRequired,
   addList: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   board: {},
+  boardKey: '',
   addList: () => console.warn('addList not defined')
 }
 
@@ -37,13 +39,13 @@ export class ListAdd extends React.Component {
   }
 
   handlePressEnter() {
-    const board = this.props.board
+    const { boardKey } = this.props
     const name = this.state.name.trim()
     const { slug, error } = this.state
 
     if (name && slug && !error) {
       const list = { name, slug }
-      this.props.addList(list, board.slug)
+      this.props.addList(list, boardKey)
       this.setState({ name: '', slug: '', error: null })
     }
   }

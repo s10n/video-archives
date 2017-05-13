@@ -49,7 +49,7 @@ class App extends React.Component {
         <AppHeader />
 
         <section className="AppWrapper">
-          <AppSidebar boardsList={boards} trash={trash} />
+          <AppSidebar boards={boards} trash={trash} />
           <main className="AppMain">
             <div className="PageWrapper">{this.props.children}</div>
           </main>

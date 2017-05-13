@@ -95,11 +95,11 @@ export function addBoard(board) {
   const user = firebase.auth().currentUser
 
   return dispatch => {
-    // TODO: Add type to types.js
-    // TODO: Optimistic updates
-    dispatch({ type: 'ADD_BOARD_REQUESTED', board })
+    const boardsRef = database.ref(`/boards/${user.uid}`)
+    const newBoardKey = boardsRef.push().key
 
-    database.ref(`/boards/${user.uid}/${board.slug}`).set(board)
+    dispatch({ type: 'ADD_BOARD_REQUESTED', newBoardKey, board })
+    boardsRef.child(newBoardKey).set(board)
       .then(() => {
         dispatch({ type: 'ADD_BOARD_FULFILLED' })
         hashHistory.push(board.slug)
@@ -116,16 +116,16 @@ export function deleteBoard(deletingBoard) {
   return { type: types.DELETE_BOARD, payload: deletingBoard }
 }
 
-export function addList(list, boardSlug) {
+export function addList(list, boardKey) {
   const database = firebase.database()
   const user = firebase.auth().currentUser
 
   return dispatch => {
-    // TODO: Add type to types.js
-    // TODO: Optimistic updates
-    dispatch({ type: 'ADD_LIST_REQUESTED', list, boardSlug })
+    const listsRef = database.ref(`/boards/${user.uid}/${boardKey}/lists`)
+    const newListKey = listsRef.push().key
 
-    database.ref(`/boards/${user.uid}/${boardSlug}/lists/${list.slug}`).set(list)
+    dispatch({ type: 'ADD_LIST_REQUESTED', boardKey, newListKey, list })
+    listsRef.child(newListKey).set(list)
       .then(() => { dispatch({ type: 'ADD_LIST_FULFILLED' }) })
       .catch(error => { dispatch({ type: 'ADD_LIST_REJECTED' }) })
   }
@@ -144,11 +144,11 @@ export function addVideo(video) {
   const user = firebase.auth().currentUser
 
   return dispatch => {
-    // TODO: Add type to types.js
-    // TODO: Optimistic updates
-    dispatch({ type: 'ADD_VIDEO_REQUESTED', video })
+    const videosRef = database.ref(`/videos/${user.uid}`)
+    const newVideoKey = videosRef.push().key
 
-    database.ref(`/videos/${user.uid}/${video.data.id}`).set(video)
+    dispatch({ type: 'ADD_VIDEO_REQUESTED', newVideoKey, video })
+    videosRef.child(newVideoKey).set(video)
       .then(() => { dispatch({ type: 'ADD_VIDEO_FULFILLED' }) })
       .catch(error => { dispatch({ type: 'ADD_VIDEO_REJECTED' }) })
   }
