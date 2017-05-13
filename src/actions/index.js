@@ -44,8 +44,17 @@ export function authError(error) {
   return { type: types.AUTH_ERROR, payload: error }
 }
 
-export function fetchBoards(boards) {
-  return { type: types.FETCH_BOARDS, payload: boards }
+export function fetchBoards(localBoards) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    dispatch({ type: 'FETCH_BOARDS_REQUESTED', boards: localBoards })
+
+    return database.ref(`/boards/${user.uid}`)
+      .once('value', snap => { dispatch({ type: 'FETCH_BOARDS_FULFILLED', boards: snap.val() }) })
+      .catch(error => { dispatch({ type: 'FETCH_BOARDS_REJECTED' }) })
+  }
 }
 
 export function fetchVideos(videos) {

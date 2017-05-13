@@ -2,10 +2,10 @@ import _ from 'lodash'
 import * as types from '../actions/types'
 import { SAMPLE_VIDEOS } from './SampleStorage'
 
-export default function (state = [], action) {
+export default function (state = {}, action) {
   switch(action.type) {
     case types.FETCH_VIDEOS:
-      return action.payload
+      return action.payload || {}
 
     case types.IMPORT_STORAGE:
       return SAMPLE_VIDEOS

@@ -8,15 +8,15 @@ import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
   editBoard: React.PropTypes.func.isRequired,
   deleteBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   editBoard: () => console.warn('editBoard not defined'),
   deleteBoard: () => console.warn('deleteBoard not defined')
 }
@@ -91,7 +91,7 @@ class BoardRead extends React.Component {
   }
 
   render() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const currentBoard = this.props.boards[this.props.params.boardSlug]
 
     return (
       <section className="Page">
@@ -130,7 +130,7 @@ class BoardRead extends React.Component {
               </div>
             }
 
-            {currentBoard.lists.map(list =>
+            {currentBoard.lists && currentBoard.lists.map(list =>
               <div className="VideoWrapper" key={list.slug}>
                 <VideoList
                   list={list}

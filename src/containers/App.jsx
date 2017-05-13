@@ -15,25 +15,25 @@ import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
   fetchBoards: React.PropTypes.func.isRequired,
   pushStorage: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   fetchBoards: () => console.warn('fetchBoards not defined'),
   pushStorage: () => console.warn('pushStorage not defined')
 }
 
 class App extends React.Component {
   componentWillMount() {
-    const boards = localStorage.boards && JSON.parse(localStorage.boards)
-    const videos = localStorage.videos && JSON.parse(localStorage.videos)
-    boards && this.props.fetchBoards(boards)
-    videos && this.props.fetchVideos(videos)
+    const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
+    const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
+    this.props.fetchBoards(localBoards)
+    this.props.fetchVideos(localVideos)
   }
 
   componentDidUpdate(prevProps) {

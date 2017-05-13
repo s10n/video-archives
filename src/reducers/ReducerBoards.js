@@ -2,10 +2,13 @@ import _ from 'lodash'
 import * as types from '../actions/types'
 import { SAMPLE_BOARDS } from './SampleStorage'
 
-export default function (state = [], action) {
+export default function (state = {}, action) {
   switch(action.type) {
-    case types.FETCH_BOARDS:
-      return action.payload
+    case 'FETCH_BOARDS_REQUESTED':
+      return action.boards || {}
+
+    case 'FETCH_BOARDS_FULFILLED':
+      return action.boards || {}
 
     case types.IMPORT_STORAGE:
       return SAMPLE_BOARDS

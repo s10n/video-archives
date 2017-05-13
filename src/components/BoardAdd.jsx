@@ -12,12 +12,12 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
   addBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
+  boards: {},
   addBoard: () => console.warn('addBoard not defined')
 }
 
