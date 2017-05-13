@@ -130,10 +130,10 @@ class BoardRead extends React.Component {
               </div>
             }
 
-            {currentBoard.lists && currentBoard.lists.map(list =>
-              <div className="VideoWrapper" key={list.slug}>
+            {currentBoard.lists && Object.keys(currentBoard.lists).map(key =>
+              <div className="VideoWrapper" key={key}>
                 <VideoList
-                  list={list}
+                  list={currentBoard.lists[key]}
                   videoList={this.props.videos}
                   currentBoard={currentBoard}
                 />

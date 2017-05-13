@@ -29,11 +29,15 @@ export default function (state = {}, action) {
       const deletingBoard = action.payload
       return _.without(state, deletingBoard)
 
-    case types.ADD_LIST:
-      const { addingList, addingListCurrentBoardSlug } = action.payload
-      return state.map(board => {return board.slug === addingListCurrentBoardSlug ?
-        { ...board, lists: [ ...board.lists, addingList ] } : board
-      })
+    case 'ADD_LIST_REQUESTED':
+      const { list, boardSlug } = action.payload
+      return {
+        ...state,
+        [boardSlug]: {
+          ...state[boardSlug],
+          lists: { ...state[boardSlug].lists, [list.slug]: list }
+        }
+      }
 
     case types.EDIT_LIST:
       const { editingList, editingListPart, editingListCurrentBoard } = action.payload

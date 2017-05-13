@@ -28,14 +28,14 @@ export const ERROR_MESSAGE = {
 const propTypes = {
   boardSlug: React.PropTypes.string,
   listSlug: React.PropTypes.string,
-  videos: React.PropTypes.array.isRequired,
+  videos: React.PropTypes.object.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
   boardSlug: '',
   listSlug: '',
-  videos: [],
+  videos: {},
   addVideo: () => console.warn('addVideo not defined')
 }
 

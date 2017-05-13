@@ -107,8 +107,19 @@ export function deleteBoard(deletingBoard) {
   return { type: types.DELETE_BOARD, payload: deletingBoard }
 }
 
-export function addList(addingList, addingListCurrentBoardSlug) {
-  return { type: types.ADD_LIST, payload: { addingList, addingListCurrentBoardSlug } }
+export function addList(list, boardSlug) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    // TODO: Add type to types.js
+    // TODO: Optimistic updates
+    dispatch({ type: 'ADD_LIST_REQUESTED', payload: { list, boardSlug } })
+
+    database.ref(`/boards/${user.uid}/${boardSlug}/lists/${list.slug}`).set(list)
+      .then(() => { dispatch({ type: 'ADD_LIST_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'ADD_LIST_REJECTED' }) })
+  }
 }
 
 export function editList(editingList, editingListPart, editingListCurrentBoard) {

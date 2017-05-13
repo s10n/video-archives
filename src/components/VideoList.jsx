@@ -9,7 +9,7 @@ import VideoAdd from './VideoAdd'
 
 const propTypes = {
   list: React.PropTypes.object.isRequired,
-  videoList: React.PropTypes.array.isRequired,
+  videoList: React.PropTypes.object.isRequired,
   currentBoard: React.PropTypes.object.isRequired,
   editList: React.PropTypes.func.isRequired,
   deleteList: React.PropTypes.func.isRequired
@@ -17,7 +17,7 @@ const propTypes = {
 
 const defaultProps = {
   list: {},
-  videoList: [],
+  videoList: {},
   currentBoard: {},
   editList: () => console.warn('editList not defined'),
   deleteList: () => console.warn('deleteList not defined')
@@ -109,15 +109,15 @@ export class VideoList extends React.Component {
       )
     }
 
-    const listScroll = vidoes => {
-      return vidoes.map(video => {
-        const condition =
-          video.board === board.slug &&
-          (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
-          !video.deleted
+    const listScroll = videos => {
+      // return videos.map(video => {
+      //   const condition =
+      //     video.board === board.slug &&
+      //     (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
+      //     !video.deleted
 
-        return condition && <VideoItem video={video} key={video.data.id} />
-      })
+      //   return condition && <VideoItem video={video} key={video.data.id} />
+      // })
     }
 
     const styleIE = () => {
