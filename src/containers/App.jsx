@@ -17,6 +17,7 @@ import AppSidebar from './AppSidebar'
 const propTypes = {
   boards: React.PropTypes.object.isRequired,
   videos: React.PropTypes.object.isRequired,
+  authenticated: React.PropTypes.bool.isRequired,
   fetchBoards: React.PropTypes.func.isRequired,
   pushStorage: React.PropTypes.func.isRequired
 }
@@ -24,6 +25,7 @@ const propTypes = {
 const defaultProps = {
   boards: {},
   videos: {},
+  authenticated: false,
   fetchBoards: () => console.warn('fetchBoards not defined'),
   pushStorage: () => console.warn('pushStorage not defined')
 }
@@ -32,8 +34,8 @@ class App extends React.Component {
   componentWillMount() {
     const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
     const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
-    this.props.fetchBoards(localBoards)
-    this.props.fetchVideos(localVideos)
+    this.props.authenticated && this.props.fetchBoards(localBoards)
+    this.props.authenticated && this.props.fetchVideos(localVideos)
   }
 
   componentDidUpdate(prevProps) {
@@ -60,7 +62,7 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { boards: state.boards, videos: state.videos }
+  return { boards: state.boards, videos: state.videos, authenticated: state.auth.authenticated }
 }
 
 function mapDispatchToProps(dispatch) {
