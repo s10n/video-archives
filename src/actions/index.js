@@ -1,6 +1,7 @@
 import { hashHistory } from 'react-router'
 import * as firebase from 'firebase'
 import * as types from './types'
+import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../SampleStorage'
 
 export function signupUser({ email, password }) {
   return dispatch => {
@@ -71,7 +72,21 @@ export function fetchVideos(localVideos) {
 }
 
 export function importStorage() {
-  return { type: types.IMPORT_STORAGE }
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    const ref = database.ref()
+    const updates = {
+      [`/boards/${user.uid}`]: SAMPLE_BOARDS,
+      [`/videos/${user.uid}`]: SAMPLE_VIDEOS
+    }
+
+    dispatch({ type: 'IMPORT_STORAGE_REQUESTED', boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
+    ref.update(updates)
+      .then(() => { dispatch({ type: 'IMPORT_STORAGE_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'IMPORT_STORAGE_REJECTED' }) })
+  }
 }
 
 export function emptyStorage() {

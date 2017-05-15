@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 import * as types from '../actions/types'
-import { SAMPLE_BOARDS } from './SampleStorage'
 
 export default function (state = {}, action) {
   switch(action.type) {
@@ -11,8 +10,8 @@ export default function (state = {}, action) {
     case 'FETCH_BOARDS_FULFILLED':
       return action.boards || {}
 
-    case types.IMPORT_STORAGE:
-      return SAMPLE_BOARDS
+    case 'IMPORT_STORAGE_REQUESTED':
+      return action.boards
 
     case types.EMPTY_STORAGE:
       return []

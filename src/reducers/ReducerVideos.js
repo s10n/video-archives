@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import * as types from '../actions/types'
-import { SAMPLE_VIDEOS } from './SampleStorage'
 
 export default function (state = {}, action) {
   switch(action.type) {
@@ -10,8 +9,8 @@ export default function (state = {}, action) {
     case 'FETCH_VIDEOS_FULFILLED':
       return action.videos || {}
 
-    case types.IMPORT_STORAGE:
-      return SAMPLE_VIDEOS
+    case 'IMPORT_STORAGE_REQUESTED':
+      return action.videos
 
     case types.EMPTY_STORAGE:
       return []
