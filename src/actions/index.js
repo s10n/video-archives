@@ -90,7 +90,21 @@ export function importStorage() {
 }
 
 export function emptyStorage() {
-  return { type: types.EMPTY_STORAGE }
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    const ref = database.ref()
+    const updates = {
+      [`/boards/${user.uid}`]: null,
+      [`/videos/${user.uid}`]: null
+    }
+
+    dispatch({ type: 'EMPTY_STORAGE_REQUESTED' })
+    ref.update(updates)
+      .then(() => { dispatch({ type: 'EMPTY_STORAGE_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'EMPTY_STORAGE_REJECTED' }) })
+  }
 }
 
 export function pushStorage(props, prevProps) {

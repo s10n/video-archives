@@ -13,8 +13,8 @@ export default function (state = {}, action) {
     case 'IMPORT_STORAGE_REQUESTED':
       return action.boards
 
-    case types.EMPTY_STORAGE:
-      return []
+    case 'EMPTY_STORAGE_REQUESTED':
+      return {}
 
     case 'ADD_BOARD_REQUESTED':
       return { ...state, [action.newBoardKey]: action.board }

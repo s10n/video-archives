@@ -12,8 +12,8 @@ export default function (state = {}, action) {
     case 'IMPORT_STORAGE_REQUESTED':
       return action.videos
 
-    case types.EMPTY_STORAGE:
-      return []
+    case 'EMPTY_STORAGE_REQUESTED':
+      return {}
 
     case types.EDIT_BOARD:
       const { editingBoard, editingBoardPart } = action.payload
