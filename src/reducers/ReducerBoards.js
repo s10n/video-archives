@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
-import * as types from '../actions/types'
+// import * as types from '../actions/types'
 
 export default function (state = {}, action) {
   switch(action.type) {
@@ -28,19 +28,11 @@ export default function (state = {}, action) {
     case 'ADD_LIST_REQUESTED':
       return dotProp.set(state, `${action.boardKey}.lists.${action.newListKey}`, action.list)
 
-    case types.EDIT_LIST:
-      const { editingList, editingListPart, editingListCurrentBoard } = action.payload
-      return state.map(board => {return board === editingListCurrentBoard ?
-        { ...board,
-          lists: board.lists.map(list => {return list === editingList ? editingListPart : list})
-        } : board
-      })
+    case 'EDIT_LIST_REQUESTED':
+      return dotProp.set(state, `${action.boardKey}.lists.${action.listKey}`, action.newList)
 
-    case types.DELETE_LIST:
-      const { deletingList, deletingListCurrentBoard } = action.payload
-      return state.map(board => {return board === deletingListCurrentBoard ?
-        { ...board, lists: _.without(board.lists, deletingList) } : board
-      })
+    case 'DELETE_LIST_REQUESTED':
+      return dotProp.delete(state, `${action.boardKey}.lists.${action.listKey}`)
 
     default:
       return state

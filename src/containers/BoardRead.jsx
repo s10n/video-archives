@@ -126,7 +126,7 @@ class BoardRead extends React.Component {
               ) &&
               <div className="VideoWrapper">
                 <VideoList
-                  videoList={this.props.videos}
+                  videos={this.props.videos}
                   board={board}
                   boardKey={boardKey}
                 />
@@ -138,7 +138,7 @@ class BoardRead extends React.Component {
                 <VideoList
                   list={board.lists[key]}
                   listKey={key}
-                  videoList={this.props.videos}
+                  videos={this.props.videos}
                   board={board}
                   boardKey={boardKey}
                 />

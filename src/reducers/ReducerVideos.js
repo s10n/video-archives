@@ -16,19 +16,6 @@ export default function (state = {}, action) {
     case 'EMPTY_STORAGE_REQUESTED':
       return {}
 
-    case types.EDIT_LIST:
-      const { editingList, editingListPart } = action.payload
-      return state.map(video => {return video.list === editingList.slug ?
-        { ...video, list: editingListPart.slug } : video
-      })
-
-    case types.DELETE_LIST:
-      const { deletingList, deletingListCurrentBoard } = action.payload
-      return state.map(video => {
-        return video.board === deletingListCurrentBoard.slug && video.list === deletingList.slug ?
-          { ...video, list: null, deleted: true } : video
-      })
-
     case 'ADD_VIDEO_REQUESTED':
       return { ...state, [action.newVideoKey]: action.video }
 

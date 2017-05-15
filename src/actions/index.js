@@ -175,7 +175,7 @@ export function deleteBoard(boardKey, videos) {
   }
 }
 
-export function addList(list, boardKey) {
+export function addList(boardKey, list) {
   const database = firebase.database()
   const user = firebase.auth().currentUser
 
@@ -190,12 +190,39 @@ export function addList(list, boardKey) {
   }
 }
 
-export function editList(editingList, editingListPart, editingListCurrentBoard) {
-  return { type: types.EDIT_LIST, payload: { editingList, editingListPart, editingListCurrentBoard } }
+export function editList(boardKey, listKey, newList) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    dispatch({ type: 'EDIT_LIST_REQUESTED', boardKey, listKey, newList })
+    database.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).update(newList)
+      .then(() => { dispatch({ type: 'EDIT_LIST_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'EDIT_LIST_REJECTED' }) })
+  }
 }
 
-export function deleteList(deletingList, deletingListCurrentBoard) {
-  return { type: types.DELETE_LIST, payload: { deletingList, deletingListCurrentBoard } }
+export function deleteList(boardKey, listKey, videos) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    const ref = database.ref()
+    const newVideo = { list: null, deleted: true }
+    let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
+
+    videos.map(videoKey => {
+      updates[`/videos/${user.uid}/${videoKey}/list`] = null
+      updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+      dispatch({ type: 'EDIT_VIDEO_REQUESTED', videoKey, newVideo })
+      return false
+    })
+
+    dispatch({ type: 'DELETE_LIST_REQUESTED', boardKey, listKey })
+    ref.update(updates)
+      .then(() => { dispatch({ type: 'DELETE_LIST_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'DELETE_LIST_REJECTED' }) })
+  }
 }
 
 export function addVideo(video) {

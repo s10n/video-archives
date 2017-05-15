@@ -12,7 +12,7 @@ const propTypes = {
   boardKey: React.PropTypes.string.isRequired,
   list: React.PropTypes.object.isRequired,
   listKey: React.PropTypes.string.isRequired,
-  videoList: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
   editList: React.PropTypes.func.isRequired,
   deleteList: React.PropTypes.func.isRequired
 }
@@ -22,7 +22,7 @@ const defaultProps = {
   boardKey: '',
   list: {},
   listKey: '',
-  videoList: {},
+  videos: {},
   editList: () => console.warn('editList not defined'),
   deleteList: () => console.warn('deleteList not defined')
 }
@@ -64,27 +64,27 @@ export class VideoList extends React.Component {
   }
 
   handlePressEnter() {
-    const list = this.props.list
     const name = this.state.name.trim()
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      this.props.editList(list, { name, slug }, this.props.board)
+      this.props.editList(this.props.boardKey, this.props.listKey, { name, slug })
       this.listNameInput.blur()
     }
   }
 
   handleDeleteClick() {
-    const list = this.props.list
+    const listKey = this.props.listKey
+    const videos = Object.keys(_.pickBy(this.props.videos, ['list', listKey])).map(key => key)
 
-    if (confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
-      this.props.deleteList(list, this.props.board)
+    if (confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
+      this.props.deleteList(this.props.boardKey, this.props.listKey, videos)
     }
   }
 
   render() {
     const list = this.props.list
-    const videoList = this.props.videoList
+    const videos = this.props.videos
 
     const ListHeader = list => {
       return (
@@ -135,7 +135,7 @@ export class VideoList extends React.Component {
         {ListHeader(list)}
 
         <div className="CardScroll" style={styleIE()}>
-          {listScroll(videoList)}
+          {listScroll(videos)}
         </div>
 
         <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />

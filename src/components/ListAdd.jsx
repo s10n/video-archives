@@ -45,7 +45,7 @@ export class ListAdd extends React.Component {
 
     if (name && slug && !error) {
       const list = { name, slug }
-      this.props.addList(list, boardKey)
+      this.props.addList(boardKey, list)
       this.setState({ name: '', slug: '', error: null })
     }
   }
