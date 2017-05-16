@@ -8,21 +8,17 @@ import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
   editBoard: React.PropTypes.func.isRequired,
   deleteBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   editBoard: () => console.warn('editBoard not defined'),
   deleteBoard: () => console.warn('deleteBoard not defined')
-}
-
-const contextTypes = {
-  router: React.PropTypes.object
 }
 
 class BoardRead extends React.Component {
@@ -37,15 +33,19 @@ class BoardRead extends React.Component {
   }
 
   handleTitleClick() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
-    const { title, slug } = currentBoard
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
+
+    const { title, slug } = board
 
     this.setState({ isEditing: true, title, slug })
   }
 
   handleInputBlur() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
-    const { title, slug } = currentBoard
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
+
+    const { title, slug } = board
 
     this.setState({ isEditing: false, title, slug, error: null })
   }
@@ -70,28 +70,30 @@ class BoardRead extends React.Component {
   }
 
   handlePressEnter() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      this.props.editBoard(currentBoard, { title, slug })
-      this.context.router.push(slug)
+      this.props.editBoard(boardKey, { title, slug })
       this.boardTitleInput.blur()
     }
   }
 
   handleDeleteClick() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
+    const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
 
-    if (confirm(`Delete ${currentBoard.title}?\nAll lists and videos will be deleted.`)) {
-      this.props.deleteBoard(currentBoard)
-      this.context.router.push('/')
+    if (confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
+      this.props.deleteBoard(boardKey, videos)
     }
   }
 
   render() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const board = this.props.boards[boardKey]
 
     return (
       <section className="Page">
@@ -103,7 +105,7 @@ class BoardRead extends React.Component {
             onBlur={this.handleInputBlur}
             onChange={this.handleInputChange}
             onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
-            value={!this.state.isEditing ? currentBoard.title : this.state.title}
+            value={!this.state.isEditing ? board.title : this.state.title}
             ref={input => {this.boardTitleInput = input}}
           />
 
@@ -119,23 +121,26 @@ class BoardRead extends React.Component {
               _.find(
                 this.props.videos,
                 video => {
-                  return video.board === currentBoard.slug && !video.list && !video.deleted
+                  return video.board === boardKey && !video.list && !video.deleted
                 }
               ) &&
               <div className="VideoWrapper">
                 <VideoList
-                  videoList={this.props.videos}
-                  currentBoard={currentBoard}
+                  videos={this.props.videos}
+                  board={board}
+                  boardKey={boardKey}
                 />
               </div>
             }
 
-            {currentBoard.lists.map(list =>
-              <div className="VideoWrapper" key={list.slug}>
+            {board.lists && Object.keys(board.lists).map(key =>
+              <div className="VideoWrapper" key={key}>
                 <VideoList
-                  list={list}
-                  videoList={this.props.videos}
-                  currentBoard={currentBoard}
+                  list={board.lists[key]}
+                  listKey={key}
+                  videos={this.props.videos}
+                  board={board}
+                  boardKey={boardKey}
                 />
               </div>
             )}
@@ -143,7 +148,7 @@ class BoardRead extends React.Component {
             <div className="VideoWrapper">
               <article className="Card">
                 <header className="CardHeader">
-                  <ListAdd board={currentBoard} />
+                  <ListAdd boardKey={boardKey} board={board} />
                 </header>
               </article>
             </div>
@@ -164,6 +169,5 @@ function mapDispatchToProps(dispatch) {
 
 BoardRead.propTypes = propTypes
 BoardRead.defaultProps = defaultProps
-BoardRead.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardRead)

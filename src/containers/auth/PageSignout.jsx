@@ -23,9 +23,7 @@ class Signout extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    authenticated: state.auth.authenticated
-  }
+  return { authenticated: state.auth.authenticated }
 }
 
 function mapDispatchToProps(dispatch) {

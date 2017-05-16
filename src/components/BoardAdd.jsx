@@ -12,17 +12,13 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
   addBoard: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
+  boards: {},
   addBoard: () => console.warn('addBoard not defined')
-}
-
-const contextTypes = {
-  router: React.PropTypes.object
 }
 
 export class BoardAdd extends React.Component {
@@ -55,7 +51,6 @@ export class BoardAdd extends React.Component {
     if (title && slug && !error) {
       const board = { title, slug }
       this.props.addBoard(board)
-      this.context.router.push(slug)
       this.setState({ title: '', slug: '' })
     }
   }
@@ -92,6 +87,5 @@ function mapDispatchToProps(dispatch) {
 
 BoardAdd.propTypes = propTypes
 BoardAdd.defaultProps = defaultProps
-BoardAdd.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardAdd)

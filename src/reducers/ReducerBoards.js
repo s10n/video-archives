@@ -1,51 +1,38 @@
 import _ from 'lodash'
-import * as types from '../actions/types'
-import { SAMPLE_BOARDS } from './SampleStorage'
+import dotProp from 'dot-prop-immutable'
+// import * as types from '../actions/types'
 
-export default function (state = [], action) {
+export default function (state = {}, action) {
   switch(action.type) {
-    case types.FETCH_BOARDS:
-      return action.payload
+    case 'FETCH_BOARDS_REQUESTED':
+      return action.boards || {}
 
-    case types.IMPORT_STORAGE:
-      return SAMPLE_BOARDS
+    case 'FETCH_BOARDS_FULFILLED':
+      return action.boards || {}
 
-    case types.EMPTY_STORAGE:
-      return []
+    case 'IMPORT_STORAGE_REQUESTED':
+      return action.boards
 
-    case types.ADD_BOARD:
-      const addingBoard = action.payload
-      return [ ...state, { title: addingBoard.title, slug: addingBoard.slug, lists: [] } ]
+    case 'EMPTY_STORAGE_REQUESTED':
+      return {}
 
-    case types.EDIT_BOARD:
-      const { editingBoard, editingBoardPart } = action.payload
-      return state.map(board => {return board === editingBoard ?
-        { ...board, ...editingBoardPart } : board
-      })
+    case 'ADD_BOARD_REQUESTED':
+      return { ...state, [action.newBoardKey]: action.board }
 
-    case types.DELETE_BOARD:
-      const deletingBoard = action.payload
-      return _.without(state, deletingBoard)
+    case 'EDIT_BOARD_REQUESTED':
+      return dotProp.merge(state, action.boardKey, action.newBoard)
 
-    case types.ADD_LIST:
-      const { addingList, addingListCurrentBoardSlug } = action.payload
-      return state.map(board => {return board.slug === addingListCurrentBoardSlug ?
-        { ...board, lists: [ ...board.lists, addingList ] } : board
-      })
+    case 'DELETE_BOARD_REQUESTED':
+      return dotProp.delete(state, action.boardKey)
 
-    case types.EDIT_LIST:
-      const { editingList, editingListPart, editingListCurrentBoard } = action.payload
-      return state.map(board => {return board === editingListCurrentBoard ?
-        { ...board,
-          lists: board.lists.map(list => {return list === editingList ? editingListPart : list})
-        } : board
-      })
+    case 'ADD_LIST_REQUESTED':
+      return dotProp.set(state, `${action.boardKey}.lists.${action.newListKey}`, action.list)
 
-    case types.DELETE_LIST:
-      const { deletingList, deletingListCurrentBoard } = action.payload
-      return state.map(board => {return board === deletingListCurrentBoard ?
-        { ...board, lists: _.without(board.lists, deletingList) } : board
-      })
+    case 'EDIT_LIST_REQUESTED':
+      return dotProp.set(state, `${action.boardKey}.lists.${action.listKey}`, action.newList)
+
+    case 'DELETE_LIST_REQUESTED':
+      return dotProp.delete(state, `${action.boardKey}.lists.${action.listKey}`)
 
     default:
       return state

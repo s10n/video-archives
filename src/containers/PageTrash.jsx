@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -7,19 +8,15 @@ import Page from './Page'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
   emptyTrash: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   emptyTrash: () => console.warn('emptyTrash not defined')
-}
-
-const contextTypes = {
-  router: React.PropTypes.object
 }
 
 class PageTrash extends React.Component {
@@ -30,15 +27,16 @@ class PageTrash extends React.Component {
 
   handleEmptyClick() {
     if (confirm(`Empty trash?`)) {
-      this.props.emptyTrash()
-      this.context.router.push('/')
+      const videos = Object.keys(_.pickBy(this.props.videos, ['deleted', true])).map(key => key)
+      this.props.emptyTrash(videos)
     }
   }
 
   render() {
     const mapToComponent = videos => {
-      return videos.map(video => {
-        return video.deleted && <VideoItem video={video} key={video.data.id} />
+      return Object.keys(videos).map(key => {
+        const video = videos[key]
+        return video.deleted && <VideoItem video={video} videoKey={key} key={key} />
       })
     }
 
@@ -68,6 +66,5 @@ function mapDispatchToProps(dispatch) {
 
 PageTrash.propTypes = propTypes
 PageTrash.defaultProps = defaultProps
-PageTrash.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageTrash)

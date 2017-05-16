@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { fetchBoards, fetchVideos, pushStorage } from '../actions'
 import 'normalize.css'
 import '../style/reboot.css'
@@ -14,25 +15,27 @@ import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
+  authenticated: React.PropTypes.bool.isRequired,
   fetchBoards: React.PropTypes.func.isRequired,
   pushStorage: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
+  authenticated: false,
   fetchBoards: () => console.warn('fetchBoards not defined'),
   pushStorage: () => console.warn('pushStorage not defined')
 }
 
 class App extends React.Component {
   componentWillMount() {
-    const boards = localStorage.boards && JSON.parse(localStorage.boards)
-    const videos = localStorage.videos && JSON.parse(localStorage.videos)
-    boards && this.props.fetchBoards(boards)
-    videos && this.props.fetchVideos(videos)
+    const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
+    const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
+    this.props.authenticated && this.props.fetchBoards(localBoards)
+    this.props.authenticated && this.props.fetchVideos(localVideos)
   }
 
   componentDidUpdate(prevProps) {
@@ -48,7 +51,7 @@ class App extends React.Component {
         <AppHeader />
 
         <section className="AppWrapper">
-          <AppSidebar boardsList={boards} trash={trash} />
+          <AppSidebar boards={boards} trash={trash} />
           <main className="AppMain">
             <div className="PageWrapper">{this.props.children}</div>
           </main>
@@ -59,10 +62,14 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { boards: state.boards, videos: state.videos }
+  return { boards: state.boards, videos: state.videos, authenticated: state.auth.authenticated }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
 }
 
 App.propTypes = propTypes
 App.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { fetchBoards, fetchVideos, pushStorage })(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
