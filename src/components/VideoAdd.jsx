@@ -28,6 +28,7 @@ export const ERROR_MESSAGE = {
 const propTypes = {
   boardKey: React.PropTypes.string,
   listKey: React.PropTypes.string,
+  boards: React.PropTypes.object.isRequired,
   videos: React.PropTypes.object.isRequired,
   addVideo: React.PropTypes.func.isRequired
 }
@@ -35,6 +36,7 @@ const propTypes = {
 const defaultProps = {
   boardKey: '',
   listKey: '',
+  boards: {},
   videos: {},
   addVideo: () => console.warn('addVideo not defined')
 }
@@ -127,8 +129,10 @@ export class VideoAdd extends React.Component {
 
     // TODO: If existVideo is in Trash, just recover it to current list
     const existVideo = this.state.existVideo
+    const existVideoBoard = this.props.boards[existVideo.board]
+    const existVideoList = existVideoBoard.lists[existVideo.list]
     const additionalMessage = (error === 'exists') ?
-      (!existVideo.deleted ? `: ${existVideo.board} - ${existVideo.list}` : ' : Trash') :
+      (!existVideo.deleted ? `: ${existVideoBoard.title} - ${existVideoList.name}` : ' : Trash') :
       ''
 
     if (error === 'success') {
@@ -172,7 +176,7 @@ export class VideoAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videos: state.videos }
+  return { boards: state.boards, videos: state.videos }
 }
 
 function mapDispatchToProps(dispatch) {

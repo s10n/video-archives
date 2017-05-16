@@ -7,14 +7,14 @@ import Page from './Page'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
+  boards: React.PropTypes.object.isRequired,
+  videos: React.PropTypes.object.isRequired,
   emptyTrash: React.PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
@@ -37,7 +37,8 @@ class PageTrash extends React.Component {
 
   render() {
     const mapToComponent = videos => {
-      return videos.map(video => {
+      return Object.keys(videos).map(key => {
+        const video = videos[key]
         return video.deleted && <VideoItem video={video} key={video.data.id} />
       })
     }

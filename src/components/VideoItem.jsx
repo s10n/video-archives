@@ -69,12 +69,13 @@ export class VideoItem extends React.Component {
 
   render() {
     const video = this.props.video
+    const board = this.props.boards[video.board]
     const url = `https://www.youtube.com/watch?v=${video.data.id}`
     const publishedAt = new Date(video.data.snippet.publishedAt)
 
     const videoItemFunctions = () => {
       const location = (
-        <span>{video.board && ` to ${video.board}`}{video.list && ` - ${video.list}`}</span>
+        <span>{video.board && ` to ${board.title}`}{video.list && ` - ${board.lists[video.list].name}`}</span>
       )
       return (
         !video.deleted ?
