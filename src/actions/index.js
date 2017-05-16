@@ -252,8 +252,16 @@ export function editVideo(videoKey, newVideo) {
   }
 }
 
-export function deleteVideo(deletingVideo) {
-  return { type: types.DELETE_VIDEO, payload: deletingVideo }
+export function deleteVideo(videoKey) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    dispatch({ type: 'DELETE_VIDEO_REQUESTED', videoKey })
+    database.ref(`/videos/${user.uid}/${videoKey}`).remove()
+      .then(() => { dispatch({ type: 'DELETE_VIDEO_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'DELETE_VIDEO_REJECTED' }) })
+  }
 }
 
 export function emptyTrash() {

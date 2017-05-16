@@ -22,9 +22,8 @@ export default function (state = {}, action) {
     case 'EDIT_VIDEO_REQUESTED':
       return dotProp.merge(state, action.videoKey, action.newVideo)
 
-    case types.DELETE_VIDEO:
-      const deletingVideo = action.payload
-      return state.filter(video => {return video !== deletingVideo})
+    case 'DELETE_VIDEO_REQUESTED':
+      return dotProp.delete(state, action.videoKey)
 
     case types.EMPTY_TRASH:
       return state.filter(video => {return video.deleted !== true})
