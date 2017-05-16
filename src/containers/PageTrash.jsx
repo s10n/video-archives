@@ -39,7 +39,7 @@ class PageTrash extends React.Component {
     const mapToComponent = videos => {
       return Object.keys(videos).map(key => {
         const video = videos[key]
-        return video.deleted && <VideoItem video={video} key={video.data.id} />
+        return video.deleted && <VideoItem video={video} videoKey={key} key={key} />
       })
     }
 

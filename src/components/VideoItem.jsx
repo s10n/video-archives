@@ -7,7 +7,10 @@ import './VideoItem.css'
 
 const propTypes = {
   video: React.PropTypes.object.isRequired,
+  videoKey: React.PropTypes.string,
   boards: React.PropTypes.object.isRequired,
+  boardKey: React.PropTypes.string,
+  listKey: React.PropTypes.string,
   addingVideo: React.PropTypes.bool,
   editVideo: React.PropTypes.func.isRequired,
   deleteVideo: React.PropTypes.func.isRequired,
@@ -17,7 +20,10 @@ const propTypes = {
 
 const defaultProps = {
   video: {},
+  videoKey: '',
   boards: {},
+  boardKey: '',
+  listKey: '',
   addingVideo: false,
   editVideo: () => console.warn('editVideo not defined'),
   deleteVideo: () => console.warn('deleteVideo not defined'),
@@ -35,31 +41,34 @@ export class VideoItem extends React.Component {
   }
 
   handleMoveClick() {
+    const { boardKey, videoKey, boards, editVideo } = this.props
     const name = prompt(`Type a name or slug of list`).trim()
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
     if (name && slug) {
-      const board = _.find(this.props.boards, ['slug', this.props.video.board])
-      const listExists = _.find(board.lists, ['slug', slug])
-      const list = { name, slug }
-      listExists || this.props.addList(list, board.slug)
-      this.props.editVideo(this.props.video, { list: slug })
+      const newListKey = _.findKey(boards[boardKey].lists, ['slug', slug])
+      // const list = { name, slug }
+      // newListKey || addList(boardKey, list)
+      newListKey || alert('Error')
+      newListKey && editVideo(videoKey, { list: newListKey })
     }
   }
 
   handleTrashClick() {
-    this.props.editVideo(this.props.video, { deleted: true })
+    this.props.editVideo(this.props.videoKey, { deleted: true })
   }
 
   handleRecoverClick() {
-    const title = this.props.video.board || prompt(`Type a name or slug of board`).trim()
+    const { video, videoKey, boards, editVideo } = this.props
+    const title = video.board ? boards[video.board].title : prompt(`Type a name or slug of board`).trim()
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
 
     if (title && slug) {
-      const boardExists = _.find(this.props.boards, ['slug', slug])
-      const board = { title, slug }
-      boardExists || this.props.addBoard(board)
-      this.props.editVideo(this.props.video, { board: slug, deleted: false })
+      const newBoardKey = _.findKey(boards, ['slug', slug])
+      // const board = { title, slug }
+      // newBoardKey || addBoard(board)
+      newBoardKey || alert('Error')
+      newBoardKey && editVideo(videoKey, { board: newBoardKey, deleted: false })
     }
   }
 

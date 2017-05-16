@@ -115,12 +115,14 @@ export class VideoList extends React.Component {
     const listScroll = videos => {
       return Object.keys(videos).map(key => {
         const video = videos[key]
+        const { boardKey, listKey } = this.props
         const condition =
-          video.board === this.props.boardKey &&
-          (_.isEmpty(list) ? !video.list : video.list === this.props.listKey) &&
+          video.board === boardKey &&
+          (_.isEmpty(list) ? !video.list : video.list === listKey) &&
           !video.deleted
 
-        return condition && <VideoItem video={video} key={video.data.id} />
+        return condition &&
+          <VideoItem video={video} videoKey={key} boardKey={boardKey} listKey={listKey} key={key} />
       })
     }
 

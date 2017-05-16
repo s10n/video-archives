@@ -240,8 +240,16 @@ export function addVideo(video) {
   }
 }
 
-export function editVideo(editingVideo, editingVideoPart) {
-  return { type: types.EDIT_VIDEO, payload: { editingVideo, editingVideoPart } }
+export function editVideo(videoKey, newVideo) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    dispatch({ type: 'EDIT_VIDEO_REQUESTED', videoKey, newVideo })
+    database.ref(`/videos/${user.uid}/${videoKey}`).update(newVideo)
+      .then(() => { dispatch({ type: 'EDIT_VIDEO_FULFILLED' }) })
+      .catch(error => { dispatch({ type: 'EDIT_VIDEO_REJECTED' }) })
+  }
 }
 
 export function deleteVideo(deletingVideo) {
