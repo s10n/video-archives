@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
-import * as types from '../actions/types'
+// import * as types from '../actions/types'
 
 export default function (state = {}, action) {
   switch(action.type) {
@@ -24,9 +24,6 @@ export default function (state = {}, action) {
 
     case 'DELETE_VIDEO_REQUESTED':
       return dotProp.delete(state, action.videoKey)
-
-    case types.EMPTY_TRASH:
-      return state.filter(video => {return video.deleted !== true})
 
     default:
       return state

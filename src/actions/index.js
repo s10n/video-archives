@@ -264,6 +264,25 @@ export function deleteVideo(videoKey) {
   }
 }
 
-export function emptyTrash() {
-  return { type: types.EMPTY_TRASH }
+export function emptyTrash(videos) {
+  const database = firebase.database()
+  const user = firebase.auth().currentUser
+
+  return dispatch => {
+    dispatch({ type: 'EMPTY_TRASH_REQUESTED' })
+    let updates = {}
+
+    videos.map(videoKey => {
+      updates[`/videos/${user.uid}/${videoKey}`] = null
+      dispatch({ type: 'DELETE_VIDEO_REQUESTED', videoKey })
+      return false
+    })
+
+    database.ref().update(updates)
+      .then(() => {
+        dispatch({ type: 'EMPTY_TRASH_FULFILLED' })
+        hashHistory.push('/')
+      })
+      .catch(error => { dispatch({ type: 'EMPTY_TRASH_REJECTED' }) })
+  }
 }

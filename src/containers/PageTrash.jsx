@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -18,10 +19,6 @@ const defaultProps = {
   emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
-const contextTypes = {
-  router: React.PropTypes.object
-}
-
 class PageTrash extends React.Component {
   constructor(props) {
     super(props)
@@ -30,8 +27,8 @@ class PageTrash extends React.Component {
 
   handleEmptyClick() {
     if (confirm(`Empty trash?`)) {
-      this.props.emptyTrash()
-      this.context.router.push('/')
+      const videos = Object.keys(_.pickBy(this.props.videos, ['deleted', true])).map(key => key)
+      this.props.emptyTrash(videos)
     }
   }
 
@@ -69,6 +66,5 @@ function mapDispatchToProps(dispatch) {
 
 PageTrash.propTypes = propTypes
 PageTrash.defaultProps = defaultProps
-PageTrash.contextTypes = contextTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageTrash)
