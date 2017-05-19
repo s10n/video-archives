@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { fetchBoards, fetchVideos, pushStorage } from '../actions'
@@ -15,11 +16,11 @@ import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
 
 const propTypes = {
-  boards: React.PropTypes.object.isRequired,
-  videos: React.PropTypes.object.isRequired,
-  authenticated: React.PropTypes.bool.isRequired,
-  fetchBoards: React.PropTypes.func.isRequired,
-  pushStorage: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  authenticated: PropTypes.bool.isRequired,
+  fetchBoards: PropTypes.func.isRequired,
+  pushStorage: PropTypes.func.isRequired
 }
 
 const defaultProps = {

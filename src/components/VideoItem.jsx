@@ -1,21 +1,22 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editVideo, deleteVideo, addBoard, addList } from '../actions'
 import './VideoItem.css'
 
 const propTypes = {
-  video: React.PropTypes.object.isRequired,
-  videoKey: React.PropTypes.string,
-  boards: React.PropTypes.object.isRequired,
-  boardKey: React.PropTypes.string,
-  listKey: React.PropTypes.string,
-  addingVideo: React.PropTypes.bool,
-  editVideo: React.PropTypes.func.isRequired,
-  deleteVideo: React.PropTypes.func.isRequired,
-  addBoard: React.PropTypes.func.isRequired,
-  addList: React.PropTypes.func.isRequired
+  video: PropTypes.object.isRequired,
+  videoKey: PropTypes.string,
+  boards: PropTypes.object.isRequired,
+  boardKey: PropTypes.string,
+  listKey: PropTypes.string,
+  addingVideo: PropTypes.bool,
+  editVideo: PropTypes.func.isRequired,
+  deleteVideo: PropTypes.func.isRequired,
+  addBoard: PropTypes.func.isRequired,
+  addList: PropTypes.func.isRequired
 }
 
 const defaultProps = {

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editBoard, deleteBoard } from '../actions'
@@ -8,10 +9,10 @@ import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  boards: React.PropTypes.object.isRequired,
-  videos: React.PropTypes.object.isRequired,
-  editBoard: React.PropTypes.func.isRequired,
-  deleteBoard: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  editBoard: PropTypes.func.isRequired,
+  deleteBoard: PropTypes.func.isRequired
 }
 
 const defaultProps = {

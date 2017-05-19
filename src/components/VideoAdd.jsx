@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import axios from 'axios'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addVideo } from '../actions'
@@ -26,11 +27,11 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  boardKey: React.PropTypes.string,
-  listKey: React.PropTypes.string,
-  boards: React.PropTypes.object.isRequired,
-  videos: React.PropTypes.object.isRequired,
-  addVideo: React.PropTypes.func.isRequired
+  boardKey: PropTypes.string,
+  listKey: PropTypes.string,
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  addVideo: PropTypes.func.isRequired
 }
 
 const defaultProps = {

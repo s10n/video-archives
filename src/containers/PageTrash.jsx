@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { emptyTrash } from '../actions'
@@ -8,9 +9,9 @@ import Page from './Page'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
-  boards: React.PropTypes.object.isRequired,
-  videos: React.PropTypes.object.isRequired,
-  emptyTrash: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  emptyTrash: PropTypes.func.isRequired
 }
 
 const defaultProps = {

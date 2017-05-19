@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addList } from '../actions'
@@ -10,9 +11,9 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  board: React.PropTypes.object.isRequired,
-  boardKey: React.PropTypes.string.isRequired,
-  addList: React.PropTypes.func.isRequired
+  board: PropTypes.object.isRequired,
+  boardKey: PropTypes.string.isRequired,
+  addList: PropTypes.func.isRequired
 }
 
 const defaultProps = {

@@ -1,11 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import './AppSidebar.css'
 import BoardAdd from '../components/BoardAdd'
 
 const propTypes = {
-  boards: React.PropTypes.object.isRequired,
-  trash: React.PropTypes.bool.isRequired
+  boards: PropTypes.object.isRequired,
+  trash: PropTypes.bool.isRequired
 }
 
 const defaultProps = {
