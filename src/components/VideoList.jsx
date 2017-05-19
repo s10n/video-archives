@@ -77,7 +77,7 @@ export class VideoList extends React.Component {
     const listKey = this.props.listKey
     const videos = Object.keys(_.pickBy(this.props.videos, ['list', listKey])).map(key => key)
 
-    if (confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
+    if (window.confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
       this.props.deleteList(this.props.boardKey, this.props.listKey, videos)
     }
   }

@@ -86,7 +86,7 @@ class BoardRead extends React.Component {
     const board = this.props.boards[boardKey]
     const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
 
-    if (confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
+    if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
       this.props.deleteBoard(boardKey, videos)
     }
   }

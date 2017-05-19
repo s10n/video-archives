@@ -26,7 +26,7 @@ class PageTrash extends React.Component {
   }
 
   handleEmptyClick() {
-    if (confirm(`Empty trash?`)) {
+    if (window.confirm(`Empty trash?`)) {
       const videos = Object.keys(_.pickBy(this.props.videos, ['deleted', true])).map(key => key)
       this.props.emptyTrash(videos)
     }
