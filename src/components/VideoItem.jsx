@@ -43,15 +43,19 @@ export class VideoItem extends React.Component {
 
   handleMoveClick() {
     const { boardKey, videoKey, boards, editVideo } = this.props
-    const name = prompt(`Type a name or slug of list`).trim()
-    const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    const input = prompt(`Type a name or slug of list`)
 
-    if (name && slug) {
-      const newListKey = _.findKey(boards[boardKey].lists, ['slug', slug])
-      // const list = { name, slug }
-      // newListKey || addList(boardKey, list)
-      newListKey || alert('Error')
-      newListKey && editVideo(videoKey, { list: newListKey })
+    if (input) {
+      const name = input.trim()
+      const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
+
+      if (name && slug) {
+        const newListKey = _.findKey(boards[boardKey].lists, ['slug', slug])
+        // const list = { name, slug }
+        // newListKey || addList(boardKey, list)
+        newListKey || alert('Error')
+        newListKey && editVideo(videoKey, { list: newListKey })
+      }
     }
   }
 
@@ -61,15 +65,19 @@ export class VideoItem extends React.Component {
 
   handleRecoverClick() {
     const { video, videoKey, boards, editVideo } = this.props
-    const title = video.board ? boards[video.board].title : prompt(`Type a name or slug of board`).trim()
-    const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    const input = video.board ? boards[video.board].title : prompt(`Type a name or slug of board`)
 
-    if (title && slug) {
-      const newBoardKey = _.findKey(boards, ['slug', slug])
-      // const board = { title, slug }
-      // newBoardKey || addBoard(board)
-      newBoardKey || alert('Error')
-      newBoardKey && editVideo(videoKey, { board: newBoardKey, deleted: false })
+    if (input) {
+      const title = input.trim()
+      const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+
+      if (title && slug) {
+        const newBoardKey = _.findKey(boards, ['slug', slug])
+        // const board = { title, slug }
+        // newBoardKey || addBoard(board)
+        newBoardKey || alert('Error')
+        newBoardKey && editVideo(videoKey, { board: newBoardKey, deleted: false })
+      }
     }
   }
 
