@@ -3,7 +3,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { HashRouter as Router } from 'react-router-dom'
+import createHistory from 'history/createHashHistory'
+import { ConnectedRouter } from 'react-router-redux'
 import { fetchBoards, fetchVideos, pushStorage } from '../actions'
 import 'normalize.css'
 import '../style/reboot.css'
@@ -16,6 +17,8 @@ import './App.css'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
 import AppMain from './AppMain'
+
+export const history = createHistory()
 
 const propTypes = {
   boards: PropTypes.object.isRequired,
@@ -50,7 +53,7 @@ class App extends React.Component {
     const trash = _.find(videos, 'deleted') && true
 
     return (
-      <Router>
+      <ConnectedRouter history={history}>
         <div className="AppContainer">
           <AppHeader />
 
@@ -59,7 +62,7 @@ class App extends React.Component {
             <AppMain />
           </section>
         </div>
-      </Router>
+      </ConnectedRouter>
     )
   }
 }
