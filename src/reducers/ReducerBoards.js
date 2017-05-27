@@ -1,36 +1,36 @@
 import dotProp from 'dot-prop-immutable'
-// import * as types from '../actions/types'
+import * as types from '../actions/types'
 
 export default function (state = {}, action) {
   switch(action.type) {
-    case 'FETCH_BOARDS_REQUESTED':
+    case types.FETCH_BOARDS:
       return action.boards || {}
 
     case 'FETCH_BOARDS_FULFILLED':
       return action.boards || {}
 
-    case 'IMPORT_STORAGE_REQUESTED':
+    case types.IMPORT_STORAGE:
       return action.boards
 
-    case 'EMPTY_STORAGE_REQUESTED':
+    case types.EMPTY_STORAGE:
       return {}
 
-    case 'ADD_BOARD_REQUESTED':
+    case types.ADD_BOARD:
       return { ...state, [action.newBoardKey]: action.board }
 
-    case 'EDIT_BOARD_REQUESTED':
+    case types.EDIT_BOARD:
       return dotProp.merge(state, action.boardKey, action.newBoard)
 
-    case 'DELETE_BOARD_REQUESTED':
+    case types.DELETE_BOARD:
       return dotProp.delete(state, action.boardKey)
 
-    case 'ADD_LIST_REQUESTED':
+    case types.ADD_LIST:
       return dotProp.set(state, `${action.boardKey}.lists.${action.newListKey}`, action.list)
 
-    case 'EDIT_LIST_REQUESTED':
+    case types.EDIT_LIST:
       return dotProp.set(state, `${action.boardKey}.lists.${action.listKey}`, action.newList)
 
-    case 'DELETE_LIST_REQUESTED':
+    case types.DELETE_LIST:
       return dotProp.delete(state, `${action.boardKey}.lists.${action.listKey}`)
 
     default:

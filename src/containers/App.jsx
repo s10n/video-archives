@@ -40,8 +40,8 @@ class App extends React.Component {
   componentWillMount() {
     const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
     const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
-    this.props.authenticated && this.props.fetchBoards(localBoards)
-    this.props.authenticated && this.props.fetchVideos(localVideos)
+    this.props.fetchBoards(localBoards)
+    this.props.fetchVideos(localVideos)
   }
 
   componentDidUpdate(prevProps) {
