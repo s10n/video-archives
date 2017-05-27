@@ -1,16 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { Redirect } from 'react-router-dom'
 import { signoutUser } from '../../actions'
 import Page from '../Page'
 
 class Signout extends React.Component {
   componentWillMount() {
-    this.props.signoutUser()
+    this.props.authenticated && this.props.signoutUser()
   }
 
   render() {
-    return (
+    return this.props.authenticated ? (
       <Page page="Signout" title="Goodbye">
         <article className="Card">
           <div className="CardScroll">
@@ -18,7 +19,7 @@ class Signout extends React.Component {
           </div>
         </article>
       </Page>
-    )
+    ) : <Redirect to="/" />
   }
 }
 
