@@ -127,14 +127,16 @@ export class VideoAdd extends React.Component {
 
   showFetchResult() {
     const error = this.state.error
+    let additionalMessage = ''
 
-    // TODO: If existVideo is in Trash, just recover it to current list
-    const existVideo = this.state.existVideo
-    const existVideoBoard = this.props.boards[existVideo.board]
-    const existVideoList = existVideoBoard.lists[existVideo.list]
-    const additionalMessage = (error === 'exists') ?
-      (!existVideo.deleted ? `: ${existVideoBoard.title} - ${existVideoList.name}` : ' : Trash') :
-      ''
+    if (error === 'exists') {
+      // TODO: If existVideo is in Trash, just recover it to current list
+      const existVideo = this.state.existVideo
+      const existVideoBoard = this.props.boards[existVideo.board]
+      const existVideoList = existVideoBoard.lists[existVideo.list]
+      additionalMessage = !existVideo.deleted ?
+        `: ${existVideoBoard.title} - ${existVideoList.name}` : ' : Trash'
+    }
 
     if (error === 'success') {
       return (
