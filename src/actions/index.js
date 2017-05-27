@@ -149,10 +149,9 @@ export function editBoard(boardKey, newBoard) {
 export function deleteBoard(boardKey, videos) {
   return dispatch => {
     const user = auth().currentUser
-    const newVideo = { board: null, list: null, deleted: true }
 
     videos.map(videoKey => {
-      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo })
+      dispatch(editVideo(videoKey, { board: null, list: null, deleted: true }))
       return false
     })
 
@@ -208,10 +207,9 @@ export function editList(boardKey, listKey, newList) {
 export function deleteList(boardKey, listKey, videos) {
   return dispatch => {
     const user = auth().currentUser
-    const newVideo = { list: null, deleted: true }
 
     videos.map(videoKey => {
-      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo })
+      dispatch(editVideo(videoKey, { list: null, deleted: true }))
       return false
     })
 
@@ -281,7 +279,7 @@ export function emptyTrash(videos) {
     const user = auth().currentUser
 
     videos.map(videoKey => {
-      dispatch({ type: types.DELETE_VIDEO, videoKey })
+      dispatch(deleteVideo(videoKey))
       return false
     })
 
