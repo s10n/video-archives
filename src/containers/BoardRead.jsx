@@ -96,7 +96,7 @@ class BoardRead extends React.Component {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
-    return (
+    return boardKey ? (
       <section className="Page">
         <header className="PageHeader BoardHeader">
           <input
@@ -155,6 +155,12 @@ class BoardRead extends React.Component {
             </div>
           </div>
         </main>
+      </section>
+    ) : (
+      <section className="Page">
+        <header className="PageHeader BoardHeader">
+          <h1 className="PageTitle">Not Found</h1>
+        </header>
       </section>
     )
   }
