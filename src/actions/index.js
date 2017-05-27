@@ -20,6 +20,8 @@ export function signinUser({ email, password }) {
       .then(response => {
         dispatch({ type: types.AUTH_USER })
         dispatch(push('/'))
+        dispatch(fetchBoards())
+        dispatch(fetchVideos())
       })
       .catch(error => { dispatch(authError(error.message)) })
   }
@@ -28,7 +30,10 @@ export function signinUser({ email, password }) {
 export function signoutUser() {
   return dispatch => {
     auth().signOut()
-      .then(response => { dispatch({ type: types.UNAUTH_USER }) })
+      .then(response => {
+        dispatch({ type: types.UNAUTH_USER })
+        dispatch(emptyStorage())
+      })
       .catch(error => { dispatch(authError(error.message)) })
   }
 }
@@ -37,9 +42,10 @@ function authError(error) {
   return { type: types.AUTH_ERROR, payload: error }
 }
 
-export function fetchBoards(localBoards) {
+export function fetchBoards() {
   return dispatch => {
     const user = auth().currentUser
+    const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
     dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
 
@@ -51,9 +57,10 @@ export function fetchBoards(localBoards) {
   }
 }
 
-export function fetchVideos(localVideos) {
+export function fetchVideos() {
   return dispatch => {
     const user = auth().currentUser
+    const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
     dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
 
