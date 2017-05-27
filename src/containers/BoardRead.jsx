@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editBoard, deleteBoard } from '../actions'
+import { reservedBoardSlug } from '../config/constants'
 import './BoardRead.css'
 import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
@@ -61,7 +62,7 @@ class BoardRead extends React.Component {
     )
     let error = null
 
-    if (slug === 'trash') {
+    if (reservedBoardSlug.includes(slug)) {
       error = 'Reserved board title'
     } else if (boardExists) {
       error = 'Board already exists'

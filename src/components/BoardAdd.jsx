@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addBoard } from '../actions'
+import { reservedBoardSlug } from '../config/constants'
 import './BoardAdd.css'
 
 export const ERROR_MESSAGE = {
@@ -36,7 +37,7 @@ export class BoardAdd extends React.Component {
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     let error = null
 
-    if (slug === 'trash') {
+    if (reservedBoardSlug.includes(slug)) {
       error = ERROR_MESSAGE.reserved
     } else if (_.find(this.props.boards, ['slug', slug])) {
       error = ERROR_MESSAGE.exists
