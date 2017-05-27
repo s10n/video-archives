@@ -34,7 +34,7 @@ class BoardRead extends React.Component {
   }
 
   handleTitleClick() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
     const { title, slug } = board
@@ -43,7 +43,7 @@ class BoardRead extends React.Component {
   }
 
   handleInputBlur() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
     const { title, slug } = board
@@ -57,7 +57,7 @@ class BoardRead extends React.Component {
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const boardExists = _.find(
       this.props.boards,
-      board => {return slug === board.slug && slug !== this.props.params.boardSlug}
+      board => {return slug === board.slug && slug !== this.props.match.params.boardSlug}
     )
     let error = null
 
@@ -71,7 +71,7 @@ class BoardRead extends React.Component {
   }
 
   handlePressEnter() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
 
     const title = this.state.title.trim()
     const { slug, error } = this.state
@@ -83,7 +83,7 @@ class BoardRead extends React.Component {
   }
 
   handleDeleteClick() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
     const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
 
@@ -93,7 +93,7 @@ class BoardRead extends React.Component {
   }
 
   render() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
     return (
