@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router'
+import { push } from 'react-router-redux'
 import * as firebase from 'firebase'
 import * as types from './types'
 import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../SampleStorage'
@@ -8,7 +8,7 @@ export function signupUser({ email, password }) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
-        hashHistory.push('/')
+        dispatch(push('/'))
       })
       .catch(error => {
         dispatch(authError(error.message))
@@ -21,7 +21,7 @@ export function signinUser({ email, password }) {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
-        hashHistory.push('/')
+        dispatch(push('/'))
       })
       .catch(error => {
         dispatch(authError(error.message))
@@ -128,7 +128,7 @@ export function addBoard(board) {
     const newBoardKey = boardsRef.push().key
 
     dispatch({ type: 'ADD_BOARD_REQUESTED', newBoardKey, board })
-    hashHistory.push(board.slug)
+    dispatch(push(board.slug))
     boardsRef.child(newBoardKey).set(board)
       .then(() => { dispatch({ type: 'ADD_BOARD_FULFILLED' }) })
       .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
@@ -143,7 +143,7 @@ export function editBoard(boardKey, newBoard) {
     const boardsRef = database.ref(`/boards/${user.uid}`)
 
     dispatch({ type: 'EDIT_BOARD_REQUESTED', boardKey, newBoard })
-    hashHistory.push(newBoard.slug)
+    dispatch(push(newBoard.slug))
     boardsRef.child(boardKey).update(newBoard)
       .then(() => { dispatch({ type: 'EDIT_BOARD_FULFILLED' }) })
       .catch(error => { dispatch({ type: 'EDIT_BOARD_REJECTED' }) })
@@ -168,7 +168,7 @@ export function deleteBoard(boardKey, videos) {
     })
 
     dispatch({ type: 'DELETE_BOARD_REQUESTED', boardKey })
-    hashHistory.push('/')
+    dispatch(push('/'))
     ref.update(updates)
       .then(() => { dispatch({ type: 'DELETE_BOARD_FULFILLED' }) })
       .catch(error => { dispatch({ type: 'DELETE_BOARD_REJECTED' }) })
@@ -281,7 +281,7 @@ export function emptyTrash(videos) {
     database.ref().update(updates)
       .then(() => {
         dispatch({ type: 'EMPTY_TRASH_FULFILLED' })
-        hashHistory.push('/')
+        dispatch(push('/'))
       })
       .catch(error => { dispatch({ type: 'EMPTY_TRASH_REJECTED' }) })
   }

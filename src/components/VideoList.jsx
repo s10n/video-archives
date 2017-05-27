@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editList, deleteList } from '../actions'
@@ -8,13 +9,13 @@ import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
 
 const propTypes = {
-  board: React.PropTypes.object.isRequired,
-  boardKey: React.PropTypes.string.isRequired,
-  list: React.PropTypes.object.isRequired,
-  listKey: React.PropTypes.string.isRequired,
-  videos: React.PropTypes.object.isRequired,
-  editList: React.PropTypes.func.isRequired,
-  deleteList: React.PropTypes.func.isRequired
+  board: PropTypes.object.isRequired,
+  boardKey: PropTypes.string.isRequired,
+  list: PropTypes.object.isRequired,
+  listKey: PropTypes.string.isRequired,
+  videos: PropTypes.object.isRequired,
+  editList: PropTypes.func.isRequired,
+  deleteList: PropTypes.func.isRequired
 }
 
 const defaultProps = {
@@ -77,7 +78,7 @@ export class VideoList extends React.Component {
     const listKey = this.props.listKey
     const videos = Object.keys(_.pickBy(this.props.videos, ['list', listKey])).map(key => key)
 
-    if (confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
+    if (window.confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
       this.props.deleteList(this.props.boardKey, this.props.listKey, videos)
     }
   }

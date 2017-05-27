@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editBoard, deleteBoard } from '../actions'
@@ -8,10 +9,10 @@ import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  boards: React.PropTypes.object.isRequired,
-  videos: React.PropTypes.object.isRequired,
-  editBoard: React.PropTypes.func.isRequired,
-  deleteBoard: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  editBoard: PropTypes.func.isRequired,
+  deleteBoard: PropTypes.func.isRequired
 }
 
 const defaultProps = {
@@ -33,7 +34,7 @@ class BoardRead extends React.Component {
   }
 
   handleTitleClick() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
     const { title, slug } = board
@@ -42,7 +43,7 @@ class BoardRead extends React.Component {
   }
 
   handleInputBlur() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
     const { title, slug } = board
@@ -56,7 +57,7 @@ class BoardRead extends React.Component {
       .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
     const boardExists = _.find(
       this.props.boards,
-      board => {return slug === board.slug && slug !== this.props.params.boardSlug}
+      board => {return slug === board.slug && slug !== this.props.match.params.boardSlug}
     )
     let error = null
 
@@ -70,7 +71,7 @@ class BoardRead extends React.Component {
   }
 
   handlePressEnter() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
 
     const title = this.state.title.trim()
     const { slug, error } = this.state
@@ -82,17 +83,17 @@ class BoardRead extends React.Component {
   }
 
   handleDeleteClick() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
     const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
 
-    if (confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
+    if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
       this.props.deleteBoard(boardKey, videos)
     }
   }
 
   render() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
     return (

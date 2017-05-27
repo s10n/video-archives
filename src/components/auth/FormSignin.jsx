@@ -15,12 +15,12 @@ const validate = values => {
   return errors
 }
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
+const renderField = field => (
   <div className="form-element">
-    <label>{label}</label>
+    <label>{field.label}</label>
     <div>
-      <input type={type} {...input} />
-      {touched && error && <small>{error}</small>}
+      <input type={field.type} {...field.input} />
+      {field.meta.touched && field.meta.error && <small>{field.meta.error}</small>}
     </div>
   </div>
 )

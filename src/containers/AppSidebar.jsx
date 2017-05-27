@@ -1,11 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router'
+import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
 import './AppSidebar.css'
 import BoardAdd from '../components/BoardAdd'
 
 const propTypes = {
-  boards: React.PropTypes.object.isRequired,
-  trash: React.PropTypes.bool.isRequired
+  boards: PropTypes.object.isRequired,
+  trash: PropTypes.bool.isRequired
 }
 
 const defaultProps = {
@@ -20,11 +21,11 @@ class AppSidebar extends React.Component {
     return (
       <nav className="AppSidebar">
         {Object.keys(boards).map(key =>
-          <Link activeClassName="active" to={boards[key].slug} key={key}>{boards[key].title}</Link>
+          <NavLink activeClassName="active" to={boards[key].slug} key={key}>{boards[key].title}</NavLink>
         )}
 
         {this.props.trash &&
-          <Link activeClassName="active" to="trash">Trash</Link>
+          <NavLink activeClassName="active" to="trash">Trash</NavLink>
         }
 
         <BoardAdd />

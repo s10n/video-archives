@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 // import * as types from '../actions/types'
 

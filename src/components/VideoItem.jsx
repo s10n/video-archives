@@ -1,21 +1,22 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editVideo, deleteVideo, addBoard, addList } from '../actions'
 import './VideoItem.css'
 
 const propTypes = {
-  video: React.PropTypes.object.isRequired,
-  videoKey: React.PropTypes.string,
-  boards: React.PropTypes.object.isRequired,
-  boardKey: React.PropTypes.string,
-  listKey: React.PropTypes.string,
-  addingVideo: React.PropTypes.bool,
-  editVideo: React.PropTypes.func.isRequired,
-  deleteVideo: React.PropTypes.func.isRequired,
-  addBoard: React.PropTypes.func.isRequired,
-  addList: React.PropTypes.func.isRequired
+  video: PropTypes.object.isRequired,
+  videoKey: PropTypes.string,
+  boards: PropTypes.object.isRequired,
+  boardKey: PropTypes.string,
+  listKey: PropTypes.string,
+  addingVideo: PropTypes.bool,
+  editVideo: PropTypes.func.isRequired,
+  deleteVideo: PropTypes.func.isRequired,
+  addBoard: PropTypes.func.isRequired,
+  addList: PropTypes.func.isRequired
 }
 
 const defaultProps = {
@@ -42,15 +43,19 @@ export class VideoItem extends React.Component {
 
   handleMoveClick() {
     const { boardKey, videoKey, boards, editVideo } = this.props
-    const name = prompt(`Type a name or slug of list`).trim()
-    const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    const input = prompt(`Type a name or slug of list`)
 
-    if (name && slug) {
-      const newListKey = _.findKey(boards[boardKey].lists, ['slug', slug])
-      // const list = { name, slug }
-      // newListKey || addList(boardKey, list)
-      newListKey || alert('Error')
-      newListKey && editVideo(videoKey, { list: newListKey })
+    if (input) {
+      const name = input.trim()
+      const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
+
+      if (name && slug) {
+        const newListKey = _.findKey(boards[boardKey].lists, ['slug', slug])
+        // const list = { name, slug }
+        // newListKey || addList(boardKey, list)
+        newListKey || alert('Error')
+        newListKey && editVideo(videoKey, { list: newListKey })
+      }
     }
   }
 
@@ -60,20 +65,24 @@ export class VideoItem extends React.Component {
 
   handleRecoverClick() {
     const { video, videoKey, boards, editVideo } = this.props
-    const title = video.board ? boards[video.board].title : prompt(`Type a name or slug of board`).trim()
-    const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+    const input = video.board ? boards[video.board].title : prompt(`Type a name or slug of board`)
 
-    if (title && slug) {
-      const newBoardKey = _.findKey(boards, ['slug', slug])
-      // const board = { title, slug }
-      // newBoardKey || addBoard(board)
-      newBoardKey || alert('Error')
-      newBoardKey && editVideo(videoKey, { board: newBoardKey, deleted: false })
+    if (input) {
+      const title = input.trim()
+      const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
+
+      if (title && slug) {
+        const newBoardKey = _.findKey(boards, ['slug', slug])
+        // const board = { title, slug }
+        // newBoardKey || addBoard(board)
+        newBoardKey || alert('Error')
+        newBoardKey && editVideo(videoKey, { board: newBoardKey, deleted: false })
+      }
     }
   }
 
   handleDeleteClick() {
-    confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey)
+    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey)
   }
 
   render() {
@@ -105,10 +114,10 @@ export class VideoItem extends React.Component {
     // TODO: Change thumbnail ratio to 16:9
     return (
       <article className="VideoItem">
-        <img src={video.data.snippet.thumbnails.high.url} alt="" role="presentation" height="120" />
+        <img src={video.data.snippet.thumbnails.high.url} alt="" height="120" />
 
         <h3 className="VideoTitle">
-          <a href={url} target="_blank">{video.data.snippet.title}</a>
+          <a href={url} target="_blank" rel="noopener noreferrer">{video.data.snippet.title}</a>
         </h3>
 
         <section className="VideoMeta">

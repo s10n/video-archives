@@ -3,14 +3,15 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import reduxThunk from 'redux-thunk'
-import { Router, hashHistory } from 'react-router'
+import { routerMiddleware } from 'react-router-redux'
 import reducers from './reducers'
-import routes from './routes'
 import { AUTH_USER, UNAUTH_USER } from './actions/types'
 import * as firebase from 'firebase'
 import { firebaseConfig } from './config'
+import App, { history } from './containers/App'
 
-const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore)
+const middleware = routerMiddleware(history)
+const createStoreWithMiddleware = applyMiddleware(reduxThunk, middleware)(createStore)
 const store = createStoreWithMiddleware(reducers)
 
 firebase.initializeApp(firebaseConfig)
@@ -19,7 +20,7 @@ firebase.auth().onAuthStateChanged(user => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Router history={hashHistory} routes={routes} />
+      <App />
     </Provider>,
     document.getElementById('app')
   )

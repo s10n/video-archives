@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
 import * as firebase from 'firebase'
 import './AppHeader.css'
 
@@ -9,8 +9,8 @@ class AppNav extends React.Component {
     if (!this.props.authenticated) {
       return (
         <nav className="AppNav">
-          <Link to="/signup">Sign up</Link>
-          <Link to="/signin">Sign in</Link>
+          <NavLink activeClassName="active" to="/signup">Sign up</NavLink>
+          <NavLink activeClassName="active" to="/signin">Sign in</NavLink>
         </nav>
       )
     } else {
@@ -19,7 +19,7 @@ class AppNav extends React.Component {
       return (
         <nav className="AppNav">
           {user && <span>{user.email}</span>}
-          <Link to="/signout">Sign out</Link>
+          <NavLink activeClassName="active" to="/signout">Sign out</NavLink>
         </nav>
       )
     }
@@ -31,7 +31,7 @@ class AppHeader extends React.Component {
     return (
       <header className="AppHeader">
         <h1 className="AppTitle">
-          <Link to="/">Video Archives <small>alpha</small></Link>
+          <NavLink activeClassName="active" to="/">Video Archives <small>alpha</small></NavLink>
         </h1>
 
         <AppNav authenticated={this.props.authenticated} />
