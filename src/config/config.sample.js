@@ -8,3 +8,7 @@ export const firebaseConfig = {
   storageBucket: '',
   messagingSenderId: ''
 }
+
+export const appConfig = {
+  signupAllowed: true
+}

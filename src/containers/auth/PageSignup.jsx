@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import { signupUser } from '../../actions'
+import { appConfig } from '../../config/config'
 import Page from '../Page'
 import FormSignup from '../../components/auth/FormSignup'
 
@@ -20,7 +21,7 @@ class PageSignup extends React.Component {
   }
 
   render() {
-    return !this.props.authenticated ? (
+    return !this.props.authenticated && appConfig.signupAllowed ? (
       <Page page="Signup" title="Create your account">
         <article className="Card">
           <div className="CardScroll">
