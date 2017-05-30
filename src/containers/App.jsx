@@ -1,6 +1,10 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import createHistory from 'history/createHashHistory'
+import { ConnectedRouter } from 'react-router-redux'
 import { fetchBoards, fetchVideos, pushStorage } from '../actions'
 import 'normalize.css'
 import '../style/reboot.css'
@@ -12,27 +16,30 @@ import '../style/page.css'
 import './App.css'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
+import AppMain from './AppMain'
+
+export const history = createHistory()
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
-  fetchBoards: React.PropTypes.func.isRequired,
-  pushStorage: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  authenticated: PropTypes.bool.isRequired,
+  fetchBoards: PropTypes.func.isRequired,
+  pushStorage: PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
+  authenticated: false,
   fetchBoards: () => console.warn('fetchBoards not defined'),
   pushStorage: () => console.warn('pushStorage not defined')
 }
 
 class App extends React.Component {
   componentWillMount() {
-    const boards = localStorage.boards && JSON.parse(localStorage.boards)
-    const videos = localStorage.videos && JSON.parse(localStorage.videos)
-    boards && this.props.fetchBoards(boards)
-    videos && this.props.fetchVideos(videos)
+    this.props.fetchBoards()
+    this.props.fetchVideos()
   }
 
   componentDidUpdate(prevProps) {
@@ -44,25 +51,29 @@ class App extends React.Component {
     const trash = _.find(videos, 'deleted') && true
 
     return (
-      <div className="AppContainer">
-        <AppHeader />
+      <ConnectedRouter history={history}>
+        <div className="AppContainer">
+          <AppHeader />
 
-        <section className="AppWrapper">
-          <AppSidebar boardsList={boards} trash={trash} />
-          <main className="AppMain">
-            <div className="PageWrapper">{this.props.children}</div>
-          </main>
-        </section>
-      </div>
+          <section className="AppWrapper">
+            <AppSidebar boards={boards} trash={trash} />
+            <AppMain />
+          </section>
+        </div>
+      </ConnectedRouter>
     )
   }
 }
 
 function mapStateToProps(state) {
-  return { boards: state.boards, videos: state.videos }
+  return { boards: state.boards, videos: state.videos, authenticated: state.auth.authenticated }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
 }
 
 App.propTypes = propTypes
 App.defaultProps = defaultProps
 
-export default connect(mapStateToProps, { fetchBoards, fetchVideos, pushStorage })(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

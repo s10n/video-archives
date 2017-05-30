@@ -1,15 +1,17 @@
 import _ from 'lodash'
 import axios from 'axios'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addVideo } from '../actions'
+import { youtubeAPIKey } from '../config/config'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
 export const API_INFO = {
   url    : 'https://www.googleapis.com/youtube/v3/videos',
-  key    : 'AIzaSyBOMBvSTv2siglJCEOybx5MD_KzerZ1WLg',
+  key    : youtubeAPIKey,
   part   : 'snippet,contentDetails',
   fields : 'items(id,snippet(publishedAt,channelId,title,thumbnails,channelTitle,categoryId),' +
            'contentDetails(duration))',
@@ -25,16 +27,18 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  boardSlug: React.PropTypes.string,
-  listSlug: React.PropTypes.string,
-  videos: React.PropTypes.array.isRequired,
-  addVideo: React.PropTypes.func.isRequired
+  boardKey: PropTypes.string,
+  listKey: PropTypes.string,
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  addVideo: PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boardSlug: '',
-  listSlug: '',
-  videos: [],
+  boardKey: '',
+  listKey: '',
+  boards: {},
+  videos: {},
   addVideo: () => console.warn('addVideo not defined')
 }
 
@@ -45,12 +49,12 @@ export class VideoAdd extends React.Component {
       videoURI: '',
       videoID: '',
       error: null,
-      video: { board: this.props.boardSlug, list: this.props.listSlug, source: 'YouTube', data: {} }
+      video: { board: this.props.boardKey, list: this.props.listKey, source: 'YouTube', data: {} }
     }
-    this.onInputChange = this.onInputChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const getParams = uri => {
       let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
       let params = {}
@@ -109,7 +113,7 @@ export class VideoAdd extends React.Component {
     }
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     if (this.state.error === 'success') {
       this.props.addVideo(this.state.video)
       this.setState({
@@ -123,12 +127,16 @@ export class VideoAdd extends React.Component {
 
   showFetchResult() {
     const error = this.state.error
+    let additionalMessage = ''
 
-    // TODO: If existVideo is in Trash, just recover it to current list
-    const existVideo = this.state.existVideo
-    const additionalMessage = (error === 'exists') ?
-      (!existVideo.deleted ? `: ${existVideo.board} - ${existVideo.list}` : ' : Trash') :
-      ''
+    if (error === 'exists') {
+      // TODO: If existVideo is in Trash, just recover it to current list
+      const existVideo = this.state.existVideo
+      const existVideoBoard = this.props.boards[existVideo.board]
+      const existVideoList = existVideoBoard.lists[existVideo.list]
+      additionalMessage = !existVideo.deleted ?
+        `: ${existVideoBoard.title} - ${existVideoList.name}` : ' : Trash'
+    }
 
     if (error === 'success') {
       return (
@@ -158,9 +166,10 @@ export class VideoAdd extends React.Component {
         }
 
         <input
+          className="borderless-input"
           type="text"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.videoURI}
           placeholder="Add a video..."
         />
@@ -170,7 +179,7 @@ export class VideoAdd extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { videos: state.videos }
+  return { boards: state.boards, videos: state.videos }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,66 +1,68 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editBoard, deleteBoard } from '../actions'
+import { reservedBoardSlug } from '../config/constants'
 import './BoardRead.css'
 import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
-  editBoard: React.PropTypes.func.isRequired,
-  deleteBoard: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  editBoard: PropTypes.func.isRequired,
+  deleteBoard: PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   editBoard: () => console.warn('editBoard not defined'),
   deleteBoard: () => console.warn('deleteBoard not defined')
 }
 
 class BoardRead extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
-
   constructor(props) {
     super(props)
     this.state = { isEditing: false, title: '', slug: '', error: null }
-    this.onTitleClick = this.onTitleClick.bind(this)
-    this.onInputBlur = this.onInputBlur.bind(this)
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
-    this.onDeleteClick = this.onDeleteClick.bind(this)
+    this.handleTitleClick = this.handleTitleClick.bind(this)
+    this.handleInputBlur = this.handleInputBlur.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
+    this.handleDeleteClick = this.handleDeleteClick.bind(this)
   }
 
-  onTitleClick() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
-    const { title, slug } = currentBoard
+  handleTitleClick() {
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+    const board = this.props.boards[boardKey]
+
+    const { title, slug } = board
 
     this.setState({ isEditing: true, title, slug })
   }
 
-  onInputBlur() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
-    const { title, slug } = currentBoard
+  handleInputBlur() {
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+    const board = this.props.boards[boardKey]
+
+    const { title, slug } = board
 
     this.setState({ isEditing: false, title, slug, error: null })
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     const boardExists = _.find(
       this.props.boards,
-      board => {return slug === board.slug && slug !== this.props.params.boardSlug}
+      board => {return slug === board.slug && slug !== this.props.match.params.boardSlug}
     )
     let error = null
 
-    if (slug === 'trash') {
+    if (reservedBoardSlug.includes(slug)) {
       error = 'Reserved board title'
     } else if (boardExists) {
       error = 'Board already exists'
@@ -69,45 +71,47 @@ class BoardRead extends React.Component {
     this.setState({ title, slug, error })
   }
 
-  onPressEnter() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+  handlePressEnter() {
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      this.props.editBoard(currentBoard, { title, slug })
-      this.context.router.push(slug)
+      this.props.editBoard(boardKey, { title, slug })
       this.boardTitleInput.blur()
     }
   }
 
-  onDeleteClick() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+  handleDeleteClick() {
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+    const board = this.props.boards[boardKey]
+    const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
 
-    if (confirm(`Delete ${currentBoard.title}?\nAll lists and videos will be deleted.`)) {
-      this.props.deleteBoard(currentBoard)
-      this.context.router.push('/')
+    if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
+      this.props.deleteBoard(boardKey, videos)
     }
   }
 
   render() {
-    const currentBoard = _.find(this.props.boards, ['slug', this.props.params.boardSlug])
+    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+    const board = this.props.boards[boardKey]
 
-    return (
+    return boardKey ? (
       <section className="Page">
         <header className="PageHeader BoardHeader">
           <input
-            className="PageTitle BoardTitle h1"
+            className="PageTitle BoardTitle h1 borderless-input"
             type="text"
-            onFocus={this.onTitleClick}
-            onBlur={this.onInputBlur}
-            onChange={this.onInputChange}
-            onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
-            value={!this.state.isEditing ? currentBoard.title : this.state.title}
+            onFocus={this.handleTitleClick}
+            onBlur={this.handleInputBlur}
+            onChange={this.handleInputChange}
+            onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
+            value={!this.state.isEditing ? board.title : this.state.title}
             ref={input => {this.boardTitleInput = input}}
           />
 
-          <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+          <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>🗑</button>
           {this.state.error &&
             <small>{this.state.error}</small>
           }
@@ -119,38 +123,45 @@ class BoardRead extends React.Component {
               _.find(
                 this.props.videos,
                 video => {
-                  return video.board === currentBoard.slug && !video.list && !video.deleted
+                  return video.board === boardKey && !video.list && !video.deleted
                 }
               ) &&
               <div className="VideoWrapper">
                 <VideoList
-                  videoList={this.props.videos}
-                  currentBoard={currentBoard}
+                  videos={this.props.videos}
+                  board={board}
+                  boardKey={boardKey}
                 />
               </div>
             }
 
-            {currentBoard.lists.map(list => {
-              return (
-                <div className="VideoWrapper" key={list.slug}>
-                  <VideoList
-                    list={list}
-                    videoList={this.props.videos}
-                    currentBoard={currentBoard}
-                  />
-                </div>
-              )
-            })}
+            {board.lists && Object.keys(board.lists).map(key =>
+              <div className="VideoWrapper" key={key}>
+                <VideoList
+                  list={board.lists[key]}
+                  listKey={key}
+                  videos={this.props.videos}
+                  board={board}
+                  boardKey={boardKey}
+                />
+              </div>
+            )}
 
             <div className="VideoWrapper">
               <article className="Card">
                 <header className="CardHeader">
-                  <ListAdd board={currentBoard} />
+                  <ListAdd boardKey={boardKey} board={board} />
                 </header>
               </article>
             </div>
           </div>
         </main>
+      </section>
+    ) : (
+      <section className="Page">
+        <header className="PageHeader BoardHeader">
+          <h1 className="PageTitle">Not Found</h1>
+        </header>
       </section>
     )
   }

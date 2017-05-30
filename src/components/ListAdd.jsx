@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addList } from '../actions'
@@ -10,12 +11,14 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  board: React.PropTypes.object.isRequired,
-  addList: React.PropTypes.func.isRequired
+  board: PropTypes.object.isRequired,
+  boardKey: PropTypes.string.isRequired,
+  addList: PropTypes.func.isRequired
 }
 
 const defaultProps = {
   board: {},
+  boardKey: '',
   addList: () => console.warn('addList not defined')
 }
 
@@ -23,27 +26,27 @@ export class ListAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = { name: '', slug: '', error: null }
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     const listExists = _.find(this.props.board.lists, ['slug', slug])
 
     this.setState({ name, slug, error: listExists && ERROR_MESSAGE.exists })
   }
 
-  onPressEnter() {
-    const board = this.props.board
+  handlePressEnter() {
+    const { boardKey } = this.props
     const name = this.state.name.trim()
     const { slug, error } = this.state
 
     if (name && slug && !error) {
       const list = { name, slug }
-      this.props.addList(list, board.slug)
+      this.props.addList(boardKey, list)
       this.setState({ name: '', slug: '', error: null })
     }
   }
@@ -53,9 +56,9 @@ export class ListAdd extends React.Component {
       <div>
         <input
           type="text"
-          className="CardTitle"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          className="CardTitle borderless-input"
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.name}
           placeholder="Add a list..."
         />

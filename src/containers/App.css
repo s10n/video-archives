@@ -16,7 +16,6 @@ body {
 
 .AppHeader {
 	flex: none;
-	height: 50px;
 }
 
 .AppWrapper {
@@ -33,12 +32,6 @@ body {
 	flex: 1;
 	background-color: hsl(0, 0%, 95%);
 	position: relative;
-}
-
-.PageWrapper {
-	position: absolute;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
 }
 
 @media (max-width: 480px) {

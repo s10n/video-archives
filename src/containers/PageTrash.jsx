@@ -1,66 +1,58 @@
+import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { emptyTrash } from '../actions'
 import './PageTrash.css'
+import Page from './Page'
 import VideoItem from '../components/VideoItem'
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  videos: React.PropTypes.array.isRequired,
-  emptyTrash: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  videos: PropTypes.object.isRequired,
+  emptyTrash: PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
-  videos: [],
+  boards: {},
+  videos: {},
   emptyTrash: () => console.warn('emptyTrash not defined')
 }
 
 class PageTrash extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
-
   constructor(props) {
     super(props)
-    this.onEmptyClick = this.onEmptyClick.bind(this)
+    this.handleEmptyClick = this.handleEmptyClick.bind(this)
   }
 
-  onEmptyClick() {
-    if (confirm(`Empty trash?`)) {
-      this.props.emptyTrash()
-      this.context.router.push('/')
+  handleEmptyClick() {
+    if (window.confirm(`Empty trash?`)) {
+      const videos = Object.keys(_.pickBy(this.props.videos, ['deleted', true])).map(key => key)
+      this.props.emptyTrash(videos)
     }
   }
 
   render() {
     const mapToComponent = videos => {
-      return videos.map(video => {
-        return video.deleted && <VideoItem video={video} key={video.data.id} />
+      return Object.keys(videos).map(key => {
+        const video = videos[key]
+        return video.deleted && <VideoItem video={video} videoKey={key} key={key} />
       })
     }
 
     return (
-      <section className="Page">
-        <header className="PageHeader">
-          <h1 className="PageTitle">Trash</h1>
-        </header>
+      <Page page="Trash" title="Trash">
+        <article className="Card">
+          <header className="CardHeader" style={{ textAlign: 'right' }}>
+            <button className="btn-link btn-small" onClick={this.handleEmptyClick}>Empty</button>
+          </header>
 
-        <main className="PageContent">
-          <div className="PageContentInner">
-            <article className="Card">
-              <header className="CardHeader" style={{ textAlign: 'right' }}>
-                <button className="btn-link btn-small" onClick={this.onEmptyClick}>Empty</button>
-              </header>
-
-              <div className="CardScroll">
-                {mapToComponent(this.props.videos)}
-              </div>
-            </article>
+          <div className="CardScroll">
+            {mapToComponent(this.props.videos)}
           </div>
-        </main>
-      </section>
+        </article>
+      </Page>
     )
   }
 }

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editList, deleteList } from '../actions'
@@ -8,17 +9,21 @@ import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
 
 const propTypes = {
-  list: React.PropTypes.object.isRequired,
-  videoList: React.PropTypes.array.isRequired,
-  currentBoard: React.PropTypes.object.isRequired,
-  editList: React.PropTypes.func.isRequired,
-  deleteList: React.PropTypes.func.isRequired
+  board: PropTypes.object.isRequired,
+  boardKey: PropTypes.string.isRequired,
+  list: PropTypes.object.isRequired,
+  listKey: PropTypes.string.isRequired,
+  videos: PropTypes.object.isRequired,
+  editList: PropTypes.func.isRequired,
+  deleteList: PropTypes.func.isRequired
 }
 
 const defaultProps = {
+  board: {},
+  boardKey: '',
   list: {},
-  videoList: [],
-  currentBoard: {},
+  listKey: '',
+  videos: {},
   editList: () => console.warn('editList not defined'),
   deleteList: () => console.warn('deleteList not defined')
 }
@@ -27,31 +32,31 @@ export class VideoList extends React.Component {
   constructor(props) {
     super(props)
     this.state = { isEditing: false, name: '', slug: '', error: null }
-    this.onNameClick = this.onNameClick.bind(this)
-    this.onInputBlur = this.onInputBlur.bind(this)
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
-    this.onDeleteClick = this.onDeleteClick.bind(this)
+    this.handleNameClick = this.handleNameClick.bind(this)
+    this.handleInputBlur = this.handleInputBlur.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
+    this.handleDeleteClick = this.handleDeleteClick.bind(this)
   }
 
-  onNameClick() {
+  handleNameClick() {
     const { name, slug } = this.props.list
 
     this.setState({ isEditing: true, name, slug })
   }
 
-  onInputBlur() {
+  handleInputBlur() {
     const { name, slug } = this.props.list
 
     this.setState({ isEditing: false, name, slug, error: null })
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     const listExists = _.find(
-      this.props.currentBoard.lists,
+      this.props.board.lists,
       list => {return list.slug === slug && list.slug !== this.props.list.slug}
     )
     const error = listExists && 'List exists'
@@ -59,47 +64,46 @@ export class VideoList extends React.Component {
     this.setState({ name, slug, error })
   }
 
-  onPressEnter() {
-    const list = this.props.list
+  handlePressEnter() {
     const name = this.state.name.trim()
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      this.props.editList(list, { name, slug }, this.props.currentBoard)
+      this.props.editList(this.props.boardKey, this.props.listKey, { name, slug })
       this.listNameInput.blur()
     }
   }
 
-  onDeleteClick() {
-    const list = this.props.list
+  handleDeleteClick() {
+    const listKey = this.props.listKey
+    const videos = Object.keys(_.pickBy(this.props.videos, ['list', listKey])).map(key => key)
 
-    if (confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
-      this.props.deleteList(list, this.props.currentBoard)
+    if (window.confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
+      this.props.deleteList(this.props.boardKey, this.props.listKey, videos)
     }
   }
 
   render() {
-    const board = this.props.currentBoard
     const list = this.props.list
-    const videoList = this.props.videoList
+    const videos = this.props.videos
 
     const ListHeader = list => {
       return (
         <header className="CardHeader ListHeader">
           <input
-            className="CardTitle ListName"
+            className="CardTitle ListName borderless-input"
             type="text"
-            onFocus={!_.isEmpty(list) && this.onNameClick}
-            onBlur={this.onInputBlur}
-            onChange={this.onInputChange}
-            onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+            onFocus={!_.isEmpty(list) && this.handleNameClick}
+            onBlur={this.handleInputBlur}
+            onChange={this.handleInputChange}
+            onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
             value={!this.state.isEditing ? (list.name || '📥') : this.state.name}
             ref={input => {this.listNameInput = input}}
             readOnly={_.isEmpty(list)}
           />
 
           {!_.isEmpty(list) &&
-            <button className="BtnTrash btn-link" onClick={this.onDeleteClick}>🗑</button>
+            <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>🗑</button>
           }
 
           {this.state.error &&
@@ -109,14 +113,17 @@ export class VideoList extends React.Component {
       )
     }
 
-    const listScroll = vidoes => {
-      return vidoes.map(video => {
+    const listScroll = videos => {
+      return Object.keys(videos).map(key => {
+        const video = videos[key]
+        const { boardKey, listKey } = this.props
         const condition =
-          video.board === board.slug &&
-          (_.isEmpty(list) ? !video.list : video.list === list.slug) &&
+          video.board === boardKey &&
+          (_.isEmpty(list) ? !video.list : video.list === listKey) &&
           !video.deleted
 
-        return condition && <VideoItem video={video} key={video.data.id} />
+        return condition &&
+          <VideoItem video={video} videoKey={key} boardKey={boardKey} listKey={listKey} key={key} />
       })
     }
 
@@ -131,10 +138,10 @@ export class VideoList extends React.Component {
         {ListHeader(list)}
 
         <div className="CardScroll" style={styleIE()}>
-          {listScroll(videoList)}
+          {listScroll(videos)}
         </div>
 
-        <VideoAdd boardSlug={board.slug} listSlug={list.slug} />
+        <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />
       </article>
     )
   }

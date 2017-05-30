@@ -1,59 +1,28 @@
-import _ from 'lodash'
+import dotProp from 'dot-prop-immutable'
 import * as types from '../actions/types'
-import { SAMPLE_VIDEOS } from './SampleStorage'
 
-export default function (state = [], action) {
+export default function (state = {}, action) {
   switch(action.type) {
     case types.FETCH_VIDEOS:
-      return action.payload
+      return action.videos || {}
+
+    case 'FETCH_VIDEOS_FULFILLED':
+      return action.videos || {}
 
     case types.IMPORT_STORAGE:
-      return SAMPLE_VIDEOS
+      return action.videos
 
     case types.EMPTY_STORAGE:
-      return []
-
-    case types.EDIT_BOARD:
-      const { editingBoard, editingBoardPart } = action.payload
-      return state.map(video => {return video.board === editingBoard.slug ?
-        Object.assign({}, video, { board: editingBoardPart.slug }) : video
-      })
-
-    case types.DELETE_BOARD:
-      const deletingBoard = action.payload
-      return state.map(video => {return video.board === deletingBoard.slug ?
-        Object.assign({}, video, { board: null, list: null, deleted: true }) : video
-      })
-
-    case types.EDIT_LIST:
-      const { editingList, editingListPart } = action.payload
-      return state.map(video => {return video.list === editingList.slug ?
-        Object.assign({}, video, { list: editingListPart.slug }) : video
-      })
-
-    case types.DELETE_LIST:
-      const { deletingList, deletingListCurrentBoard } = action.payload
-      return state.map(video => {
-        return video.board === deletingListCurrentBoard.slug && video.list === deletingList.slug ?
-          Object.assign({}, video, { list: null, deleted: true }) : video
-      })
+      return {}
 
     case types.ADD_VIDEO:
-      const addingVideo = action.payload
-      return [ ...state, addingVideo ]
+      return { ...state, [action.newVideoKey]: action.video }
 
     case types.EDIT_VIDEO:
-      const { editingVideo, editingVideoPart } = action.payload
-      return state.map(video => {return video === editingVideo ?
-        Object.assign({}, video, editingVideoPart) : video
-      })
+      return dotProp.merge(state, action.videoKey, action.newVideo)
 
     case types.DELETE_VIDEO:
-      const deletingVideo = action.payload
-      return state.filter(video => {return video !== deletingVideo})
-
-    case types.EMPTY_TRASH:
-      return state.filter(video => {return video.deleted !== true})
+      return dotProp.delete(state, action.videoKey)
 
     default:
       return state

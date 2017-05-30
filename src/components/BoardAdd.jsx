@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addBoard } from '../actions'
+import { reservedBoardSlug } from '../config/constants'
 import './BoardAdd.css'
 
 export const ERROR_MESSAGE = {
@@ -12,34 +14,30 @@ export const ERROR_MESSAGE = {
 }
 
 const propTypes = {
-  boards: React.PropTypes.array.isRequired,
-  addBoard: React.PropTypes.func.isRequired
+  boards: PropTypes.object.isRequired,
+  addBoard: PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  boards: [],
+  boards: {},
   addBoard: () => console.warn('addBoard not defined')
 }
 
 export class BoardAdd extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
-
   constructor(props) {
     super(props)
     this.state = { title: '', slug: '', error: null }
-    this.onInputChange = this.onInputChange.bind(this)
-    this.onPressEnter = this.onPressEnter.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handlePressEnter = this.handlePressEnter.bind(this)
   }
 
-  onInputChange(event) {
+  handleInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     let error = null
 
-    if (slug === 'trash') {
+    if (reservedBoardSlug.includes(slug)) {
       error = ERROR_MESSAGE.reserved
     } else if (_.find(this.props.boards, ['slug', slug])) {
       error = ERROR_MESSAGE.exists
@@ -48,14 +46,13 @@ export class BoardAdd extends React.Component {
     this.setState({ title, slug, error })
   }
 
-  onPressEnter() {
+  handlePressEnter() {
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
     if (title && slug && !error) {
       const board = { title, slug }
       this.props.addBoard(board)
-      this.context.router.push(slug)
       this.setState({ title: '', slug: '' })
     }
   }
@@ -64,9 +61,10 @@ export class BoardAdd extends React.Component {
     return (
       <section className="BoardAdd">
         <input
+          className="borderless-input"
           type="text"
-          onChange={this.onInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.onPressEnter()}}
+          onChange={this.handleInputChange}
+          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
           value={this.state.title}
           placeholder="Create new board..."
         />
