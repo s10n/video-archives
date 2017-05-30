@@ -33,7 +33,7 @@ export class ListAdd extends React.Component {
   handleInputChange(event) {
     const name = event.target.value
     const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     const listExists = _.find(this.props.board.lists, ['slug', slug])
 
     this.setState({ name, slug, error: listExists && ERROR_MESSAGE.exists })

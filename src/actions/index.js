@@ -1,109 +1,112 @@
 import { push } from 'react-router-redux'
-import * as firebase from 'firebase'
+import { auth, db } from '../config/constants'
 import * as types from './types'
 import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../SampleStorage'
 
 export function signupUser({ email, password }) {
   return dispatch => {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    auth().createUserWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
         dispatch(push('/'))
       })
-      .catch(error => {
-        dispatch(authError(error.message))
-      })
+      .catch(error => { dispatch(authError(error.message)) })
   }
 }
 
 export function signinUser({ email, password }) {
   return dispatch => {
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    auth().signInWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
         dispatch(push('/'))
+        dispatch(fetchBoards())
+        dispatch(fetchVideos())
       })
-      .catch(error => {
-        dispatch(authError(error.message))
-      })
+      .catch(error => { dispatch(authError(error.message)) })
   }
 }
 
 export function signoutUser() {
   return dispatch => {
-    firebase.auth().signOut()
+    auth().signOut()
       .then(response => {
         dispatch({ type: types.UNAUTH_USER })
+        dispatch(emptyStorage())
       })
-      .catch(error => {
-        dispatch(authError(error.message))
-      })
+      .catch(error => { dispatch(authError(error.message)) })
   }
 }
 
-export function authError(error) {
+function authError(error) {
   return { type: types.AUTH_ERROR, payload: error }
 }
 
-export function fetchBoards(localBoards) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
+export function fetchBoards() {
   return dispatch => {
-    dispatch({ type: 'FETCH_BOARDS_REQUESTED', boards: localBoards })
+    const user = auth().currentUser
+    const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
-    return database.ref(`/boards/${user.uid}`)
-      .once('value', snap => { dispatch({ type: 'FETCH_BOARDS_FULFILLED', boards: snap.val() }) })
-      .catch(error => { dispatch({ type: 'FETCH_BOARDS_REJECTED' }) })
+    dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
+
+    if (user) {
+      db.ref(`/boards/${user.uid}`)
+        .once('value', snap => { dispatch({ type: 'FETCH_BOARDS_FULFILLED', boards: snap.val() }) })
+        .catch(error => { dispatch({ type: 'FETCH_BOARDS_REJECTED' }) })
+    }
   }
 }
 
-export function fetchVideos(localVideos) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
+export function fetchVideos() {
   return dispatch => {
-    dispatch({ type: 'FETCH_VIDEOS_REQUESTED', videos: localVideos })
+    const user = auth().currentUser
+    const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
-    return database.ref(`/videos/${user.uid}`)
-      .once('value', snap => { dispatch({ type: 'FETCH_VIDEOS_FULFILLED', videos: snap.val() }) })
-      .catch(error => { dispatch({ type: 'FETCH_VIDEOS_REJECTED' }) })
+    dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
+
+    if (user) {
+      db.ref(`/videos/${user.uid}`)
+        .once('value', snap => { dispatch({ type: 'FETCH_VIDEOS_FULFILLED', videos: snap.val() }) })
+        .catch(error => { dispatch({ type: 'FETCH_VIDEOS_REJECTED' }) })
+    }
   }
 }
 
 export function importStorage() {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const ref = database.ref()
-    const updates = {
-      [`/boards/${user.uid}`]: SAMPLE_BOARDS,
-      [`/videos/${user.uid}`]: SAMPLE_VIDEOS
-    }
+    const user = auth().currentUser
 
-    dispatch({ type: 'IMPORT_STORAGE_REQUESTED', boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
-    ref.update(updates)
-      .then(() => { dispatch({ type: 'IMPORT_STORAGE_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'IMPORT_STORAGE_REJECTED' }) })
+    dispatch({ type: types.IMPORT_STORAGE, boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
+
+    if (user) {
+      const updates = {
+        [`/boards/${user.uid}`]: SAMPLE_BOARDS,
+        [`/videos/${user.uid}`]: SAMPLE_VIDEOS
+      }
+
+      db.ref().update(updates)
+        .then(() => { dispatch({ type: 'IMPORT_STORAGE_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'IMPORT_STORAGE_REJECTED' }) })
+    }
   }
 }
 
 export function emptyStorage() {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const ref = database.ref()
-    const updates = {
-      [`/boards/${user.uid}`]: null,
-      [`/videos/${user.uid}`]: null
-    }
+    const user = auth().currentUser
 
-    dispatch({ type: 'EMPTY_STORAGE_REQUESTED' })
-    ref.update(updates)
-      .then(() => { dispatch({ type: 'EMPTY_STORAGE_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'EMPTY_STORAGE_REJECTED' }) })
+    dispatch({ type: types.EMPTY_STORAGE })
+
+    if (user) {
+      const updates = {
+        [`/boards/${user.uid}`]: null,
+        [`/videos/${user.uid}`]: null
+      }
+
+      db.ref().update(updates)
+        .then(() => { dispatch({ type: 'EMPTY_STORAGE_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'EMPTY_STORAGE_REJECTED' }) })
+    }
   }
 }
 
@@ -120,169 +123,189 @@ export function pushStorage(props, prevProps) {
 }
 
 export function addBoard(board) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const boardsRef = database.ref(`/boards/${user.uid}`)
-    const newBoardKey = boardsRef.push().key
+    const user = auth().currentUser
+    const newBoardKey = user ? db.ref(`/boards/${user.uid}`).push().key : Date.now()
 
-    dispatch({ type: 'ADD_BOARD_REQUESTED', newBoardKey, board })
+    dispatch({ type: types.ADD_BOARD, newBoardKey, board })
     dispatch(push(board.slug))
-    boardsRef.child(newBoardKey).set(board)
-      .then(() => { dispatch({ type: 'ADD_BOARD_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
+
+    if (user) {
+      db.ref(`/boards/${user.uid}/${newBoardKey}`).set(board)
+        .then(() => { dispatch({ type: 'ADD_BOARD_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
+    }
   }
 }
 
 export function editBoard(boardKey, newBoard) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const boardsRef = database.ref(`/boards/${user.uid}`)
+    const user = auth().currentUser
 
-    dispatch({ type: 'EDIT_BOARD_REQUESTED', boardKey, newBoard })
+    dispatch({ type: types.EDIT_BOARD, boardKey, newBoard })
     dispatch(push(newBoard.slug))
-    boardsRef.child(boardKey).update(newBoard)
-      .then(() => { dispatch({ type: 'EDIT_BOARD_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'EDIT_BOARD_REJECTED' }) })
+
+    if (user) {
+      db.ref(`/boards/${user.uid}`).child(boardKey).update(newBoard)
+        .then(() => { dispatch({ type: 'EDIT_BOARD_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'EDIT_BOARD_REJECTED' }) })
+    }
   }
 }
 
 export function deleteBoard(boardKey, videos) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const ref = database.ref()
-    const newVideo = { board: null, list: null, deleted: true }
-    let updates = { [`/boards/${user.uid}/${boardKey}`]: null }
+    const user = auth().currentUser
 
     videos.map(videoKey => {
-      updates[`/videos/${user.uid}/${videoKey}/board`] = null
-      updates[`/videos/${user.uid}/${videoKey}/list`] = null
-      updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
-      dispatch({ type: 'EDIT_VIDEO_REQUESTED', videoKey, newVideo })
+      dispatch(editVideo(videoKey, { board: null, list: null, deleted: true }))
       return false
     })
 
-    dispatch({ type: 'DELETE_BOARD_REQUESTED', boardKey })
+    dispatch({ type: types.DELETE_BOARD, boardKey })
     dispatch(push('/'))
-    ref.update(updates)
-      .then(() => { dispatch({ type: 'DELETE_BOARD_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'DELETE_BOARD_REJECTED' }) })
+
+    if (user) {
+      let updates = { [`/boards/${user.uid}/${boardKey}`]: null }
+
+      videos.map(videoKey => {
+        updates[`/videos/${user.uid}/${videoKey}/board`] = null
+        updates[`/videos/${user.uid}/${videoKey}/list`] = null
+        updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+        return false
+      })
+
+      db.ref().update(updates)
+        .then(() => { dispatch({ type: 'DELETE_BOARD_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'DELETE_BOARD_REJECTED' }) })
+    }
   }
 }
 
 export function addList(boardKey, list) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const listsRef = database.ref(`/boards/${user.uid}/${boardKey}/lists`)
-    const newListKey = listsRef.push().key
+    const user = auth().currentUser
+    const newListKey = user ? db.ref(`/boards/${user.uid}/${boardKey}/lists`).push().key : Date.now()
 
-    dispatch({ type: 'ADD_LIST_REQUESTED', boardKey, newListKey, list })
-    listsRef.child(newListKey).set(list)
-      .then(() => { dispatch({ type: 'ADD_LIST_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'ADD_LIST_REJECTED' }) })
+    dispatch({ type: types.ADD_LIST, boardKey, newListKey, list })
+
+    if (user) {
+      db.ref(`/boards/${user.uid}/${boardKey}/lists/${newListKey}`).set(list)
+        .then(() => { dispatch({ type: 'ADD_LIST_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'ADD_LIST_REJECTED' }) })
+    }
   }
 }
 
 export function editList(boardKey, listKey, newList) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    dispatch({ type: 'EDIT_LIST_REQUESTED', boardKey, listKey, newList })
-    database.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).update(newList)
-      .then(() => { dispatch({ type: 'EDIT_LIST_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'EDIT_LIST_REJECTED' }) })
+    const user = auth().currentUser
+
+    dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList })
+
+    if (user) {
+      db.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).update(newList)
+        .then(() => { dispatch({ type: 'EDIT_LIST_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'EDIT_LIST_REJECTED' }) })
+    }
   }
 }
 
 export function deleteList(boardKey, listKey, videos) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const ref = database.ref()
-    const newVideo = { list: null, deleted: true }
-    let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
+    const user = auth().currentUser
 
     videos.map(videoKey => {
-      updates[`/videos/${user.uid}/${videoKey}/list`] = null
-      updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
-      dispatch({ type: 'EDIT_VIDEO_REQUESTED', videoKey, newVideo })
+      dispatch(editVideo(videoKey, { list: null, deleted: true }))
       return false
     })
 
-    dispatch({ type: 'DELETE_LIST_REQUESTED', boardKey, listKey })
-    ref.update(updates)
-      .then(() => { dispatch({ type: 'DELETE_LIST_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'DELETE_LIST_REJECTED' }) })
+    dispatch({ type: types.DELETE_LIST, boardKey, listKey })
+
+    if (user) {
+      let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
+
+      videos.map(videoKey => {
+        updates[`/videos/${user.uid}/${videoKey}/list`] = null
+        updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+        return false
+      })
+
+      db.ref().update(updates)
+        .then(() => { dispatch({ type: 'DELETE_LIST_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'DELETE_LIST_REJECTED' }) })
+    }
   }
 }
 
 export function addVideo(video) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    const videosRef = database.ref(`/videos/${user.uid}`)
-    const newVideoKey = videosRef.push().key
+    const user = auth().currentUser
+    const newVideoKey = user ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
 
-    dispatch({ type: 'ADD_VIDEO_REQUESTED', newVideoKey, video })
-    videosRef.child(newVideoKey).set(video)
-      .then(() => { dispatch({ type: 'ADD_VIDEO_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'ADD_VIDEO_REJECTED' }) })
+    dispatch({ type: types.ADD_VIDEO, newVideoKey, video })
+
+    if (user) {
+      db.ref(`/videos/${user.uid}/${newVideoKey}`).set(video)
+        .then(() => { dispatch({ type: 'ADD_VIDEO_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'ADD_VIDEO_REJECTED' }) })
+    }
   }
 }
 
 export function editVideo(videoKey, newVideo) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    dispatch({ type: 'EDIT_VIDEO_REQUESTED', videoKey, newVideo })
-    database.ref(`/videos/${user.uid}/${videoKey}`).update(newVideo)
-      .then(() => { dispatch({ type: 'EDIT_VIDEO_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'EDIT_VIDEO_REJECTED' }) })
+    const user = auth().currentUser
+
+    dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo })
+
+    if (user) {
+      db.ref(`/videos/${user.uid}/${videoKey}`).update(newVideo)
+        .then(() => { dispatch({ type: 'EDIT_VIDEO_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'EDIT_VIDEO_REJECTED' }) })
+    }
   }
 }
 
 export function deleteVideo(videoKey) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    dispatch({ type: 'DELETE_VIDEO_REQUESTED', videoKey })
-    database.ref(`/videos/${user.uid}/${videoKey}`).remove()
-      .then(() => { dispatch({ type: 'DELETE_VIDEO_FULFILLED' }) })
-      .catch(error => { dispatch({ type: 'DELETE_VIDEO_REJECTED' }) })
+    const user = auth().currentUser
+
+    dispatch({ type: types.DELETE_VIDEO, videoKey })
+
+    if (user) {
+      db.ref(`/videos/${user.uid}/${videoKey}`).remove()
+        .then(() => { dispatch({ type: 'DELETE_VIDEO_FULFILLED' }) })
+        .catch(error => { dispatch({ type: 'DELETE_VIDEO_REJECTED' }) })
+    }
   }
 }
 
 export function emptyTrash(videos) {
-  const database = firebase.database()
-  const user = firebase.auth().currentUser
-
   return dispatch => {
-    dispatch({ type: 'EMPTY_TRASH_REQUESTED' })
-    let updates = {}
+    const user = auth().currentUser
 
     videos.map(videoKey => {
-      updates[`/videos/${user.uid}/${videoKey}`] = null
-      dispatch({ type: 'DELETE_VIDEO_REQUESTED', videoKey })
+      dispatch(deleteVideo(videoKey))
       return false
     })
 
-    database.ref().update(updates)
-      .then(() => {
-        dispatch({ type: 'EMPTY_TRASH_FULFILLED' })
-        dispatch(push('/'))
+    dispatch({ type: types.EMPTY_TRASH })
+
+    if (user) {
+      let updates = {}
+
+      videos.map(videoKey => {
+        updates[`/videos/${user.uid}/${videoKey}`] = null
+        return false
       })
-      .catch(error => { dispatch({ type: 'EMPTY_TRASH_REJECTED' }) })
+
+      db.ref().update(updates)
+        .then(() => {
+          dispatch({ type: 'EMPTY_TRASH_FULFILLED' })
+          dispatch(push('/'))
+        })
+        .catch(error => { dispatch({ type: 'EMPTY_TRASH_REJECTED' }) })
+    }
   }
 }

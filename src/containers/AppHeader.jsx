@@ -2,12 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import * as firebase from 'firebase'
+import { appConfig } from '../config/config'
 import './AppHeader.css'
 
 class AppNav extends React.Component {
   render() {
     if (!this.props.authenticated) {
-      return (
+      return appConfig.signupAllowed && (
         <nav className="AppNav">
           <NavLink activeClassName="active" to="/signup">Sign up</NavLink>
           <NavLink activeClassName="active" to="/signin">Sign in</NavLink>

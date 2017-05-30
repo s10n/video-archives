@@ -1,27 +1,27 @@
 import dotProp from 'dot-prop-immutable'
-// import * as types from '../actions/types'
+import * as types from '../actions/types'
 
 export default function (state = {}, action) {
   switch(action.type) {
-    case 'FETCH_VIDEOS_REQUESTED':
+    case types.FETCH_VIDEOS:
       return action.videos || {}
 
     case 'FETCH_VIDEOS_FULFILLED':
       return action.videos || {}
 
-    case 'IMPORT_STORAGE_REQUESTED':
+    case types.IMPORT_STORAGE:
       return action.videos
 
-    case 'EMPTY_STORAGE_REQUESTED':
+    case types.EMPTY_STORAGE:
       return {}
 
-    case 'ADD_VIDEO_REQUESTED':
+    case types.ADD_VIDEO:
       return { ...state, [action.newVideoKey]: action.video }
 
-    case 'EDIT_VIDEO_REQUESTED':
+    case types.EDIT_VIDEO:
       return dotProp.merge(state, action.videoKey, action.newVideo)
 
-    case 'DELETE_VIDEO_REQUESTED':
+    case types.DELETE_VIDEO:
       return dotProp.delete(state, action.videoKey)
 
     default:

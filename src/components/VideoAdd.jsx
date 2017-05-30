@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addVideo } from '../actions'
-import { youtubeAPIKey } from '../config'
+import { youtubeAPIKey } from '../config/config'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 

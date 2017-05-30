@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editBoard, deleteBoard } from '../actions'
+import { reservedBoardSlug } from '../config/constants'
 import './BoardRead.css'
 import VideoList from '../components/VideoList'
 import ListAdd from '../components/ListAdd'
@@ -54,14 +55,14 @@ class BoardRead extends React.Component {
   handleInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     const boardExists = _.find(
       this.props.boards,
       board => {return slug === board.slug && slug !== this.props.match.params.boardSlug}
     )
     let error = null
 
-    if (slug === 'trash') {
+    if (reservedBoardSlug.includes(slug)) {
       error = 'Reserved board title'
     } else if (boardExists) {
       error = 'Board already exists'
@@ -96,7 +97,7 @@ class BoardRead extends React.Component {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
 
-    return (
+    return boardKey ? (
       <section className="Page">
         <header className="PageHeader BoardHeader">
           <input
@@ -155,6 +156,12 @@ class BoardRead extends React.Component {
             </div>
           </div>
         </main>
+      </section>
+    ) : (
+      <section className="Page">
+        <header className="PageHeader BoardHeader">
+          <h1 className="PageTitle">Not Found</h1>
+        </header>
       </section>
     )
   }
