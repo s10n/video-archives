@@ -55,7 +55,7 @@ class BoardRead extends React.Component {
   handleInputChange(event) {
     const title = event.target.value
     const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=/g, '-').replace(/--+/g, '-')
+      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
     const boardExists = _.find(
       this.props.boards,
       board => {return slug === board.slug && slug !== this.props.match.params.boardSlug}
