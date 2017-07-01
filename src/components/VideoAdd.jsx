@@ -9,12 +9,14 @@ import { youtubeAPIKey } from '../config/config'
 import './VideoAdd.css'
 import VideoItem from './VideoItem'
 
+const snippetFields = 'title,thumbnails,publishedAt,channelId,channelTitle,categoryId'
+const contentDetailsFields = 'duration'
+
 export const API_INFO = {
   url    : 'https://www.googleapis.com/youtube/v3/videos',
   key    : youtubeAPIKey,
   part   : 'snippet,contentDetails',
-  fields : 'items(id,snippet(publishedAt,channelId,title,thumbnails,channelTitle,categoryId),' +
-           'contentDetails(duration))',
+  fields : `items(id,snippet(${snippetFields}),contentDetails(${contentDetailsFields}))`,
   videoIDLength : 11
 }
 

@@ -89,6 +89,7 @@ export class VideoItem extends React.Component {
     const video = this.props.video
     const board = this.props.boards[video.board]
     const url = `https://www.youtube.com/watch?v=${video.data.id}`
+    const { thumbnails, title, channelId, channelTitle } = video.data.snippet
     const publishedAt = new Date(video.data.snippet.publishedAt)
 
     const videoItemFunctions = () => {
@@ -114,13 +115,22 @@ export class VideoItem extends React.Component {
     // TODO: Change thumbnail ratio to 16:9
     return (
       <article className="VideoItem">
-        <img src={video.data.snippet.thumbnails.high.url} alt="" height="120" />
+        <img src={thumbnails.high.url} alt="" height="120" />
 
         <h3 className="VideoTitle">
-          <a href={url} target="_blank" rel="noopener noreferrer">{video.data.snippet.title}</a>
+          <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
         </h3>
 
         <section className="VideoMeta">
+          <p>
+            <a
+              href={`https://www.youtube.com/channel/${channelId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {channelTitle}
+            </a>
+          </p>
           <date>{publishedAt.toLocaleString('en-US')}</date>
           {!this.props.addingVideo && videoItemFunctions()}
         </section>
