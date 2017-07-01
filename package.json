@@ -7,7 +7,7 @@
     "enzyme": "^2.8.2",
     "gh-pages": "^1.0.0",
     "react-addons-test-utils": "^15.5.1",
-    "react-scripts": "1.0.7",
+    "react-scripts": "1.0.10",
     "sinon": "^2.2.0"
   },
   "dependencies": {
