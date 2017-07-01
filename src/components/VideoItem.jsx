@@ -89,7 +89,7 @@ export class VideoItem extends React.Component {
     const video = this.props.video
     const board = this.props.boards[video.board]
     const url = `https://www.youtube.com/watch?v=${video.data.id}`
-    const { thumbnails, title, channelTitle } = video.data.snippet
+    const { thumbnails, title, channelId, channelTitle } = video.data.snippet
     const publishedAt = new Date(video.data.snippet.publishedAt)
 
     const videoItemFunctions = () => {
@@ -122,6 +122,15 @@ export class VideoItem extends React.Component {
         </h3>
 
         <section className="VideoMeta">
+          <p>
+            <a
+              href={`https://www.youtube.com/channel/${channelId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {channelTitle}
+            </a>
+          </p>
           <date>{publishedAt.toLocaleString('en-US')}</date>
           {!this.props.addingVideo && videoItemFunctions()}
         </section>
