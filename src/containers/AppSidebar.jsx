@@ -14,24 +14,20 @@ const defaultProps = {
   trash: false
 }
 
-class AppSidebar extends React.Component {
-  render() {
-    const { boards } = this.props
+const AppSidebar = ({ boards, trash }) => {
+  return (
+    <nav className="AppSidebar">
+      {Object.keys(boards).map(key =>
+        <NavLink activeClassName="active" to={boards[key].slug} key={key}>{boards[key].title}</NavLink>
+      )}
 
-    return (
-      <nav className="AppSidebar">
-        {Object.keys(boards).map(key =>
-          <NavLink activeClassName="active" to={boards[key].slug} key={key}>{boards[key].title}</NavLink>
-        )}
+      {trash &&
+        <NavLink activeClassName="active" to="trash">Trash</NavLink>
+      }
 
-        {this.props.trash &&
-          <NavLink activeClassName="active" to="trash">Trash</NavLink>
-        }
-
-        <BoardAdd />
-      </nav>
-    )
-  }
+      <BoardAdd />
+    </nav>
+  )
 }
 
 AppSidebar.propTypes = propTypes
