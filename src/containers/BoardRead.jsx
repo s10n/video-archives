@@ -147,13 +147,15 @@ class BoardRead extends React.Component {
               </div>
             )}
 
-            <div className="VideoWrapper">
-              <article className="Card">
-                <header className="CardHeader">
-                  <ListAdd boardKey={boardKey} board={board} />
-                </header>
-              </article>
-            </div>
+            {!board.isSyncing &&
+              <div className="VideoWrapper">
+                <article className="Card">
+                  <header className="CardHeader">
+                    <ListAdd boardKey={boardKey} board={board} />
+                  </header>
+                </article>
+              </div>
+            }
           </div>
         </main>
       </section>

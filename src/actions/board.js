@@ -30,14 +30,24 @@ export function addBoard(board) {
   return dispatch => {
     const user = auth().currentUser
     const newBoardKey = user ? db.ref(`/boards/${user.uid}`).push().key : Date.now()
+    const syncingBoard = { ...board, isSyncing: true }
 
-    dispatch({ type: types.ADD_BOARD, newBoardKey, board })
+    dispatch({ type: types.ADD_BOARD, newBoardKey, board: !user ? board : syncingBoard })
     dispatch(push(board.slug))
 
     if (user) {
       db.ref(`/boards/${user.uid}/${newBoardKey}`).set(board)
-        .then(() => { dispatch({ type: 'ADD_BOARD_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
+        .then(() => {
+          const boardKey = newBoardKey
+          const newBoard = { ...board, isSyncing: false }
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard })
+        })
+        .catch(error => {
+          const boardKey = newBoardKey
+          console.error(error)
+          dispatch({ type: types.DELETE_BOARD, boardKey })
+          dispatch(push('/'))
+        })
     }
   }
 }
