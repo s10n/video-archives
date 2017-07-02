@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { importStorage, emptyStorage } from '../actions'
+import { importStorage, emptyStorage } from '../actions/storage'
 import './PageFront.css'
 import Page from './Page'
 

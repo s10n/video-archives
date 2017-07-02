@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect, Link } from 'react-router-dom'
-import { signinUser } from '../../actions'
+import { signinUser } from '../../actions/auth'
 import Page from '../Page'
 import FormSignin from '../../components/auth/FormSignin'
 
