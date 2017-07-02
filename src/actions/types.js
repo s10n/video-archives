@@ -1,9 +1,10 @@
+export const APP_STATUS = 'APP_STATUS'
+
 export const AUTH_USER = 'AUTH_USER'
 export const UNAUTH_USER = 'UNAUTH_USER'
 export const AUTH_ERROR = 'AUTH_ERROR'
 
 export const FETCH_BOARDS = 'FETCH_BOARDS'
-export const FETCH_BOARDS_REJECTED = 'FETCH_BOARDS_REJECTED'
 export const FETCH_VIDEOS = 'FETCH_VIDEOS'
 export const IMPORT_STORAGE = 'IMPORT_STORAGE'
 export const EMPTY_STORAGE = 'EMPTY_STORAGE'

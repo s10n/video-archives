@@ -7,19 +7,18 @@ export function fetchBoards() {
     const user = auth().currentUser
     const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
-    dispatch(
-      !user
-        ? { type: types.FETCH_BOARDS, boards: localBoards }
-        : { type: types.FETCH_BOARDS, boards: localBoards, isBoardsFetching: true }
-    )
+    dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
 
     if (user) {
+      dispatch({ type: types.APP_STATUS, status: 'App is fetching...' })
+
       db.ref(`/boards/${user.uid}`)
         .once('value', snap => {
-          dispatch({ type: types.FETCH_BOARDS, boards: snap.val(), isBoardsFetching: false })
+          dispatch({ type: types.FETCH_BOARDS, boards: snap.val() })
+          dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.FETCH_BOARDS_REJECTED, error })
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
         })
     }
   }
@@ -90,6 +89,8 @@ export function deleteBoard(boardKey, videos, board) {
     if (user) {
       let updates = { [`/boards/${user.uid}/${boardKey}`]: null }
 
+      dispatch({ type: types.APP_STATUS, status: `App is deleting ${board.title}` })
+
       Object.keys(videos).forEach(videoKey => {
         updates[`/videos/${user.uid}/${videoKey}/board`] = null
         updates[`/videos/${user.uid}/${videoKey}/list`] = null
@@ -97,6 +98,9 @@ export function deleteBoard(boardKey, videos, board) {
       })
 
       db.ref().update(updates)
+        .then(() => {
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
         .catch(error => {
           console.error(error)
           dispatch({ type: types.ADD_BOARD, newBoardKey: boardKey, board })
