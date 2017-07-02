@@ -5,6 +5,9 @@ export default function(state = {}, action) {
     case types.FETCH_BOARDS:
       return { isBoardsFetching: action.isBoardsFetching }
 
+    case types.FETCH_BOARDS_REJECTED:
+      return { error: action.error }
+
     default:
       return state
   }

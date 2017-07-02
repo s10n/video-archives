@@ -19,7 +19,9 @@ export function fetchBoards() {
         .once('value', snap => {
           dispatch({ type: types.FETCH_BOARDS, boards: snap.val(), isBoardsFetching: false })
         })
-        .catch(error => { console.error(error) })
+        .catch(error => {
+          dispatch({ type: types.FETCH_BOARDS_REJECTED, error })
+        })
     }
   }
 }

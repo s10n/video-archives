@@ -5,7 +5,7 @@ import * as firebase from 'firebase'
 import { appConfig } from '../config/config'
 import './AppHeader.css'
 
-const AppNav = ({ isBoardsFetching, authenticated }) => {
+const AppNav = ({ isBoardsFetching, error, authenticated }) => {
   if (!authenticated) {
     return appConfig.signupAllowed && (
       <nav className="AppNav">
@@ -15,10 +15,11 @@ const AppNav = ({ isBoardsFetching, authenticated }) => {
     )
   } else {
     const user = firebase.auth().currentUser
+    error && console.error(error)
 
     return (
       <nav className="AppNav">
-        {isBoardsFetching && <span>App is fetching...</span>}
+        {!error ? (isBoardsFetching && <span>App is fetching...</span>) : <span>Error</span>}
         {user && <span>{user.email}</span>}
         <NavLink activeClassName="active" to="/signout">Sign out</NavLink>
       </nav>
@@ -26,20 +27,21 @@ const AppNav = ({ isBoardsFetching, authenticated }) => {
   }
 }
 
-const AppHeader = ({ isBoardsFetching, authenticated }) => {
+const AppHeader = ({ isBoardsFetching, error, authenticated }) => {
   return (
     <header className="AppHeader">
       <h1 className="AppTitle">
         <NavLink activeClassName="active" to="/">Video Archives <small>alpha</small></NavLink>
       </h1>
 
-      <AppNav isBoardsFetching={isBoardsFetching} authenticated={authenticated} />
+      <AppNav isBoardsFetching={isBoardsFetching} error={error} authenticated={authenticated} />
     </header>
   )
 }
 
 function mapStateToProps(state) {
-  return { isBoardsFetching: state.app.isBoardsFetching, authenticated: state.auth.authenticated }
+  const { isBoardsFetching, error } = state.app
+  return { isBoardsFetching, error, authenticated: state.auth.authenticated }
 }
 
 export default connect(mapStateToProps)(AppHeader)
