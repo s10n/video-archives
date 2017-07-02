@@ -87,10 +87,10 @@ class BoardRead extends React.Component {
   handleDeleteClick() {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
-    const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
+    const videos = _.pickBy(this.props.videos, ['board', boardKey])
 
     if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
-      this.props.deleteBoard(boardKey, videos)
+      this.props.deleteBoard(boardKey, videos, board)
     }
   }
 
@@ -104,7 +104,7 @@ class BoardRead extends React.Component {
           <input
             className="PageTitle BoardTitle h1 borderless-input"
             type="text"
-            onFocus={this.handleTitleClick}
+            onFocus={!board.isSyncing && this.handleTitleClick}
             onBlur={this.handleInputBlur}
             onChange={this.handleInputChange}
             onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}

@@ -1,7 +1,6 @@
 import { push } from 'react-router-redux'
 import { auth, db } from '../config/constants'
 import * as types from './types'
-import { editVideo } from './video'
 
 export function fetchBoards() {
   return dispatch => {
@@ -76,14 +75,14 @@ export function editBoard(boardKey, newBoard, oldBoard) {
   }
 }
 
-export function deleteBoard(boardKey, videos) {
+export function deleteBoard(boardKey, videos, board) {
   return dispatch => {
     const user = auth().currentUser
+    const deletedVideo = { board: null, list: null, deleted: true }
 
-    videos.map(videoKey => {
-      dispatch(editVideo(videoKey, { board: null, list: null, deleted: true }))
-      return false
-    })
+    Object.keys(videos).forEach(videoKey =>
+      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: deletedVideo })
+    )
 
     dispatch({ type: types.DELETE_BOARD, boardKey })
     dispatch(push('/'))
@@ -91,16 +90,21 @@ export function deleteBoard(boardKey, videos) {
     if (user) {
       let updates = { [`/boards/${user.uid}/${boardKey}`]: null }
 
-      videos.map(videoKey => {
+      Object.keys(videos).forEach(videoKey => {
         updates[`/videos/${user.uid}/${videoKey}/board`] = null
         updates[`/videos/${user.uid}/${videoKey}/list`] = null
         updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
-        return false
       })
 
       db.ref().update(updates)
-        .then(() => { dispatch({ type: 'DELETE_BOARD_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'DELETE_BOARD_REJECTED' }) })
+        .catch(error => {
+          console.error(error)
+          dispatch({ type: types.ADD_BOARD, newBoardKey: boardKey, board })
+          Object.keys(videos).forEach(videoKey =>
+            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
+          )
+          dispatch(push(board.slug))
+        })
     }
   }
 }
