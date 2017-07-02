@@ -6,9 +6,6 @@ export default function (state = {}, action) {
     case types.FETCH_BOARDS:
       return action.boards || {}
 
-    case 'FETCH_BOARDS_FULFILLED':
-      return action.boards || {}
-
     case types.IMPORT_STORAGE:
       return action.boards
 

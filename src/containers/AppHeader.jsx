@@ -5,7 +5,7 @@ import * as firebase from 'firebase'
 import { appConfig } from '../config/config'
 import './AppHeader.css'
 
-const AppNav = ({ authenticated }) => {
+const AppNav = ({ isBoardsFetching, authenticated }) => {
   if (!authenticated) {
     return appConfig.signupAllowed && (
       <nav className="AppNav">
@@ -18,6 +18,7 @@ const AppNav = ({ authenticated }) => {
 
     return (
       <nav className="AppNav">
+        {isBoardsFetching && <span>App is fetching...</span>}
         {user && <span>{user.email}</span>}
         <NavLink activeClassName="active" to="/signout">Sign out</NavLink>
       </nav>
@@ -25,20 +26,20 @@ const AppNav = ({ authenticated }) => {
   }
 }
 
-const AppHeader = ({ authenticated }) => {
+const AppHeader = ({ isBoardsFetching, authenticated }) => {
   return (
     <header className="AppHeader">
       <h1 className="AppTitle">
         <NavLink activeClassName="active" to="/">Video Archives <small>alpha</small></NavLink>
       </h1>
 
-      <AppNav authenticated={authenticated} />
+      <AppNav isBoardsFetching={isBoardsFetching} authenticated={authenticated} />
     </header>
   )
 }
 
 function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated }
+  return { isBoardsFetching: state.app.isBoardsFetching, authenticated: state.auth.authenticated }
 }
 
 export default connect(mapStateToProps)(AppHeader)

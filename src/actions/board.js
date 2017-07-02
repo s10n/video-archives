@@ -8,12 +8,18 @@ export function fetchBoards() {
     const user = auth().currentUser
     const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
-    dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
+    dispatch(
+      !user
+        ? { type: types.FETCH_BOARDS, boards: localBoards }
+        : { type: types.FETCH_BOARDS, boards: localBoards, isBoardsFetching: true }
+    )
 
     if (user) {
       db.ref(`/boards/${user.uid}`)
-        .once('value', snap => { dispatch({ type: 'FETCH_BOARDS_FULFILLED', boards: snap.val() }) })
-        .catch(error => { dispatch({ type: 'FETCH_BOARDS_REJECTED' }) })
+        .once('value', snap => {
+          dispatch({ type: types.FETCH_BOARDS, boards: snap.val(), isBoardsFetching: false })
+        })
+        .catch(error => { console.error(error) })
     }
   }
 }
