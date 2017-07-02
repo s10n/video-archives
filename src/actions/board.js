@@ -39,8 +39,8 @@ export function addBoard(board) {
       db.ref(`/boards/${user.uid}/${newBoardKey}`).set(board)
         .then(() => {
           const boardKey = newBoardKey
-          const newBoard = { ...board, isSyncing: false }
-          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard })
+          const syncedBoard = { ...board, isSyncing: false }
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
         })
         .catch(error => {
           const boardKey = newBoardKey
@@ -52,17 +52,26 @@ export function addBoard(board) {
   }
 }
 
-export function editBoard(boardKey, newBoard) {
+export function editBoard(boardKey, newBoard, oldBoard) {
   return dispatch => {
     const user = auth().currentUser
+    const syncingBoard = { ...newBoard, isSyncing: true }
 
-    dispatch({ type: types.EDIT_BOARD, boardKey, newBoard })
+    dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: !user ? newBoard : syncingBoard })
     dispatch(push(newBoard.slug))
 
     if (user) {
       db.ref(`/boards/${user.uid}`).child(boardKey).update(newBoard)
-        .then(() => { dispatch({ type: 'EDIT_BOARD_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'EDIT_BOARD_REJECTED' }) })
+        .then(() => {
+          const syncedBoard = { ...newBoard, isSyncing: false }
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
+        })
+        .catch(error => {
+          const syncedBoard = { ...oldBoard, isSyncing: false }
+          console.error(error)
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
+          dispatch(push(oldBoard.slug))
+        })
     }
   }
 }

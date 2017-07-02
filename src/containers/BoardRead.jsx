@@ -73,12 +73,13 @@ class BoardRead extends React.Component {
 
   handlePressEnter() {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+    const board = this.props.boards[boardKey]
 
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      this.props.editBoard(boardKey, { title, slug })
+      this.props.editBoard(boardKey, { title, slug }, board)
       this.boardTitleInput.blur()
     }
   }
