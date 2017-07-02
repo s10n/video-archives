@@ -1,6 +1,6 @@
 import { auth, db } from '../config/constants'
 import * as types from './types'
-import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../SampleStorage'
+import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../config/sample'
 
 export function importStorage() {
   return dispatch => {
