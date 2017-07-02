@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { addBoard } from '../actions'
+import { addBoard } from '../actions/board'
 import { reservedBoardSlug } from '../config/constants'
 import './BoardAdd.css'
 

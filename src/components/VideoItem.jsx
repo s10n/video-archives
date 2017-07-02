@@ -3,7 +3,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { editVideo, deleteVideo, addBoard, addList } from '../actions'
+import { addBoard } from '../actions/board'
+import { addList } from '../actions/list'
+import { editVideo, deleteVideo } from '../actions/video'
 import './VideoItem.css'
 
 const propTypes = {

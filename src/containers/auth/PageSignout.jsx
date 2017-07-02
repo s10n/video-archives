@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
-import { signoutUser } from '../../actions'
+import { signoutUser } from '../../actions/auth'
 import Page from '../Page'
 
 class Signout extends React.Component {
