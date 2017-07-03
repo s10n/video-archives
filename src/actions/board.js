@@ -10,7 +10,7 @@ export function fetchBoards() {
     dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
 
     if (user) {
-      dispatch({ type: types.APP_STATUS, status: 'App is fetching...' })
+      dispatch({ type: types.APP_STATUS, status: 'App is fetching boards' })
 
       db.ref(`/boards/${user.uid}`)
         .once('value', snap => {

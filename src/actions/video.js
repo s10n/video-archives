@@ -10,9 +10,16 @@ export function fetchVideos() {
     dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
 
     if (user) {
+      dispatch({ type: types.APP_STATUS, status: 'App is fetching videos' })
+
       db.ref(`/videos/${user.uid}`)
-        .once('value', snap => { dispatch({ type: 'FETCH_VIDEOS_FULFILLED', videos: snap.val() }) })
-        .catch(error => { dispatch({ type: 'FETCH_VIDEOS_REJECTED' }) })
+        .once('value', snap => {
+          dispatch({ type: 'FETCH_VIDEOS_FULFILLED', videos: snap.val() })
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+        })
     }
   }
 }
