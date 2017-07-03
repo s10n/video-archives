@@ -26,16 +26,24 @@ export function addList(boardKey, list) {
   }
 }
 
-export function editList(boardKey, listKey, newList) {
+export function editList(boardKey, listKey, newList, oldList) {
   return dispatch => {
     const user = auth().currentUser
+    const syncingList = { ...newList, isSyncing: true }
 
-    dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList })
+    dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: !user ? newList : syncingList })
 
     if (user) {
       db.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).update(newList)
-        .then(() => { dispatch({ type: 'EDIT_LIST_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'EDIT_LIST_REJECTED' }) })
+        .then(() => {
+          const syncedList = { ...newList, isSyncing: false }
+          dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
+        })
+        .catch(error => {
+          const syncedList = { ...oldList, isSyncing: false }
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
+        })
     }
   }
 }

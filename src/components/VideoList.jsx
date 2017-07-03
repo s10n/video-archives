@@ -69,7 +69,7 @@ export class VideoList extends React.Component {
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      this.props.editList(this.props.boardKey, this.props.listKey, { name, slug })
+      this.props.editList(this.props.boardKey, this.props.listKey, { name, slug }, this.props.list)
       this.listNameInput.blur()
     }
   }
