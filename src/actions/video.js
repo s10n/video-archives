@@ -28,13 +28,22 @@ export function addVideo(video) {
   return dispatch => {
     const user = auth().currentUser
     const newVideoKey = user ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
+    const syncingVideo = { ...video, isSyncing: true }
 
-    dispatch({ type: types.ADD_VIDEO, newVideoKey, video })
+    dispatch({ type: types.ADD_VIDEO, newVideoKey, video: !user ? video : syncingVideo })
 
     if (user) {
+      const videoKey = newVideoKey
+
       db.ref(`/videos/${user.uid}/${newVideoKey}`).set(video)
-        .then(() => { dispatch({ type: 'ADD_VIDEO_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'ADD_VIDEO_REJECTED' }) })
+        .then(() => {
+          const syncedVideo = { ...video, isSyncing: false }
+          dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.DELETE_VIDEO, videoKey })
+        })
     }
   }
 }

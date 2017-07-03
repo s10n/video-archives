@@ -98,19 +98,20 @@ export class VideoItem extends React.Component {
       const location = (
         <span>{video.board && ` to ${board.title}`}{video.list && ` - ${board.lists[video.list].name}`}</span>
       )
-      return (
-        !video.deleted ?
+      return !video.deleted ? (
+        !video.isSyncing && (
           <section>
             <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
             &middot;
             <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
           </section>
-        :
-          <section>
-            <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
-            &middot;
-            <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
-          </section>
+        )
+      ) : (
+        <section>
+          <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
+          &middot;
+          <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
+        </section>
       )
     }
 
