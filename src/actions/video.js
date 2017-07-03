@@ -70,16 +70,23 @@ export function editVideo(videoKey, newVideo, oldVideo) {
   }
 }
 
-export function deleteVideo(videoKey) {
+export function deleteVideo(videoKey, video) {
   return dispatch => {
     const user = auth().currentUser
 
     dispatch({ type: types.DELETE_VIDEO, videoKey })
 
     if (user) {
+      dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
+
       db.ref(`/videos/${user.uid}/${videoKey}`).remove()
-        .then(() => { dispatch({ type: 'DELETE_VIDEO_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'DELETE_VIDEO_REJECTED' }) })
+        .then(() => {
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.ADD_VIDEO, newVideoKey: videoKey, video })
+        })
     }
   }
 }

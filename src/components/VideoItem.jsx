@@ -85,7 +85,7 @@ export class VideoItem extends React.Component {
   }
 
   handleDeleteClick() {
-    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey)
+    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey, this.props.video)
   }
 
   render() {
