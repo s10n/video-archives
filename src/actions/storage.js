@@ -14,9 +14,16 @@ export function importStorage() {
         [`/videos/${user.uid}`]: SAMPLE_VIDEOS
       }
 
+      dispatch({ type: types.APP_STATUS, status: 'App is importing sample' })
+
       db.ref().update(updates)
-        .then(() => { dispatch({ type: 'IMPORT_STORAGE_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'IMPORT_STORAGE_REJECTED' }) })
+        .then(() => {
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.IMPORT_STORAGE, boards: {}, videos: {} })
+        })
     }
   }
 }
