@@ -95,27 +95,31 @@ export function emptyTrash(videos) {
   return dispatch => {
     const user = auth().currentUser
 
-    videos.map(videoKey => {
-      dispatch(deleteVideo(videoKey))
-      return false
+    dispatch(push('/'))
+    Object.keys(videos).forEach(videoKey => {
+      dispatch({ type: types.DELETE_VIDEO, videoKey })
     })
-
-    dispatch({ type: types.EMPTY_TRASH })
 
     if (user) {
       let updates = {}
 
-      videos.map(videoKey => {
+      Object.keys(videos).forEach(videoKey => {
         updates[`/videos/${user.uid}/${videoKey}`] = null
-        return false
       })
+
+      dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
 
       db.ref().update(updates)
         .then(() => {
-          dispatch({ type: 'EMPTY_TRASH_FULFILLED' })
-          dispatch(push('/'))
+          dispatch({ type: types.APP_STATUS, status: null })
         })
-        .catch(error => { dispatch({ type: 'EMPTY_TRASH_REJECTED' }) })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          Object.keys(videos).forEach(videoKey => {
+            dispatch({ type: types.ADD_VIDEO, newVideoKey: videoKey, video: videos[videoKey] })
+          })
+          dispatch(push('Trash'))
+        })
     }
   }
 }

@@ -21,5 +21,3 @@ export const DELETE_LIST = 'DELETE_LIST'
 export const ADD_VIDEO = 'ADD_VIDEO'
 export const EDIT_VIDEO = 'EDIT_VIDEO'
 export const DELETE_VIDEO = 'DELETE_VIDEO'
-
-export const EMPTY_TRASH = 'EMPTY_TRASH'
