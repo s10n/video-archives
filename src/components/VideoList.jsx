@@ -141,7 +141,9 @@ export class VideoList extends React.Component {
           {listScroll(videos)}
         </div>
 
-        <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />
+        {!list.isSyncing &&
+          <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />
+        }
       </article>
     )
   }

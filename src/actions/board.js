@@ -34,14 +34,14 @@ export function addBoard(board) {
     dispatch(push(board.slug))
 
     if (user) {
+      const boardKey = newBoardKey
+
       db.ref(`/boards/${user.uid}/${newBoardKey}`).set(board)
         .then(() => {
-          const boardKey = newBoardKey
           const syncedBoard = { ...board, isSyncing: false }
           dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
         })
         .catch(error => {
-          const boardKey = newBoardKey
           dispatch({ type: types.APP_STATUS, status: 'Error', error })
           dispatch({ type: types.DELETE_BOARD, boardKey })
           dispatch(push('/'))
