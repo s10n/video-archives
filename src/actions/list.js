@@ -1,6 +1,5 @@
 import { auth, db } from '../config/constants'
 import * as types from './types'
-import { editVideo } from './video'
 
 export function addList(boardKey, list) {
   return dispatch => {
@@ -48,13 +47,13 @@ export function editList(boardKey, listKey, newList, oldList) {
   }
 }
 
-export function deleteList(boardKey, listKey, videos) {
+export function deleteList(boardKey, listKey, videos, list) {
   return dispatch => {
     const user = auth().currentUser
+    const deletedVideo = { list: null, deleted: true }
 
-    videos.map(videoKey => {
-      dispatch(editVideo(videoKey, { list: null, deleted: true }))
-      return false
+    Object.keys(videos).forEach(videoKey => {
+      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: deletedVideo })
     })
 
     dispatch({ type: types.DELETE_LIST, boardKey, listKey })
@@ -62,15 +61,24 @@ export function deleteList(boardKey, listKey, videos) {
     if (user) {
       let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
 
-      videos.map(videoKey => {
+      Object.keys(videos).forEach(videoKey => {
         updates[`/videos/${user.uid}/${videoKey}/list`] = null
         updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
-        return false
       })
 
+      dispatch({ type: types.APP_STATUS, status: `App is deleting ${list.name}` })
+
       db.ref().update(updates)
-        .then(() => { dispatch({ type: 'DELETE_LIST_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'DELETE_LIST_REJECTED' }) })
+        .then(() => {
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.ADD_LIST, boardKey, newListKey: listKey, list })
+          Object.keys(videos).forEach(videoKey =>
+            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
+          )
+        })
     }
   }
 }
