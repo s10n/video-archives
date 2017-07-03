@@ -40,9 +40,15 @@ export function emptyStorage() {
         [`/videos/${user.uid}`]: null
       }
 
+      dispatch({ type: types.APP_STATUS, status: 'App is emptying storage' })
+
       db.ref().update(updates)
-        .then(() => { dispatch({ type: 'EMPTY_STORAGE_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'EMPTY_STORAGE_REJECTED' }) })
+        .then(() => {
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+        })
     }
   }
 }
