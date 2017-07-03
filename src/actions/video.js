@@ -48,16 +48,24 @@ export function addVideo(video) {
   }
 }
 
-export function editVideo(videoKey, newVideo) {
+export function editVideo(videoKey, newVideo, oldVideo) {
   return dispatch => {
     const user = auth().currentUser
+    const syncingVideo = { ...newVideo, isSyncing: true }
 
-    dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo })
+    dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: !user ? newVideo : syncingVideo })
 
     if (user) {
       db.ref(`/videos/${user.uid}/${videoKey}`).update(newVideo)
-        .then(() => { dispatch({ type: 'EDIT_VIDEO_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'EDIT_VIDEO_REJECTED' }) })
+        .then(() => {
+          const syncedVideo = { ...newVideo, isSyncing: false }
+          dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
+        })
+        .catch(error => {
+          const syncedVideo = { ...oldVideo, isSyncing: false }
+          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
+        })
     }
   }
 }
