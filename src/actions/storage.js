@@ -21,7 +21,7 @@ export function importStorage() {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.IMPORT_STORAGE, boards: {}, videos: {} })
         })
     }
@@ -47,7 +47,7 @@ export function emptyStorage() {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
         })
     }
   }

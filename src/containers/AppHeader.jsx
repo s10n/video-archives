@@ -5,7 +5,7 @@ import * as firebase from 'firebase'
 import { appConfig } from '../config/config'
 import './AppHeader.css'
 
-const AppNav = ({ status, error, authenticated }) => {
+const AppNav = ({ status, authenticated }) => {
   if (!authenticated) {
     return appConfig.signupAllowed && (
       <nav className="AppNav">
@@ -15,7 +15,6 @@ const AppNav = ({ status, error, authenticated }) => {
     )
   } else {
     const user = firebase.auth().currentUser
-    error && console.error(error)
 
     return (
       <nav className="AppNav">
@@ -27,21 +26,21 @@ const AppNav = ({ status, error, authenticated }) => {
   }
 }
 
-const AppHeader = ({ status, error, authenticated }) => {
+const AppHeader = ({ status, authenticated }) => {
   return (
     <header className="AppHeader">
       <h1 className="AppTitle">
         <NavLink activeClassName="active" to="/">Video Archives <small>alpha</small></NavLink>
       </h1>
 
-      <AppNav status={status} error={error} authenticated={authenticated} />
+      <AppNav status={status} authenticated={authenticated} />
     </header>
   )
 }
 
 function mapStateToProps(state) {
-  const { status, error } = state.app
-  return { status, error, authenticated: state.auth.authenticated }
+  const { status } = state.app
+  return { status, authenticated: state.auth.authenticated }
 }
 
 export default connect(mapStateToProps)(AppHeader)

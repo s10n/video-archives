@@ -18,7 +18,7 @@ export function fetchVideos() {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
         })
     }
   }
@@ -41,7 +41,7 @@ export function addVideo(video) {
           dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.DELETE_VIDEO, videoKey })
         })
     }
@@ -63,7 +63,7 @@ export function editVideo(videoKey, newVideo, oldVideo) {
         })
         .catch(error => {
           const syncedVideo = { ...oldVideo, isSyncing: false }
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
         })
     }
@@ -84,7 +84,7 @@ export function deleteVideo(videoKey, video) {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_VIDEO, newVideoKey: videoKey, video })
         })
     }
@@ -114,7 +114,7 @@ export function emptyTrash(videos) {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           Object.keys(videos).forEach(videoKey => {
             dispatch({ type: types.ADD_VIDEO, newVideoKey: videoKey, video: videos[videoKey] })
           })

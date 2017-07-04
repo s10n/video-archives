@@ -18,7 +18,7 @@ export function fetchBoards() {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
         })
     }
   }
@@ -42,7 +42,7 @@ export function addBoard(board) {
           dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.DELETE_BOARD, boardKey })
           dispatch(push('/'))
         })
@@ -66,7 +66,7 @@ export function editBoard(boardKey, newBoard, oldBoard) {
         })
         .catch(error => {
           const syncedBoard = { ...oldBoard, isSyncing: false }
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
           dispatch(push(oldBoard.slug))
         })
@@ -102,7 +102,7 @@ export function deleteBoard(boardKey, videos, board) {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_BOARD, newBoardKey: boardKey, board })
           Object.keys(videos).forEach(videoKey =>
             dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })

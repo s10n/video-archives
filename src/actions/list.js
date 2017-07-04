@@ -18,7 +18,7 @@ export function addList(boardKey, list) {
           dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.DELETE_LIST, boardKey, listKey })
         })
     }
@@ -40,7 +40,7 @@ export function editList(boardKey, listKey, newList, oldList) {
         })
         .catch(error => {
           const syncedList = { ...oldList, isSyncing: false }
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
         })
     }
@@ -73,7 +73,7 @@ export function deleteList(boardKey, listKey, videos, list) {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
-          dispatch({ type: types.APP_STATUS, status: 'Error', error })
+          dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_LIST, boardKey, newListKey: listKey, list })
           Object.keys(videos).forEach(videoKey =>
             dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
