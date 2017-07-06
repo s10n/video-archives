@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { editList, deleteList } from '../actions'
+import { editList, deleteList } from '../actions/list'
 import './VideoList.css'
 import VideoItem from './VideoItem'
 import VideoAdd from './VideoAdd'
@@ -69,17 +69,17 @@ export class VideoList extends React.Component {
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      this.props.editList(this.props.boardKey, this.props.listKey, { name, slug })
+      this.props.editList(this.props.boardKey, this.props.listKey, { name, slug }, this.props.list)
       this.listNameInput.blur()
     }
   }
 
   handleDeleteClick() {
     const listKey = this.props.listKey
-    const videos = Object.keys(_.pickBy(this.props.videos, ['list', listKey])).map(key => key)
+    const videos = _.pickBy(this.props.videos, ['list', listKey])
 
     if (window.confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
-      this.props.deleteList(this.props.boardKey, this.props.listKey, videos)
+      this.props.deleteList(this.props.boardKey, this.props.listKey, videos, this.props.list)
     }
   }
 
@@ -141,7 +141,9 @@ export class VideoList extends React.Component {
           {listScroll(videos)}
         </div>
 
-        <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />
+        {!list.isSyncing &&
+          <VideoAdd boardKey={this.props.boardKey} listKey={this.props.listKey} />
+        }
       </article>
     )
   }

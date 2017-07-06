@@ -3,7 +3,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { editVideo, deleteVideo, addBoard, addList } from '../actions'
+import { addBoard } from '../actions/board'
+import { addList } from '../actions/list'
+import { editVideo, deleteVideo } from '../actions/video'
 import './VideoItem.css'
 
 const propTypes = {
@@ -42,7 +44,7 @@ export class VideoItem extends React.Component {
   }
 
   handleMoveClick() {
-    const { boardKey, videoKey, boards, editVideo } = this.props
+    const { boardKey, video, videoKey, boards, editVideo } = this.props
     const input = prompt(`Type a name or slug of list`)
 
     if (input) {
@@ -54,13 +56,14 @@ export class VideoItem extends React.Component {
         // const list = { name, slug }
         // newListKey || addList(boardKey, list)
         newListKey || alert('Error')
-        newListKey && editVideo(videoKey, { list: newListKey })
+        newListKey && editVideo(videoKey, { list: newListKey }, video)
       }
     }
   }
 
   handleTrashClick() {
-    this.props.editVideo(this.props.videoKey, { deleted: true })
+    const { video, videoKey, editVideo } = this.props
+    editVideo(videoKey, { deleted: true }, { ...video, deleted: false })
   }
 
   handleRecoverClick() {
@@ -82,45 +85,54 @@ export class VideoItem extends React.Component {
   }
 
   handleDeleteClick() {
-    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey)
+    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey, this.props.video)
   }
 
   render() {
     const video = this.props.video
     const board = this.props.boards[video.board]
     const url = `https://www.youtube.com/watch?v=${video.data.id}`
+    const { thumbnails, title, channelId, channelTitle } = video.data.snippet
     const publishedAt = new Date(video.data.snippet.publishedAt)
 
     const videoItemFunctions = () => {
       const location = (
         <span>{video.board && ` to ${board.title}`}{video.list && ` - ${board.lists[video.list].name}`}</span>
       )
-      return (
-        !video.deleted ?
-          <section>
-            <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
-            &middot;
-            <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
-          </section>
-        :
-          <section>
-            <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
-            &middot;
-            <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
-          </section>
+      return !video.deleted ? (
+        <section style={{ opacity: video.isSyncing && '.25' }}>
+          <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
+          &middot;
+          <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
+        </section>
+      ) : (
+        <section>
+          <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
+          &middot;
+          <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
+        </section>
       )
     }
 
     // TODO: Change thumbnail ratio to 16:9
     return (
       <article className="VideoItem">
-        <img src={video.data.snippet.thumbnails.high.url} alt="" height="120" />
+        <img src={thumbnails.high.url} alt="" height="120" />
 
         <h3 className="VideoTitle">
-          <a href={url} target="_blank" rel="noopener noreferrer">{video.data.snippet.title}</a>
+          <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
         </h3>
 
         <section className="VideoMeta">
+          <p>
+            <a
+              href={`https://www.youtube.com/channel/${channelId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {channelTitle}
+            </a>
+          </p>
           <date>{publishedAt.toLocaleString('en-US')}</date>
           {!this.props.addingVideo && videoItemFunctions()}
         </section>

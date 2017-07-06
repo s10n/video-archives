@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { emptyTrash } from '../actions'
+import { emptyTrash } from '../actions/video'
 import './PageTrash.css'
 import Page from './Page'
 import VideoItem from '../components/VideoItem'
@@ -28,7 +28,7 @@ class PageTrash extends React.Component {
 
   handleEmptyClick() {
     if (window.confirm(`Empty trash?`)) {
-      const videos = Object.keys(_.pickBy(this.props.videos, ['deleted', true])).map(key => key)
+      const videos = _.pickBy(this.props.videos, ['deleted', true])
       this.props.emptyTrash(videos)
     }
   }

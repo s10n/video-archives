@@ -9,7 +9,7 @@ export default function(state = {}, action) {
       return { ...state, authenticated: false }
 
     case types.AUTH_ERROR:
-      return { ...state, error: action.payload }
+      return { ...state, error: action.error }
 
     default:
       return state
