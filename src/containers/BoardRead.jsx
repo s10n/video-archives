@@ -73,12 +73,13 @@ class BoardRead extends React.Component {
 
   handlePressEnter() {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
+    const board = this.props.boards[boardKey]
 
     const title = this.state.title.trim()
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      this.props.editBoard(boardKey, { title, slug })
+      this.props.editBoard(boardKey, { title, slug }, board)
       this.boardTitleInput.blur()
     }
   }
@@ -86,10 +87,10 @@ class BoardRead extends React.Component {
   handleDeleteClick() {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
-    const videos = Object.keys(_.pickBy(this.props.videos, ['board', boardKey])).map(key => key)
+    const videos = _.pickBy(this.props.videos, ['board', boardKey])
 
     if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
-      this.props.deleteBoard(boardKey, videos)
+      this.props.deleteBoard(boardKey, videos, board)
     }
   }
 
@@ -103,7 +104,7 @@ class BoardRead extends React.Component {
           <input
             className="PageTitle BoardTitle h1 borderless-input"
             type="text"
-            onFocus={this.handleTitleClick}
+            onFocus={!board.isSyncing && this.handleTitleClick}
             onBlur={this.handleInputBlur}
             onChange={this.handleInputChange}
             onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
@@ -147,13 +148,15 @@ class BoardRead extends React.Component {
               </div>
             )}
 
-            <div className="VideoWrapper">
-              <article className="Card">
-                <header className="CardHeader">
-                  <ListAdd boardKey={boardKey} board={board} />
-                </header>
-              </article>
-            </div>
+            {!board.isSyncing &&
+              <div className="VideoWrapper">
+                <article className="Card">
+                  <header className="CardHeader">
+                    <ListAdd boardKey={boardKey} board={board} />
+                  </header>
+                </article>
+              </div>
+            }
           </div>
         </main>
       </section>

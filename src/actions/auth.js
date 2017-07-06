@@ -12,7 +12,9 @@ export function signupUser({ email, password }) {
         dispatch({ type: types.AUTH_USER })
         dispatch(push('/'))
       })
-      .catch(error => { dispatch(authError(error.message)) })
+      .catch(error => {
+        dispatch(authError(error.message))
+      })
   }
 }
 
@@ -25,7 +27,9 @@ export function signinUser({ email, password }) {
         dispatch(fetchBoards())
         dispatch(fetchVideos())
       })
-      .catch(error => { dispatch(authError(error.message)) })
+      .catch(error => {
+        dispatch(authError(error.message))
+      })
   }
 }
 
@@ -36,10 +40,12 @@ export function signoutUser() {
         dispatch({ type: types.UNAUTH_USER })
         dispatch(emptyStorage())
       })
-      .catch(error => { dispatch(authError(error.message)) })
+      .catch(error => {
+        dispatch(authError(error.message))
+      })
   }
 }
 
 function authError(error) {
-  return { type: types.AUTH_ERROR, payload: error }
+  return { type: types.AUTH_ERROR, error }
 }

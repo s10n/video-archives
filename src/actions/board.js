@@ -1,7 +1,6 @@
 import { push } from 'react-router-redux'
 import { auth, db } from '../config/constants'
 import * as types from './types'
-import { editVideo } from './video'
 
 export function fetchBoards() {
   return dispatch => {
@@ -11,9 +10,16 @@ export function fetchBoards() {
     dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
 
     if (user) {
+      dispatch({ type: types.APP_STATUS, status: 'App is fetching boards' })
+
       db.ref(`/boards/${user.uid}`)
-        .once('value', snap => { dispatch({ type: 'FETCH_BOARDS_FULFILLED', boards: snap.val() }) })
-        .catch(error => { dispatch({ type: 'FETCH_BOARDS_REJECTED' }) })
+        .once('value', snap => {
+          dispatch({ type: types.FETCH_BOARDS, boards: snap.val() })
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: error.message })
+        })
     }
   }
 }
@@ -22,41 +28,60 @@ export function addBoard(board) {
   return dispatch => {
     const user = auth().currentUser
     const newBoardKey = user ? db.ref(`/boards/${user.uid}`).push().key : Date.now()
+    const syncingBoard = { ...board, isSyncing: true }
 
-    dispatch({ type: types.ADD_BOARD, newBoardKey, board })
+    dispatch({ type: types.ADD_BOARD, newBoardKey, board: !user ? board : syncingBoard })
     dispatch(push(board.slug))
 
     if (user) {
+      const boardKey = newBoardKey
+
       db.ref(`/boards/${user.uid}/${newBoardKey}`).set(board)
-        .then(() => { dispatch({ type: 'ADD_BOARD_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'ADD_BOARD_REJECTED' }) })
+        .then(() => {
+          const syncedBoard = { ...board, isSyncing: false }
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: error.message })
+          dispatch({ type: types.DELETE_BOARD, boardKey })
+          dispatch(push('/'))
+        })
     }
   }
 }
 
-export function editBoard(boardKey, newBoard) {
+export function editBoard(boardKey, newBoard, oldBoard) {
   return dispatch => {
     const user = auth().currentUser
+    const syncingBoard = { ...newBoard, isSyncing: true }
 
-    dispatch({ type: types.EDIT_BOARD, boardKey, newBoard })
+    dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: !user ? newBoard : syncingBoard })
     dispatch(push(newBoard.slug))
 
     if (user) {
       db.ref(`/boards/${user.uid}`).child(boardKey).update(newBoard)
-        .then(() => { dispatch({ type: 'EDIT_BOARD_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'EDIT_BOARD_REJECTED' }) })
+        .then(() => {
+          const syncedBoard = { ...newBoard, isSyncing: false }
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
+        })
+        .catch(error => {
+          const syncedBoard = { ...oldBoard, isSyncing: false }
+          dispatch({ type: types.APP_STATUS, status: error.message })
+          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
+          dispatch(push(oldBoard.slug))
+        })
     }
   }
 }
 
-export function deleteBoard(boardKey, videos) {
+export function deleteBoard(boardKey, videos, board) {
   return dispatch => {
     const user = auth().currentUser
+    const deletedVideo = { board: null, list: null, deleted: true }
 
-    videos.map(videoKey => {
-      dispatch(editVideo(videoKey, { board: null, list: null, deleted: true }))
-      return false
-    })
+    Object.keys(videos).forEach(videoKey =>
+      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: deletedVideo })
+    )
 
     dispatch({ type: types.DELETE_BOARD, boardKey })
     dispatch(push('/'))
@@ -64,16 +89,26 @@ export function deleteBoard(boardKey, videos) {
     if (user) {
       let updates = { [`/boards/${user.uid}/${boardKey}`]: null }
 
-      videos.map(videoKey => {
+      dispatch({ type: types.APP_STATUS, status: `App is deleting ${board.title}` })
+
+      Object.keys(videos).forEach(videoKey => {
         updates[`/videos/${user.uid}/${videoKey}/board`] = null
         updates[`/videos/${user.uid}/${videoKey}/list`] = null
         updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
-        return false
       })
 
       db.ref().update(updates)
-        .then(() => { dispatch({ type: 'DELETE_BOARD_FULFILLED' }) })
-        .catch(error => { dispatch({ type: 'DELETE_BOARD_REJECTED' }) })
+        .then(() => {
+          dispatch({ type: types.APP_STATUS, status: null })
+        })
+        .catch(error => {
+          dispatch({ type: types.APP_STATUS, status: error.message })
+          dispatch({ type: types.ADD_BOARD, newBoardKey: boardKey, board })
+          Object.keys(videos).forEach(videoKey =>
+            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
+          )
+          dispatch(push(board.slug))
+        })
     }
   }
 }

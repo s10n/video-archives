@@ -44,7 +44,7 @@ export class VideoItem extends React.Component {
   }
 
   handleMoveClick() {
-    const { boardKey, videoKey, boards, editVideo } = this.props
+    const { boardKey, video, videoKey, boards, editVideo } = this.props
     const input = prompt(`Type a name or slug of list`)
 
     if (input) {
@@ -56,13 +56,14 @@ export class VideoItem extends React.Component {
         // const list = { name, slug }
         // newListKey || addList(boardKey, list)
         newListKey || alert('Error')
-        newListKey && editVideo(videoKey, { list: newListKey })
+        newListKey && editVideo(videoKey, { list: newListKey }, video)
       }
     }
   }
 
   handleTrashClick() {
-    this.props.editVideo(this.props.videoKey, { deleted: true })
+    const { video, videoKey, editVideo } = this.props
+    editVideo(videoKey, { deleted: true }, { ...video, deleted: false })
   }
 
   handleRecoverClick() {
@@ -84,7 +85,7 @@ export class VideoItem extends React.Component {
   }
 
   handleDeleteClick() {
-    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey)
+    window.confirm(`Delete?`) && this.props.deleteVideo(this.props.videoKey, this.props.video)
   }
 
   render() {
@@ -98,19 +99,18 @@ export class VideoItem extends React.Component {
       const location = (
         <span>{video.board && ` to ${board.title}`}{video.list && ` - ${board.lists[video.list].name}`}</span>
       )
-      return (
-        !video.deleted ?
-          <section>
-            <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
-            &middot;
-            <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
-          </section>
-        :
-          <section>
-            <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
-            &middot;
-            <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
-          </section>
+      return !video.deleted ? (
+        <section style={{ opacity: video.isSyncing && '.25' }}>
+          <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
+          &middot;
+          <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
+        </section>
+      ) : (
+        <section>
+          <button className="btn-link" onClick={this.handleRecoverClick}>Recover {location}</button>
+          &middot;
+          <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
+        </section>
       )
     }
 

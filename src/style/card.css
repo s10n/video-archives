@@ -24,11 +24,11 @@
 	padding: 0 10px;
 }
 
-.CardScroll:first-child {
+.CardScroll:first-child:not(:empty) {
 	margin-top: 15px;
 }
 
-.CardScroll:last-child {
+.CardScroll:last-child:not(:empty) {
 	margin-bottom: 15px;
 }
 
