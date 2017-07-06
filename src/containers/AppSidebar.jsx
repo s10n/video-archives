@@ -18,11 +18,15 @@ const AppSidebar = ({ boards, trash }) => {
   return (
     <nav className="AppSidebar">
       {Object.keys(boards).map(key =>
-        <NavLink activeClassName="active" to={boards[key].slug} key={key}>{boards[key].title}</NavLink>
+        <NavLink activeClassName="active" to={'/' + boards[key].slug} key={key}>
+          {boards[key].title}
+        </NavLink>
       )}
 
       {trash &&
-        <NavLink activeClassName="active" to="trash">Trash</NavLink>
+        <NavLink activeClassName="active" to="/trash">
+          Trash
+        </NavLink>
       }
 
       <BoardAdd />
