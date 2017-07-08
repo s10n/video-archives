@@ -13,7 +13,7 @@ const propTypes = {
   boardKey: PropTypes.string.isRequired,
   list: PropTypes.object.isRequired,
   listKey: PropTypes.string.isRequired,
-  videos: PropTypes.object.isRequired,
+  videos: PropTypes.array.isRequired,
   editList: PropTypes.func.isRequired,
   deleteList: PropTypes.func.isRequired
 }
@@ -23,7 +23,7 @@ const defaultProps = {
   boardKey: '',
   list: {},
   listKey: '',
-  videos: {},
+  videos: [],
   editList: () => console.warn('editList not defined'),
   deleteList: () => console.warn('deleteList not defined')
 }
@@ -84,8 +84,7 @@ export class VideoList extends React.Component {
   }
 
   render() {
-    const list = this.props.list
-    const videos = this.props.videos
+    const { boardKey, list, listKey, videos } = this.props
 
     const ListHeader = list => {
       return (
@@ -113,17 +112,15 @@ export class VideoList extends React.Component {
       )
     }
 
-    const listScroll = videos => {
-      return Object.keys(videos).map(key => {
-        const video = videos[key]
-        const { boardKey, listKey } = this.props
+    const listScroll = () => {
+      const videosSorted = _.sortBy(videos, 'data.snippet.publishedAt').reverse()
+
+      return videosSorted.map(video => {
         const condition =
-          video.board === boardKey &&
-          (_.isEmpty(list) ? !video.list : video.list === listKey) &&
           !video.deleted
 
         return condition &&
-          <VideoItem video={video} videoKey={key} boardKey={boardKey} listKey={listKey} key={key} />
+          <VideoItem video={video} videoKey={video.key} boardKey={boardKey} listKey={listKey} key={video.key} />
       })
     }
 
@@ -138,7 +135,7 @@ export class VideoList extends React.Component {
         {ListHeader(list)}
 
         <div className="CardScroll" style={styleIE()}>
-          {listScroll(videos)}
+          {listScroll()}
         </div>
 
         {!list.isSyncing &&

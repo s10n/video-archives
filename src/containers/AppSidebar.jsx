@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
@@ -17,9 +18,9 @@ const defaultProps = {
 const AppSidebar = ({ boards, trash }) => {
   return (
     <nav className="AppSidebar">
-      {Object.keys(boards).map(key =>
-        <NavLink activeClassName="active" to={'/' + boards[key].slug} key={key}>
-          {boards[key].title}
+      {_.sortBy(boards, 'title').map(board =>
+        <NavLink activeClassName="active" to={'/' + board.slug} key={board.key}>
+          {board.title}
         </NavLink>
       )}
 

@@ -97,6 +97,7 @@ class BoardRead extends React.Component {
   render() {
     const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
     const board = this.props.boards[boardKey]
+    const listsSorted = _.sortBy(board.lists, 'name')
 
     return boardKey ? (
       <section className="Page">
@@ -136,17 +137,21 @@ class BoardRead extends React.Component {
               </div>
             }
 
-            {board.lists && Object.keys(board.lists).map(key =>
-              <div className="VideoWrapper" key={key}>
-                <VideoList
-                  list={board.lists[key]}
-                  listKey={key}
-                  videos={this.props.videos}
-                  board={board}
-                  boardKey={boardKey}
-                />
-              </div>
-            )}
+            {listsSorted.map(list => {
+              const videosSelected = _.filter(this.props.videos, ['list', list.key])
+
+              return (
+                <div className="VideoWrapper" key={list.key}>
+                  <VideoList
+                    list={list}
+                    listKey={list.key}
+                    videos={videosSelected}
+                    board={board}
+                    boardKey={boardKey}
+                  />
+                </div>
+              )
+            })}
 
             {!board.isSyncing &&
               <div className="VideoWrapper">
