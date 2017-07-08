@@ -1,0 +1,33 @@
+{
+  "rules": {
+    "boards": {
+      "$uid": {
+        // ".read": "false",
+        ".read": "auth != null && auth.uid == $uid",
+        // ".write": "false",
+        ".write": "auth != null && auth.uid == $uid",
+
+        "$board": {
+          ".validate": "newData.hasChildren(['title', 'slug']) &&
+                        newData.child('title').isString() &&
+                        newData.child('slug').isString()",
+          "lists": {
+            "$list": {
+              ".validate": "newData.hasChildren(['name', 'slug']) &&
+                            newData.child('name').isString() &&
+                            newData.child('slug').isString()",
+            }
+          }
+        }
+      }
+    },
+    "videos": {
+      "$uid": {
+        // ".read": "false",
+        ".read": "auth != null && auth.uid == $uid",
+        // ".write": "false",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    }
+  }
+}
