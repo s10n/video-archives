@@ -75,11 +75,10 @@ export class VideoList extends React.Component {
   }
 
   handleDeleteClick() {
-    const listKey = this.props.listKey
-    const videos = _.pickBy(this.props.videos, ['list', listKey])
+    const { boardKey, list, listKey, videos, deleteList } = this.props
 
-    if (window.confirm(`Delete ${this.props.list.name}?\nAll videos will be deleted.`)) {
-      this.props.deleteList(this.props.boardKey, this.props.listKey, videos, this.props.list)
+    if (window.confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
+      deleteList(boardKey, listKey, videos, list)
     }
   }
 

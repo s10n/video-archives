@@ -53,8 +53,8 @@ export function deleteList(boardKey, listKey, videos, list) {
     const user = auth().currentUser
     const deletedVideo = { list: null, deleted: true }
 
-    Object.keys(videos).forEach(videoKey => {
-      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: deletedVideo })
+    videos.forEach(video => {
+      dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: deletedVideo })
     })
 
     dispatch({ type: types.DELETE_LIST, boardKey, listKey })
@@ -62,9 +62,9 @@ export function deleteList(boardKey, listKey, videos, list) {
     if (user) {
       let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
 
-      Object.keys(videos).forEach(videoKey => {
-        updates[`/videos/${user.uid}/${videoKey}/list`] = null
-        updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+      videos.forEach(video => {
+        updates[`/videos/${user.uid}/${video.key}/list`] = null
+        updates[`/videos/${user.uid}/${video.key}/deleted`] = true
       })
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting ${list.name}` })
@@ -76,8 +76,8 @@ export function deleteList(boardKey, listKey, videos, list) {
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_LIST, boardKey, newListKey: listKey, list })
-          Object.keys(videos).forEach(videoKey =>
-            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
+          videos.forEach(video =>
+            dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: { ...video, deleted: false } })
           )
         })
     }
