@@ -5,6 +5,7 @@ export function addList(boardKey, list) {
   return dispatch => {
     const user = auth().currentUser
     const newListKey = user ? db.ref(`/boards/${user.uid}/${boardKey}/lists`).push().key : Date.now()
+    list = { ...list, key: newListKey }
     const syncingList = { ...list, isSyncing: true }
 
     dispatch({ type: types.ADD_LIST, boardKey, newListKey, list: !user ? list : syncingList })
