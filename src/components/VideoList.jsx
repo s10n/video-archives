@@ -115,11 +115,7 @@ export class VideoList extends React.Component {
       const videosSorted = _.sortBy(videos, 'data.snippet.publishedAt').reverse()
 
       return videosSorted.map(video => {
-        const condition =
-          !video.deleted
-
-        return condition &&
-          <VideoItem video={video} videoKey={video.key} boardKey={boardKey} listKey={listKey} key={video.key} />
+        return <VideoItem video={video} videoKey={video.key} boardKey={boardKey} listKey={listKey} key={video.key} />
       })
     }
 
