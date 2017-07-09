@@ -13,8 +13,6 @@ import '../style/reboot.css'
 import '../style/type.css'
 import '../style/forms.css'
 import '../style/buttons.css'
-import '../style/card.css'
-import '../style/page.css'
 import './App.css'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
@@ -25,17 +23,8 @@ export const history = createHistory()
 const propTypes = {
   boards: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
-  authenticated: PropTypes.bool.isRequired,
   fetchBoards: PropTypes.func.isRequired,
   pushStorage: PropTypes.func.isRequired
-}
-
-const defaultProps = {
-  boards: {},
-  videos: {},
-  authenticated: false,
-  fetchBoards: () => console.warn('fetchBoards not defined'),
-  pushStorage: () => console.warn('pushStorage not defined')
 }
 
 class App extends React.Component {
@@ -50,14 +39,14 @@ class App extends React.Component {
 
   render() {
     const { boards, videos } = this.props
-    const trash = _.find(videos, 'deleted') && true
+    const trash = !!_.findKey(videos, 'deleted')
 
     return (
       <ConnectedRouter history={history}>
-        <div className="AppContainer">
+        <div className="App">
           <AppHeader />
 
-          <section className="AppWrapper">
+          <section className="AppContainer">
             <AppSidebar boards={boards} trash={trash} />
             <AppMain />
           </section>
@@ -67,15 +56,14 @@ class App extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { boards: state.boards, videos: state.videos, authenticated: state.auth.authenticated }
+App.propTypes = propTypes
+
+function mapStateToProps({ boards, videos }) {
+  return { boards, videos }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
 }
-
-App.propTypes = propTypes
-App.defaultProps = defaultProps
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

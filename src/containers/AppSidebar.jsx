@@ -10,15 +10,12 @@ const propTypes = {
   trash: PropTypes.bool.isRequired
 }
 
-const defaultProps = {
-  boards: {},
-  trash: false
-}
-
 const AppSidebar = ({ boards, trash }) => {
+  const boardsSorted = _.sortBy(boards, 'title')
+
   return (
     <nav className="AppSidebar">
-      {_.sortBy(boards, 'title').map(board =>
+      {boardsSorted.map(board =>
         <NavLink activeClassName="active" to={'/' + board.slug} key={board.key}>
           {board.title}
         </NavLink>
@@ -30,12 +27,11 @@ const AppSidebar = ({ boards, trash }) => {
         </NavLink>
       }
 
-      <BoardAdd />
+      <BoardAdd boards={boards} />
     </nav>
   )
 }
 
 AppSidebar.propTypes = propTypes
-AppSidebar.defaultProps = defaultProps
 
 export default AppSidebar

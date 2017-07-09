@@ -2,15 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
-import { signupUser } from '../../actions/auth'
-import { appConfig } from '../../config/config'
-import Page from '../Page'
-import FormSignup from '../../components/auth/FormSignup'
+import { signupUser } from '../actions/auth'
+import { appConfig } from '../config/config'
+import Page from '../components/Page'
+import Card from '../components/Card'
+import FormSignup from '../components/FormSignup'
 
 class PageSignup extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = { isSubmitting: false }
+
     this.submit = this.submit.bind(this)
   }
 
@@ -21,24 +24,25 @@ class PageSignup extends React.Component {
   }
 
   render() {
-    return !this.props.authenticated && appConfig.signupAllowed ? (
+    const { authenticated, errorMessage } = this.props
+    const { isSubmitting } = this.state
+
+    return !authenticated && appConfig.signupAllowed ? (
       <Page page="Signup" title="Create your account">
-        <article className="Card">
-          <div className="CardScroll">
-            <FormSignup
-              onSubmit={this.submit}
-              isSubmitting={this.state.isSubmitting}
-              errorMessage={this.props.errorMessage}
-            />
-          </div>
-        </article>
+        <Card>
+          <FormSignup
+            onSubmit={this.submit}
+            isSubmitting={isSubmitting}
+            errorMessage={errorMessage}
+          />
+        </Card>
       </Page>
     ) : <Redirect to="/" />
   }
 }
 
-function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated, errorMessage: state.auth.error }
+function mapStateToProps({ auth }) {
+  return { authenticated: auth.authenticated, errorMessage: auth.error }
 }
 
 function mapDispatchToProps(dispatch) {

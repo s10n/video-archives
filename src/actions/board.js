@@ -3,10 +3,10 @@ import { auth, db } from '../config/constants'
 import * as types from './types'
 
 export function fetchBoards() {
-  return dispatch => {
-    const user = auth().currentUser
-    const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
+  const user = auth().currentUser
+  const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
+  return dispatch => {
     dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
 
     if (user) {
@@ -25,35 +25,36 @@ export function fetchBoards() {
 }
 
 export function addBoard(board) {
+  const user = auth().currentUser
+  const boardKey = user ? db.ref(`/boards/${user.uid}`).push().key : Date.now()
+
   return dispatch => {
-    const user = auth().currentUser
-    const newBoardKey = user ? db.ref(`/boards/${user.uid}`).push().key : Date.now()
-    board = { ...board, key: newBoardKey }
+    board = { ...board, key: boardKey }
     const syncingBoard = { ...board, isSyncing: true }
 
-    dispatch({ type: types.ADD_BOARD, newBoardKey, board: !user ? board : syncingBoard })
+    dispatch({ type: types.ADD_BOARD, boardKey, board: !user ? board : syncingBoard })
     dispatch(push(board.slug))
 
     if (user) {
-      const boardKey = newBoardKey
-
-      db.ref(`/boards/${user.uid}/${newBoardKey}`).set(board)
+      db.ref(`/boards/${user.uid}/${boardKey}`).set(board)
         .then(() => {
           const syncedBoard = { ...board, isSyncing: false }
-          dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
+          dispatch({ type: types.EDIT_BOARD, boardKey: boardKey, newBoard: syncedBoard })
         })
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
-          dispatch({ type: types.DELETE_BOARD, boardKey })
+          dispatch({ type: types.DELETE_BOARD, boardKey: boardKey })
           dispatch(push('/'))
         })
     }
   }
 }
 
-export function editBoard(boardKey, newBoard, oldBoard) {
+export function editBoard(oldBoard, newBoard) {
+  const user = auth().currentUser
+  const boardKey = oldBoard.key
+
   return dispatch => {
-    const user = auth().currentUser
     const syncingBoard = { ...newBoard, isSyncing: true }
 
     dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: !user ? newBoard : syncingBoard })
@@ -75,14 +76,17 @@ export function editBoard(boardKey, newBoard, oldBoard) {
   }
 }
 
-export function deleteBoard(boardKey, videos, board) {
+export function deleteBoard(board, videos) {
+  const user = auth().currentUser
+  const boardKey = board.key
+
   return dispatch => {
-    const user = auth().currentUser
     const deletedVideo = { board: null, list: null, deleted: true }
 
-    Object.keys(videos).forEach(videoKey =>
+    videos.forEach(video => {
+      const videoKey = video.key
       dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: deletedVideo })
-    )
+    })
 
     dispatch({ type: types.DELETE_BOARD, boardKey })
     dispatch(push('/'))
@@ -92,10 +96,10 @@ export function deleteBoard(boardKey, videos, board) {
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting ${board.title}` })
 
-      Object.keys(videos).forEach(videoKey => {
-        updates[`/videos/${user.uid}/${videoKey}/board`] = null
-        updates[`/videos/${user.uid}/${videoKey}/list`] = null
-        updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+      videos.forEach(video => {
+        updates[`/videos/${user.uid}/${video.key}/board`] = null
+        updates[`/videos/${user.uid}/${video.key}/list`] = null
+        updates[`/videos/${user.uid}/${video.key}/deleted`] = true
       })
 
       db.ref().update(updates)
@@ -105,9 +109,10 @@ export function deleteBoard(boardKey, videos, board) {
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_BOARD, newBoardKey: boardKey, board })
-          Object.keys(videos).forEach(videoKey =>
-            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
-          )
+          videos.forEach(video => {
+            const videoKey = video.key
+            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...video, deleted: false } })
+          })
           dispatch(push(board.slug))
         })
     }
