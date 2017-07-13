@@ -4,78 +4,73 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addList } from '../actions/list'
-import './ListAdd.css'
-
-export const ERROR_MESSAGE = {
-  exists: 'List exists'
-}
+import { errorMessages, slugify } from '../config/constants'
+import Card from './Card'
 
 const propTypes = {
   board: PropTypes.object.isRequired,
-  boardKey: PropTypes.string.isRequired,
   addList: PropTypes.func.isRequired
 }
 
-const defaultProps = {
-  board: {},
-  boardKey: '',
-  addList: () => console.warn('addList not defined')
-}
-
-export class ListAdd extends React.Component {
+class ListAdd extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = { name: '', slug: '', error: null }
+
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handlePressEnter = this.handlePressEnter.bind(this)
   }
 
-  handleInputChange(event) {
-    const name = event.target.value
-    const slug = name.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
-    const listExists = _.find(this.props.board.lists, ['slug', slug])
+  handleInputChange(name) {
+    const { board } = this.props
+    const slug = slugify(name)
+    const isListExists = _.findKey(board.lists, ['slug', slug])
+    const error = isListExists && errorMessages.list.exists
 
-    this.setState({ name, slug, error: listExists && ERROR_MESSAGE.exists })
+    this.setState({ name, slug, error })
   }
 
   handlePressEnter() {
-    const { boardKey } = this.props
     const name = this.state.name.trim()
     const { slug, error } = this.state
 
     if (name && slug && !error) {
+      const { board, addList } = this.props
       const list = { name, slug }
-      this.props.addList(boardKey, list)
+      addList(board.key, list)
       this.setState({ name: '', slug: '', error: null })
     }
   }
 
   render() {
-    return (
+    const { name, error } = this.state
+
+    const header = (
       <div>
         <input
           type="text"
-          className="CardTitle borderless-input"
-          onChange={this.handleInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
-          value={this.state.name}
+          className="borderless-input"
+          onChange={event => this.handleInputChange(event.target.value)}
+          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
+          value={name}
           placeholder="Add a list..."
         />
 
-        {this.state.error &&
-          <small className="HelpBlock">{this.state.error}</small>
-        }
+        {error && <small className="HelpBlock">{error}</small>}
       </div>
+    )
+
+    return (
+      <Card header={header} />
     )
   }
 }
 
+ListAdd.propTypes = propTypes
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addList }, dispatch)
 }
-
-ListAdd.propTypes = propTypes
-ListAdd.defaultProps = defaultProps
 
 export default connect(null, mapDispatchToProps)(ListAdd)

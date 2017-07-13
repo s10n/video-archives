@@ -3,10 +3,10 @@ import { auth, db } from '../config/constants'
 import * as types from './types'
 
 export function fetchVideos() {
-  return dispatch => {
-    const user = auth().currentUser
-    const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
+  const user = auth().currentUser
+  const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
+  return dispatch => {
     dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
 
     if (user) {
@@ -14,7 +14,7 @@ export function fetchVideos() {
 
       db.ref(`/videos/${user.uid}`)
         .once('value', snap => {
-          dispatch({ type: 'FETCH_VIDEOS_FULFILLED', videos: snap.val() })
+          dispatch({ type: types.FETCH_VIDEOS, videos: snap.val() })
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
@@ -25,17 +25,17 @@ export function fetchVideos() {
 }
 
 export function addVideo(video) {
+  const user = auth().currentUser
+  const videoKey = user ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
+
   return dispatch => {
-    const user = auth().currentUser
-    const newVideoKey = user ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
+    video = { ...video, key: videoKey }
     const syncingVideo = { ...video, isSyncing: true }
 
-    dispatch({ type: types.ADD_VIDEO, newVideoKey, video: !user ? video : syncingVideo })
+    dispatch({ type: types.ADD_VIDEO, videoKey, video: !user ? video : syncingVideo })
 
     if (user) {
-      const videoKey = newVideoKey
-
-      db.ref(`/videos/${user.uid}/${newVideoKey}`).set(video)
+      db.ref(`/videos/${user.uid}/${videoKey}`).set(video)
         .then(() => {
           const syncedVideo = { ...video, isSyncing: false }
           dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
@@ -48,9 +48,11 @@ export function addVideo(video) {
   }
 }
 
-export function editVideo(videoKey, newVideo, oldVideo) {
+export function editVideo(oldVideo, newVideo) {
+  const user = auth().currentUser
+  const videoKey = oldVideo.key
+
   return dispatch => {
-    const user = auth().currentUser
     const syncingVideo = { ...newVideo, isSyncing: true }
 
     dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: !user ? newVideo : syncingVideo })
@@ -70,10 +72,11 @@ export function editVideo(videoKey, newVideo, oldVideo) {
   }
 }
 
-export function deleteVideo(videoKey, video) {
-  return dispatch => {
-    const user = auth().currentUser
+export function deleteVideo(video) {
+  const user = auth().currentUser
+  const videoKey = video.key
 
+  return dispatch => {
     dispatch({ type: types.DELETE_VIDEO, videoKey })
 
     if (user) {
@@ -85,26 +88,26 @@ export function deleteVideo(videoKey, video) {
         })
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
-          dispatch({ type: types.ADD_VIDEO, newVideoKey: videoKey, video })
+          dispatch({ type: types.ADD_VIDEO, videoKey, video })
         })
     }
   }
 }
 
 export function emptyTrash(videos) {
-  return dispatch => {
-    const user = auth().currentUser
+  const user = auth().currentUser
 
+  return dispatch => {
     dispatch(push('/'))
-    Object.keys(videos).forEach(videoKey => {
-      dispatch({ type: types.DELETE_VIDEO, videoKey })
+    videos.forEach(video => {
+      dispatch({ type: types.DELETE_VIDEO, videoKey: video.key })
     })
 
     if (user) {
       let updates = {}
 
-      Object.keys(videos).forEach(videoKey => {
-        updates[`/videos/${user.uid}/${videoKey}`] = null
+      videos.forEach(video => {
+        updates[`/videos/${user.uid}/${video.key}`] = null
       })
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
@@ -115,8 +118,8 @@ export function emptyTrash(videos) {
         })
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
-          Object.keys(videos).forEach(videoKey => {
-            dispatch({ type: types.ADD_VIDEO, newVideoKey: videoKey, video: videos[videoKey] })
+          videos.forEach(video => {
+            dispatch({ type: types.ADD_VIDEO, videoKey: video.key, video })
           })
           dispatch(push('Trash'))
         })

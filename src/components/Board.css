@@ -1,17 +1,4 @@
-.BoardTitle {
-	display: inline-block;
-}
-
-.BoardHeader .BtnTrash {
-	display: none;
-}
-
-.BoardHeader:hover .BtnTrash {
-	display: inline-block;
-	margin-left: 10px;
-}
-
-.BoardScroll {
+.PageBoard .PageContentInner {
 	overflow-x: auto;
 	margin-bottom: 15px;
 	padding-left: calc(24px - 10px);
@@ -20,28 +7,28 @@
 	white-space: nowrap;
 }
 
-.BoardScroll::-webkit-scrollbar {
+.PageBoard .PageContentInner::-webkit-scrollbar {
 	height: 10px;
 	width:  10px;
 }
 
-.BoardScroll::-webkit-scrollbar-button {
+.PageBoard .PageContentInner::-webkit-scrollbar-button {
 	display: block;
 	height: 12px;
 	width:  12px;
 }
 
-.BoardScroll::-webkit-scrollbar-thumb {
+.PageBoard .PageContentInner::-webkit-scrollbar-thumb {
 	background-color: silver;
 	border-radius: 5px;
 }
 
-.BoardScroll::-webkit-scrollbar-track-piece {
+.PageBoard .PageContentInner::-webkit-scrollbar-track-piece {
 	background-color: hsla(0, 0%, 0%, .1);
 	border-radius: 5px;
 }
 
-.VideoWrapper {
+.ListContainer {
 	display: inline-block;
 	height: 100%;
 	margin: 0 10px;

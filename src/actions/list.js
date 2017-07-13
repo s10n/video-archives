@@ -2,17 +2,17 @@ import { auth, db } from '../config/constants'
 import * as types from './types'
 
 export function addList(boardKey, list) {
+  const user = auth().currentUser
+  const listKey = user ? db.ref(`/boards/${user.uid}/${boardKey}/lists`).push().key : Date.now()
+
   return dispatch => {
-    const user = auth().currentUser
-    const newListKey = user ? db.ref(`/boards/${user.uid}/${boardKey}/lists`).push().key : Date.now()
+    list = { ...list, key: listKey }
     const syncingList = { ...list, isSyncing: true }
 
-    dispatch({ type: types.ADD_LIST, boardKey, newListKey, list: !user ? list : syncingList })
+    dispatch({ type: types.ADD_LIST, boardKey, listKey, list: !user ? list : syncingList })
 
     if (user) {
-      const listKey = newListKey
-
-      db.ref(`/boards/${user.uid}/${boardKey}/lists/${newListKey}`).set(list)
+      db.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).set(list)
         .then(() => {
           const syncedList = { ...list, isSyncing: false }
           dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
@@ -25,9 +25,11 @@ export function addList(boardKey, list) {
   }
 }
 
-export function editList(boardKey, listKey, newList, oldList) {
+export function editList(boardKey, oldList, newList) {
+  const user = auth().currentUser
+  const listKey = oldList.key
+
   return dispatch => {
-    const user = auth().currentUser
     const syncingList = { ...newList, isSyncing: true }
 
     dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: !user ? newList : syncingList })
@@ -47,13 +49,16 @@ export function editList(boardKey, listKey, newList, oldList) {
   }
 }
 
-export function deleteList(boardKey, listKey, videos, list) {
+export function deleteList(board, list, videos) {
+  const user = auth().currentUser
+  const boardKey = board.key
+  const listKey = list.key
+
   return dispatch => {
-    const user = auth().currentUser
     const deletedVideo = { list: null, deleted: true }
 
-    Object.keys(videos).forEach(videoKey => {
-      dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: deletedVideo })
+    videos.forEach(video => {
+      dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: deletedVideo })
     })
 
     dispatch({ type: types.DELETE_LIST, boardKey, listKey })
@@ -61,9 +66,9 @@ export function deleteList(boardKey, listKey, videos, list) {
     if (user) {
       let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
 
-      Object.keys(videos).forEach(videoKey => {
-        updates[`/videos/${user.uid}/${videoKey}/list`] = null
-        updates[`/videos/${user.uid}/${videoKey}/deleted`] = true
+      videos.forEach(video => {
+        updates[`/videos/${user.uid}/${video.key}/list`] = null
+        updates[`/videos/${user.uid}/${video.key}/deleted`] = true
       })
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting ${list.name}` })
@@ -74,9 +79,9 @@ export function deleteList(boardKey, listKey, videos, list) {
         })
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
-          dispatch({ type: types.ADD_LIST, boardKey, newListKey: listKey, list })
-          Object.keys(videos).forEach(videoKey =>
-            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...videos[videoKey], deleted: false } })
+          dispatch({ type: types.ADD_LIST, boardKey, listKey, list })
+          videos.forEach(video =>
+            dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: { ...video, deleted: false } })
           )
         })
     }

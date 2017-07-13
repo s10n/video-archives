@@ -13,7 +13,7 @@ export default function (state = {}, action) {
       return {}
 
     case types.ADD_BOARD:
-      return { ...state, [action.newBoardKey]: action.board }
+      return dotProp.set(state, action.boardKey, action.board)
 
     case types.EDIT_BOARD:
       return dotProp.merge(state, action.boardKey, action.newBoard)
@@ -22,10 +22,10 @@ export default function (state = {}, action) {
       return dotProp.delete(state, action.boardKey)
 
     case types.ADD_LIST:
-      return dotProp.set(state, `${action.boardKey}.lists.${action.newListKey}`, action.list)
+      return dotProp.set(state, `${action.boardKey}.lists.${action.listKey}`, action.list)
 
     case types.EDIT_LIST:
-      return dotProp.set(state, `${action.boardKey}.lists.${action.listKey}`, action.newList)
+      return dotProp.merge(state, `${action.boardKey}.lists.${action.listKey}`, action.newList)
 
     case types.DELETE_LIST:
       return dotProp.delete(state, `${action.boardKey}.lists.${action.listKey}`)

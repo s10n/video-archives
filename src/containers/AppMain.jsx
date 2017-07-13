@@ -5,7 +5,7 @@ import './AppMain.css'
 const AppMain = () => {
   return (
     <main className="AppMain">
-      <div className="PageWrapper">
+      <div className="AppMainInner">
         {routes}
       </div>
     </main>

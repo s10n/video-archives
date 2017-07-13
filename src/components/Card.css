@@ -32,6 +32,10 @@
 	margin-bottom: 15px;
 }
 
+.CardScroll:not(:empty) + .CardFooter {
+	margin-top: 10px;
+}
+
 .CardScroll::-webkit-scrollbar {
 	height: 6px;
 	width:  6px;

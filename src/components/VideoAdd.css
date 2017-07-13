@@ -1,7 +1,3 @@
-.CardScroll:not(:empty) + .VideoAdd {
-	margin-top: 10px;
-}
-
 .VideoAdd {
 	flex: 0 0 auto;
 }

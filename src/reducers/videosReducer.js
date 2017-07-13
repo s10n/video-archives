@@ -6,9 +6,6 @@ export default function (state = {}, action) {
     case types.FETCH_VIDEOS:
       return action.videos || {}
 
-    case 'FETCH_VIDEOS_FULFILLED':
-      return action.videos || {}
-
     case types.IMPORT_STORAGE:
       return action.videos
 
@@ -16,7 +13,7 @@ export default function (state = {}, action) {
       return {}
 
     case types.ADD_VIDEO:
-      return { ...state, [action.newVideoKey]: action.video }
+      return dotProp.set(state, action.videoKey, action.video)
 
     case types.EDIT_VIDEO:
       return dotProp.merge(state, action.videoKey, action.newVideo)
