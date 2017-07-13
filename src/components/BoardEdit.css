@@ -1,0 +1,12 @@
+.BoardEdit .BoardTitle {
+	display: inline-block;
+}
+
+.BoardEdit .BtnTrash {
+	display: none;
+}
+
+.BoardEdit:hover .BtnTrash {
+	display: inline-block;
+	margin-left: 10px;
+}

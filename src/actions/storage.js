@@ -3,9 +3,9 @@ import * as types from './types'
 import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../config/sample'
 
 export function importStorage() {
-  return dispatch => {
-    const user = auth().currentUser
+  const user = auth().currentUser
 
+  return dispatch => {
     dispatch({ type: types.IMPORT_STORAGE, boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
 
     if (user) {
@@ -29,9 +29,9 @@ export function importStorage() {
 }
 
 export function emptyStorage() {
-  return dispatch => {
-    const user = auth().currentUser
+  const user = auth().currentUser
 
+  return dispatch => {
     dispatch({ type: types.EMPTY_STORAGE })
 
     if (user) {

@@ -1,8 +1,8 @@
-.VideoItem a:hover {
+.Video a:hover {
 	text-decoration: underline;
 }
 
-.VideoItem + .VideoItem {
+.Video + .Video {
 	margin-top: 20px;
 }
 

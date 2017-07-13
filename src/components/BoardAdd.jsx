@@ -4,44 +4,33 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addBoard } from '../actions/board'
-import { reservedBoardSlug } from '../config/constants'
+import { errorMessages, reservedBoardSlug, slugify } from '../config/constants'
 import './BoardAdd.css'
-
-export const ERROR_MESSAGE = {
-  valid: 'Press enter key to create ↵',
-  reserved: 'Reserved board title',
-  exists: 'Board already exists'
-}
 
 const propTypes = {
   boards: PropTypes.object.isRequired,
   addBoard: PropTypes.func.isRequired
 }
 
-const defaultProps = {
-  boards: {},
-  addBoard: () => console.warn('addBoard not defined')
-}
-
-export class BoardAdd extends React.Component {
+class BoardAdd extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = { title: '', slug: '', error: null }
+
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handlePressEnter = this.handlePressEnter.bind(this)
   }
 
-  handleInputChange(event) {
-    const title = event.target.value
-    const slug = title.trim().toString().toLowerCase().replace(/\s+/g, '-')
-      .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
-    let error = null
+  handleInputChange(title) {
+    const { boards } = this.props
+    const slug = slugify(title)
+    const isBoardExists = _.findKey(boards, ['slug', slug])
+    const isSlugReserved = reservedBoardSlug.includes(slug)
 
-    if (reservedBoardSlug.includes(slug)) {
-      error = ERROR_MESSAGE.reserved
-    } else if (_.find(this.props.boards, ['slug', slug])) {
-      error = ERROR_MESSAGE.exists
-    }
+    let error = null
+    if (isBoardExists) error = errorMessages.board.exists
+    if (isSlugReserved) error = errorMessages.board.reserved
 
     this.setState({ title, slug, error })
   }
@@ -51,27 +40,28 @@ export class BoardAdd extends React.Component {
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      const board = { title, slug }
-      this.props.addBoard(board)
+      this.props.addBoard({ title, slug })
       this.setState({ title: '', slug: '' })
     }
   }
 
   render() {
+    const { title, error } = this.state
+
     return (
       <section className="BoardAdd">
         <input
           className="borderless-input"
           type="text"
-          onChange={this.handleInputChange}
-          onKeyPress={event => {(event.key === 'Enter') && this.handlePressEnter()}}
-          value={this.state.title}
+          onChange={event => this.handleInputChange(event.target.value)}
+          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
+          value={title}
           placeholder="Create new board..."
         />
 
-        {this.state.title.length > 0 &&
+        {title.length > 0 &&
           <p className="HelpBlock">
-            <small>{this.state.error || ERROR_MESSAGE.valid}</small>
+            <small>{error || errorMessages.board.valid}</small>
           </p>
         }
       </section>
@@ -79,15 +69,10 @@ export class BoardAdd extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { boards: state.boards }
-}
+BoardAdd.propTypes = propTypes
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addBoard }, dispatch)
 }
 
-BoardAdd.propTypes = propTypes
-BoardAdd.defaultProps = defaultProps
-
-export default connect(mapStateToProps, mapDispatchToProps)(BoardAdd)
+export default connect(null, mapDispatchToProps)(BoardAdd)

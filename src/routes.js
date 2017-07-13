@@ -1,19 +1,19 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import PageFront from './containers/PageFront'
-import PageTrash from './containers/PageTrash'
-import BoardRead from './containers/BoardRead'
-import PageSignup from './containers/auth/PageSignup'
-import PageSignin from './containers/auth/PageSignin'
-import PageSignout from './containers/auth/PageSignout'
+import PageSignup from './containers/PageSignup'
+import PageSignin from './containers/PageSignin'
+import PageSignout from './containers/PageSignout'
+import Trash from './components/Trash'
+import Board from './components/Board'
 
 export default (
   <Switch>
     <Route exact path="/" component={PageFront} />
-    <Route exact path="/trash" component={PageTrash} />
     <Route exact path="/signup" component={PageSignup} />
     <Route exact path="/signin" component={PageSignin} />
     <Route exact path="/signout" component={PageSignout} />
-    <Route path="/:boardSlug" component={BoardRead} />
+    <Route exact path="/trash" component={Trash} />
+    <Route exact path="/:boardSlug" component={Board} />
   </Switch>
 )
