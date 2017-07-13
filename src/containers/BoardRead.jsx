@@ -11,6 +11,8 @@ import ListAdd from '../components/ListAdd'
 
 const propTypes = {
   boards: PropTypes.object.isRequired,
+  board: PropTypes.object.isRequired,
+  boardKey: PropTypes.string.isRequired,
   videos: PropTypes.object.isRequired,
   editBoard: PropTypes.func.isRequired,
   deleteBoard: PropTypes.func.isRequired
@@ -18,6 +20,8 @@ const propTypes = {
 
 const defaultProps = {
   boards: {},
+  board: {},
+  boardKey: '',
   videos: {},
   editBoard: () => console.warn('editBoard not defined'),
   deleteBoard: () => console.warn('deleteBoard not defined')
@@ -35,18 +39,14 @@ class BoardRead extends React.Component {
   }
 
   handleTitleClick() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
-    const board = this.props.boards[boardKey]
-
+    const { board } = this.props
     const { title, slug } = board
 
     this.setState({ isEditing: true, title, slug })
   }
 
   handleInputBlur() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
-    const board = this.props.boards[boardKey]
-
+    const { board } = this.props
     const { title, slug } = board
 
     this.setState({ isEditing: false, title, slug, error: null })
@@ -72,8 +72,7 @@ class BoardRead extends React.Component {
   }
 
   handlePressEnter() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
-    const board = this.props.boards[boardKey]
+    const { boardKey, board } = this.props
 
     const title = this.state.title.trim()
     const { slug, error } = this.state
@@ -85,9 +84,7 @@ class BoardRead extends React.Component {
   }
 
   handleDeleteClick() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
-    const board = this.props.boards[boardKey]
-    const videos = _.pickBy(this.props.videos, ['board', boardKey])
+    const { boardKey, board, videos } = this.props
 
     if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
       this.props.deleteBoard(boardKey, videos, board)
@@ -95,8 +92,9 @@ class BoardRead extends React.Component {
   }
 
   render() {
-    const boardKey = _.findKey(this.props.boards, ['slug', this.props.match.params.boardSlug])
-    const board = this.props.boards[boardKey]
+    const { boardKey, board, videos } = this.props
+    const listsSorted = _.sortBy(board.lists, 'name')
+    const videosInbox = _.filter(videos, video => !video.list && !video.deleted)
 
     return boardKey ? (
       <section className="Page">
@@ -120,33 +118,31 @@ class BoardRead extends React.Component {
 
         <main className="PageContent">
           <div className="PageContentInner BoardScroll">
-            {
-              _.find(
-                this.props.videos,
-                video => {
-                  return video.board === boardKey && !video.list && !video.deleted
-                }
-              ) &&
+            {!_.isEmpty(videosInbox) && (
               <div className="VideoWrapper">
                 <VideoList
-                  videos={this.props.videos}
-                  board={board}
-                  boardKey={boardKey}
-                />
-              </div>
-            }
-
-            {board.lists && Object.keys(board.lists).map(key =>
-              <div className="VideoWrapper" key={key}>
-                <VideoList
-                  list={board.lists[key]}
-                  listKey={key}
-                  videos={this.props.videos}
+                  videos={videosInbox}
                   board={board}
                   boardKey={boardKey}
                 />
               </div>
             )}
+
+            {listsSorted.map(list => {
+              const videosSelected = _.filter(videos, video => video.list === list.key && !video.deleted)
+
+              return (
+                <div className="VideoWrapper" key={list.key}>
+                  <VideoList
+                    list={list}
+                    listKey={list.key}
+                    videos={videosSelected}
+                    board={board}
+                    boardKey={boardKey}
+                  />
+                </div>
+              )
+            })}
 
             {!board.isSyncing &&
               <div className="VideoWrapper">
@@ -170,8 +166,12 @@ class BoardRead extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { boards: state.boards, videos: state.videos }
+function mapStateToProps(state, ownProps) {
+  const { boards } = state
+  const boardKey = _.findKey(boards, ['slug', ownProps.match.params.boardSlug])
+  const board = boards[boardKey]
+  const videos = _.pickBy(state.videos, ['board', boardKey])
+  return { boards, board, boardKey, videos }
 }
 
 function mapDispatchToProps(dispatch) {

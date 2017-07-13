@@ -1,23 +1,29 @@
 export const SAMPLE_BOARDS = {
   "-Kk6WM23ReE8Gz3HGPEH" : {
+    "key": "-Kk6WM23ReE8Gz3HGPEH",
     "lists" : {
       "-Kk6WN0PwhkLnecNsLfX" : {
+        "key": "-Kk6WN0PwhkLnecNsLfX",
         "name" : "AC/DC",
         "slug" : "ac-dc"
       },
       "-Kk6WO4ABBvXEaoPaokn" : {
+        "key": "-Kk6WO4ABBvXEaoPaokn",
         "name" : "Guns N' Roses",
         "slug" : "guns-n-roses"
       },
       "-Kk6WP4gPYBQdBWRBMsg" : {
+        "key": "-Kk6WP4gPYBQdBWRBMsg",
         "name" : "OK Go",
         "slug" : "ok-go"
       },
       "-Kk6WQD2CegRNconxhxP" : {
+        "key": "-Kk6WQD2CegRNconxhxP",
         "name" : "PSY",
         "slug" : "psy"
       },
       "-Kk6WR9g3AWY-Mw6H_rk" : {
+        "key": "-Kk6WR9g3AWY-Mw6H_rk",
         "name" : "Macklemore",
         "slug" : "macklemore"
       }
@@ -26,8 +32,10 @@ export const SAMPLE_BOARDS = {
     "title" : "Music"
   },
   "-Kk6WS-YhJ0EWWHI0r3z" : {
+    "key": "-Kk6WS-YhJ0EWWHI0r3z",
     "lists" : {
       "-Kk6WSkHxsSFEsQZc-OE" : {
+        "key": "-Kk6WSkHxsSFEsQZc-OE",
         "name" : "Water",
         "slug" : "water"
       }
@@ -75,6 +83,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "AC/DC - Back In Black (Official Video)"
       }
     },
+    "key": "-Kk6WZJACBgwbcS7OsBT",
     "list" : "-Kk6WN0PwhkLnecNsLfX",
     "source" : "YouTube"
   },
@@ -120,6 +129,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "AC/DC - Highway to Hell (Official Video)"
       }
     },
+    "key": "-Kk6W_73yXAznL_qQsuO",
     "list" : "-Kk6WN0PwhkLnecNsLfX",
     "source" : "YouTube"
   },
@@ -160,6 +170,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "AC/DC - Shoot To Thrill (Iron Man 2 Version)"
       }
     },
+    "key": "-Kk6Wa-oIP7ge8zI8xWa",
     "list" : "-Kk6WN0PwhkLnecNsLfX",
     "source" : "YouTube"
   },
@@ -205,6 +216,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "Guns N' Roses - Sweet Child O' Mine"
       }
     },
+    "key": "-Kk6Wb1K3KjF-VgGMCBM",
     "list" : "-Kk6WO4ABBvXEaoPaokn",
     "source" : "YouTube"
   },
@@ -250,6 +262,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "Guns N' Roses - November Rain"
       }
     },
+    "key": "-Kk6Wc3XOuyP0P75naMK",
     "list" : "-Kk6WO4ABBvXEaoPaokn",
     "source" : "YouTube"
   },
@@ -295,6 +308,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "Guns N' Roses - Welcome To The Jungle"
       }
     },
+    "key": "-Kk6WdVn-l62949I2akJ",
     "list" : "-Kk6WO4ABBvXEaoPaokn",
     "source" : "YouTube"
   },
@@ -340,6 +354,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "OK Go - End Love - Official Video"
       }
     },
+    "key": "-Kk6WerQoBsi_QOdpx0G",
     "list" : "-Kk6WP4gPYBQdBWRBMsg",
     "source" : "YouTube"
   },
@@ -385,6 +400,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "OK Go - The Writing's On the Wall - Official Video"
       }
     },
+    "key": "-Kk6WfiWj6MVxaH2PJYd",
     "list" : "-Kk6WP4gPYBQdBWRBMsg",
     "source" : "YouTube"
   },
@@ -430,6 +446,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "OK Go - I Won't Let You Down - Official Video"
       }
     },
+    "key": "-Kk6WgaP3X7H8Jk0hwf8",
     "list" : "-Kk6WP4gPYBQdBWRBMsg",
     "source" : "YouTube"
   },
@@ -475,6 +492,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "OK Go – The One Moment – Official Video"
       }
     },
+    "key": "-Kk6WhMY-O5FsXkvzBIy",
     "list" : "-Kk6WP4gPYBQdBWRBMsg",
     "source" : "YouTube"
   },
@@ -520,6 +538,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "PSY - GANGNAM STYLE(강남스타일) M/V"
       }
     },
+    "key": "-Kk6WidfUCLEIjZFskJk",
     "list" : "-Kk6WQD2CegRNconxhxP",
     "source" : "YouTube"
   },
@@ -565,6 +584,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "PSY - GENTLEMAN M/V"
       }
     },
+    "key": "-Kk6WluATZkOdf9Hbbvq",
     "list" : "-Kk6WQD2CegRNconxhxP",
     "source" : "YouTube"
   },
@@ -605,6 +625,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "MACKLEMORE & RYAN LEWIS - CAN'T HOLD US FEAT. RAY DALTON (OFFICIAL MUSIC VIDEO)"
       }
     },
+    "key": "-Kk6Wn1wuZVfVC2GwLoy",
     "list" : "-Kk6WR9g3AWY-Mw6H_rk",
     "source" : "YouTube"
   },
@@ -650,6 +671,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "PSY - ‘I LUV IT’ M/V"
       }
     },
+    "key": "-Kk6WrJAsCJB8IoUBe00",
     "list" : "-Kk6WQD2CegRNconxhxP",
     "source" : "YouTube"
   },
@@ -695,6 +717,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "PSY - ‘New Face’ M/V"
       }
     },
+    "key": "-Kk6WstH_oJsZXpHc3DE",
     "list" : "-Kk6WQD2CegRNconxhxP",
     "source" : "YouTube"
   },
@@ -735,6 +758,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "Kitesurfer Gordon Heather: Whichever Way the Wind Blows"
       }
     },
+    "key": "-Kk6WutQjTinTtA2oILr",
     "list" : "-Kk6WSkHxsSFEsQZc-OE",
     "source" : "YouTube"
   },
@@ -775,6 +799,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "Hoverboard in Real Life! In 4K!"
       }
     },
+    "key": "-Kk6WvpszD0mdWxHih_B",
     "list" : "-Kk6WSkHxsSFEsQZc-OE",
     "source" : "YouTube"
   },
@@ -820,6 +845,7 @@ export const SAMPLE_VIDEOS = {
         "title" : "BSR SUPER SLIDE - The Royal Flush in 4K"
       }
     },
+    "key": "-Kk6WwkX4KcOw0av6I8f",
     "list" : "-Kk6WSkHxsSFEsQZc-OE",
     "source" : "YouTube"
   }

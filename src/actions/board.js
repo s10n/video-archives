@@ -28,6 +28,7 @@ export function addBoard(board) {
   return dispatch => {
     const user = auth().currentUser
     const newBoardKey = user ? db.ref(`/boards/${user.uid}`).push().key : Date.now()
+    board = { ...board, key: newBoardKey }
     const syncingBoard = { ...board, isSyncing: true }
 
     dispatch({ type: types.ADD_BOARD, newBoardKey, board: !user ? board : syncingBoard })

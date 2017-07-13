@@ -28,6 +28,7 @@ export function addVideo(video) {
   return dispatch => {
     const user = auth().currentUser
     const newVideoKey = user ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
+    video = { ...video, key: newVideoKey }
     const syncingVideo = { ...video, isSyncing: true }
 
     dispatch({ type: types.ADD_VIDEO, newVideoKey, video: !user ? video : syncingVideo })
