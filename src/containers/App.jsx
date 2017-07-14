@@ -39,7 +39,7 @@ class App extends React.Component {
 
   render() {
     const { boards, videos } = this.props
-    const trash = !!_.findKey(videos, 'deleted')
+    const trash = _.filter(videos, 'deleted').length
 
     return (
       <ConnectedRouter history={history}>
@@ -47,7 +47,7 @@ class App extends React.Component {
           <AppHeader />
 
           <section className="AppContainer">
-            <AppSidebar boards={boards} trash={trash} />
+            <AppSidebar boards={boards} videos={videos} trash={trash} />
             <AppMain />
           </section>
         </div>

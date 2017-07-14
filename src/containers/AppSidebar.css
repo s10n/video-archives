@@ -5,7 +5,7 @@
 .AppSidebar a,
 .AppSidebar input {
 	color: black;
-	display: block;
+	display: flex;
 	line-height: 20px;
 	padding: 10px 24px;
 	width: 100%;
@@ -16,8 +16,20 @@
 	background-color: hsl(0, 0%, 95%);
 }
 
+.AppSidebar a span {
+	flex: 1;
+}
+
+.AppSidebar a .count {
+	color: gray;
+	flex: none;
+	font-size: 11px;
+}
+
 .AppSidebar .active,
-.AppSidebar .active:hover {
+.AppSidebar .active:hover,
+.AppSidebar .active .count,
+.AppSidebar .active:hover .count {
 	background-color: hsl(358, 79%, 45%);
 	color: white;
 }

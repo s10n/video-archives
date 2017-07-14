@@ -81,7 +81,7 @@ export function deleteList(board, list, videos) {
           dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_LIST, boardKey, listKey, list })
           videos.forEach(video =>
-            dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: { ...video, deleted: false } })
+            dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: { ...video, deleted: null } })
           )
         })
     }

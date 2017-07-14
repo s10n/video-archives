@@ -7,23 +7,30 @@ import BoardAdd from '../components/BoardAdd'
 
 const propTypes = {
   boards: PropTypes.object.isRequired,
-  trash: PropTypes.bool.isRequired
+  videos: PropTypes.object.isRequired,
+  trash: PropTypes.number.isRequired
 }
 
-const AppSidebar = ({ boards, trash }) => {
+const AppSidebar = ({ boards, videos, trash }) => {
   const boardsSorted = _.sortBy(boards, 'title')
 
   return (
     <nav className="AppSidebar">
-      {boardsSorted.map(board =>
-        <NavLink activeClassName="active" to={'/' + board.slug} key={board.key}>
-          {board.title}
-        </NavLink>
-      )}
+      {boardsSorted.map(board => {
+        const count = _.filter(videos, video => video.board === board.key && !video.deleted).length
 
-      {trash &&
+        return (
+          <NavLink activeClassName="active" to={'/' + board.slug} key={board.key}>
+            <span>{board.title}</span>
+            <span className="count">{count}</span>
+          </NavLink>
+        )
+      })}
+
+      {(trash > 0) &&
         <NavLink activeClassName="active" to="/trash">
-          Trash
+          <span>Trash</span>
+          <span className="count">{trash}</span>
         </NavLink>
       }
 
