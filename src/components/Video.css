@@ -20,3 +20,8 @@
 .VideoMeta a {
 	color: gray;
 }
+
+.VideoMeta time:before {
+	content: '\002022';
+	margin: 0 5px;
+}
