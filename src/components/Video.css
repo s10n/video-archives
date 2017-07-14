@@ -6,6 +6,15 @@
 	margin-top: 20px;
 }
 
+.VideoThumbnail {
+	background-color: silver;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 160px;
+	height: 90px;
+}
+
 .VideoTitle {
 	font-size: 13px;
 	line-height: 1.3;

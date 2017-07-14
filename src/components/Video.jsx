@@ -14,8 +14,8 @@ const Video = ({ video, board, addingVideo }) => {
   const { thumbnails, title, channelTitle, channelId } = video.data.snippet
 
   const Thumbnail = () => {
-    // TODO: Change thumbnail ratio to 16:9
-    return <img src={thumbnails.high.url} alt="" height="120" />
+    const backgroundImage = `url(${thumbnails.high.url})`
+    return <section className="VideoThumbnail" style={{ backgroundImage }} />
   }
 
   const Title = () => {
