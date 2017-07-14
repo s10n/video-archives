@@ -47,7 +47,7 @@ class App extends React.Component {
           <AppHeader />
 
           <section className="AppContainer">
-            <AppSidebar boards={boards} trash={trash} />
+            <AppSidebar boards={boards} videos={videos} trash={trash} />
             <AppMain />
           </section>
         </div>
