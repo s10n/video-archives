@@ -39,7 +39,7 @@ class App extends React.Component {
 
   render() {
     const { boards, videos } = this.props
-    const trash = !!_.findKey(videos, 'deleted')
+    const trash = _.filter(videos, 'deleted').length
 
     return (
       <ConnectedRouter history={history}>

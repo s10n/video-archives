@@ -8,7 +8,7 @@ import BoardAdd from '../components/BoardAdd'
 const propTypes = {
   boards: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
-  trash: PropTypes.bool.isRequired
+  trash: PropTypes.number.isRequired
 }
 
 const AppSidebar = ({ boards, videos, trash }) => {
@@ -27,9 +27,10 @@ const AppSidebar = ({ boards, videos, trash }) => {
         )
       })}
 
-      {trash &&
+      {(trash > 0) &&
         <NavLink activeClassName="active" to="/trash">
-          Trash
+          <span>Trash</span>
+          <span className="count">{trash}</span>
         </NavLink>
       }
 
