@@ -111,7 +111,7 @@ export function deleteBoard(board, videos) {
           dispatch({ type: types.ADD_BOARD, newBoardKey: boardKey, board })
           videos.forEach(video => {
             const videoKey = video.key
-            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...video, deleted: false } })
+            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...video, deleted: null } })
           })
           dispatch(push(board.slug))
         })

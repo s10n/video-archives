@@ -41,7 +41,7 @@ class VideoEdit extends React.Component {
 
   handleTrashClick() {
     const { video, editVideo } = this.props
-    editVideo({ ...video, deleted: false }, { deleted: true })
+    editVideo({ ...video, deleted: null }, { deleted: true })
   }
 
   handleRecoverClick() {
@@ -54,7 +54,7 @@ class VideoEdit extends React.Component {
 
       if (title && slug) {
         const newBoardKey = _.findKey(boards, ['slug', slug])
-        newBoardKey ? editVideo(video, { board: newBoardKey, deleted: false }) : alert('Error')
+        newBoardKey ? editVideo(video, { board: newBoardKey, deleted: null }) : alert('Error')
       }
     }
   }
