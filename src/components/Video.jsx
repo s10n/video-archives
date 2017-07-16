@@ -1,21 +1,57 @@
+import _ from 'lodash'
+import moment from 'moment'
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { DragSource } from 'react-dnd'
+import { editVideo } from '../actions/video'
+import { ItemTypes } from '../config/constants'
 import './Video.css'
 import VideoEdit from './VideoEdit'
 
 const propTypes = {
   video: PropTypes.object.isRequired,
   board: PropTypes.object,
-  addingVideo: PropTypes.bool
+  addingVideo: PropTypes.bool,
+  appStatus: PropTypes.string,
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  editVideo: PropTypes.func.isRequired
 }
 
-const Video = ({ video, board, addingVideo }) => {
+const videoSource = {
+  canDrag(props) {
+    return (!props.video.isSyncing && !props.appStatus)
+  },
+
+  beginDrag(props) {
+    return { video: props.video }
+  },
+
+  endDrag(props, monitor) {
+    if (!monitor.didDrop()) return
+    const item = monitor.getItem()
+    const dropResult = monitor.getDropResult()
+    const { video } = item
+    const { list } = dropResult
+    props.editVideo(video, { list: list.key })
+  }
+}
+
+const collect = (connect, monitor) => {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  }
+}
+
+const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDragging }) => {
   const { thumbnails, title, channelTitle, channelId } = video.data.snippet
 
   const Thumbnail = () => {
     const backgroundImage = `url(${thumbnails.high.url})`
-    return <section className="VideoThumbnail" style={{ backgroundImage }} />
+    return connectDragSource(<section className="VideoThumbnail" style={{ backgroundImage }} />)
   }
 
   const Title = () => {
@@ -41,7 +77,7 @@ const Video = ({ video, board, addingVideo }) => {
   }
 
   return (
-    <article className="Video">
+    <article className="Video" style={{ opacity: isDragging && 0.5 }}>
       <Thumbnail />
       <Title />
 
@@ -56,4 +92,17 @@ const Video = ({ video, board, addingVideo }) => {
 
 Video.propTypes = propTypes
 
-export default Video
+function mapStateToProps({ app }) {
+  return { appStatus: app.status }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ editVideo }, dispatch)
+}
+
+const enhance = _.flow(
+  DragSource(ItemTypes.VIDEO, videoSource, collect),
+  connect(mapStateToProps, mapDispatchToProps)
+)
+
+export default enhance(Video)

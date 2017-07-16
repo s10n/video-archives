@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import createHistory from 'history/createHashHistory'
 import { ConnectedRouter } from 'react-router-redux'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import { fetchBoards } from '../actions/board'
 import { fetchVideos } from '../actions/video'
 import { pushStorage } from '../actions/storage'
@@ -13,6 +15,7 @@ import '../style/reboot.css'
 import '../style/type.css'
 import '../style/forms.css'
 import '../style/buttons.css'
+import '../style/dnd.css'
 import './App.css'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
@@ -66,4 +69,9 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+const enhance = _.flow(
+  DragDropContext(HTML5Backend),
+  connect(mapStateToProps, mapDispatchToProps)
+)
+
+export default enhance(App)
