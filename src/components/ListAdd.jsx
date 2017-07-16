@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -12,7 +12,7 @@ const propTypes = {
   addList: PropTypes.func.isRequired
 }
 
-class ListAdd extends React.Component {
+class ListAdd extends Component {
   constructor(props) {
     super(props)
 

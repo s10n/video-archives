@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { signoutUser } from '../actions/auth'
 import Page from '../components/Page'
 import Card from '../components/Card'
 
-class Signout extends React.Component {
+class Signout extends Component {
   componentWillMount() {
     this.props.authenticated && this.props.signoutUser()
   }

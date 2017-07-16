@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -27,7 +27,7 @@ const propTypes = {
   pushStorage: PropTypes.func.isRequired
 }
 
-class App extends React.Component {
+class App extends Component {
   componentWillMount() {
     this.props.fetchBoards()
     this.props.fetchVideos()

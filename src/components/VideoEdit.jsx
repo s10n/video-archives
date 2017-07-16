@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -14,7 +14,7 @@ const propTypes = {
   deleteVideo: PropTypes.func.isRequired,
 }
 
-class VideoEdit extends React.Component {
+class VideoEdit extends Component {
   constructor(props) {
     super(props)
 

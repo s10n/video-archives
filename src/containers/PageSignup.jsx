@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
@@ -8,7 +8,7 @@ import Page from '../components/Page'
 import Card from '../components/Card'
 import FormSignup from '../components/FormSignup'
 
-class PageSignup extends React.Component {
+class PageSignup extends Component {
   constructor(props) {
     super(props)
 

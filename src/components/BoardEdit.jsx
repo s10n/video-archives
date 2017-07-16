@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -15,7 +15,7 @@ const propTypes = {
   deleteBoard: PropTypes.func.isRequired
 }
 
-class BoardEdit extends React.Component {
+class BoardEdit extends Component {
   constructor(props) {
     super(props)
 

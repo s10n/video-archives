@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -14,7 +14,7 @@ const propTypes = {
   emptyTrash: PropTypes.func.isRequired
 }
 
-class Trash extends React.Component {
+class Trash extends Component {
   constructor(props) {
     super(props)
 
