@@ -36,4 +36,4 @@ const NavItem = ({ board, count, trash, connectDropTarget, isOver }) => {
 
 NavItem.propTypes = propTypes
 
-export default DropTarget(ItemTypes.VIDEO, boardTarget, collect)(NavItem)
+export default DropTarget([ItemTypes.VIDEO, ItemTypes.LIST], boardTarget, collect)(NavItem)
