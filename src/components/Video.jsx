@@ -34,8 +34,11 @@ const videoSource = {
     const item = monitor.getItem()
     const dropResult = monitor.getDropResult()
     const { video } = item
-    const { list } = dropResult
-    props.editVideo(video, { list: list.key })
+    const { board, list, trash } = dropResult
+
+    board && props.editVideo(video, { board: board.key, list: null, deleted: null })
+    list && props.editVideo(video, { list: list.key })
+    trash && props.editVideo({ ...video, deleted: null }, { deleted: true })
   }
 }
 
