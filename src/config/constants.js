@@ -39,6 +39,8 @@ export const errorMessages = {
 
 export const reservedBoardSlug = ['trash', 'signup', 'signin', 'signout']
 
+export const ItemTypes = { VIDEO: 'video', LIST: 'list' }
+
 export const slugify = string => {
   return string.trim().toString().toLowerCase().replace(/\s+/g, '-')
     .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')

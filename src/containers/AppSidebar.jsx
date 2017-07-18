@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import './AppSidebar.css'
+import NavItem from '../components/NavItem'
 import BoardAdd from '../components/BoardAdd'
 
 const propTypes = {
@@ -18,21 +19,18 @@ const AppSidebar = ({ boards, videos, trash }) => {
     <nav className="AppSidebar">
       {boardsSorted.map(board => {
         const count = _.filter(videos, video => video.board === board.key && !video.deleted).length
-
         return (
-          <NavLink activeClassName="active" to={'/' + board.slug} key={board.key}>
-            <span>{board.title}</span>
-            <span className="count">{count}</span>
+          <NavLink to={'/' + board.slug} key={board.key}>
+            <NavItem board={board} count={count} />
           </NavLink>
         )
       })}
 
-      {(trash > 0) &&
-        <NavLink activeClassName="active" to="/trash">
-          <span>Trash</span>
-          <span className="count">{trash}</span>
+      {(trash > 0) && (
+        <NavLink to="/trash">
+          <NavItem trash count={trash} />
         </NavLink>
-      }
+      )}
 
       <BoardAdd boards={boards} />
     </nav>

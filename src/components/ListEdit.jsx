@@ -3,16 +3,50 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { DragSource } from 'react-dnd'
 import { editList, deleteList } from '../actions/list'
-import { errorMessages, slugify } from '../config/constants'
+import { ItemTypes, errorMessages, slugify } from '../config/constants'
 import './ListEdit.css'
 
 const propTypes = {
   board: PropTypes.object.isRequired,
   list: PropTypes.object,
   videos: PropTypes.array.isRequired,
+  appStatus: PropTypes.string,
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
   editList: PropTypes.func.isRequired,
   deleteList: PropTypes.func.isRequired
+}
+
+const listSource = {
+  canDrag(props) {
+    const { list, appStatus } = props
+    return (list && !list.isSyncing && !appStatus)
+  },
+
+  beginDrag(props) {
+    return { list: props.list }
+  },
+
+  endDrag(props, monitor) {
+    if (!monitor.didDrop()) return
+    const item = monitor.getItem()
+    const dropResult = monitor.getDropResult()
+    const { list } = item
+    const { trash } = dropResult
+    const { deleteList, videos } = props
+
+    trash && (window.confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) &&
+      deleteList(props.board, list, videos)
+  }
+}
+
+const collect = (connect, monitor) => {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  }
 }
 
 class ListEdit extends Component {
@@ -67,11 +101,11 @@ class ListEdit extends Component {
   }
 
   render() {
-    const { list } = this.props
+    const { list, connectDragSource, isDragging } = this.props
     const { isEditing, name, error } = this.state
 
-    return !_.isEmpty(list) ? (
-      <div>
+    return !_.isEmpty(list) ? connectDragSource(
+      <div className="ListEdit" style={{ opacity: isDragging && .5 }}>
         <input
           className="ListName borderless-input"
           type="text"
@@ -87,14 +121,27 @@ class ListEdit extends Component {
 
         {error && <small className="HelpBlock">{error}</small>}
       </div>
-    ) : <span role="img" aria-label="Inbox">📥</span>
+    ) : (
+      <div className="ListEdit">
+        <span role="img" aria-label="Inbox">📥</span>
+      </div>
+    )
   }
 }
 
 ListEdit.propTypes = propTypes
 
+function mapStateToProps({ app }) {
+  return { appStatus: app.status }
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ editList, deleteList }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(ListEdit)
+const enhance = _.flow(
+  DragSource(ItemTypes.LIST, listSource, collect),
+  connect(mapStateToProps, mapDispatchToProps)
+)
+
+export default enhance(ListEdit)
