@@ -66,17 +66,18 @@ class VideoEdit extends Component {
 
   render() {
     const { video, boards } = this.props
+    const opacity = video.isSyncing && '.25'
     let locationString = video.board ? `to ${boards[video.board].title}` : ''
     locationString += video.list ? ` - ${boards[video.board].lists[video.list].name}` : ''
 
     return !video.deleted ? (
-      <section style={{ opacity: video.isSyncing && '.25' }}>
+      <section style={{ opacity }}>
         <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
         &middot;
         <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
       </section>
     ) : (
-      <section>
+      <section style={{ opacity }}>
         <button className="btn-link" onClick={this.handleRecoverClick}>Recover {locationString}</button>
         &middot;
         <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
