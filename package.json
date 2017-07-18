@@ -2,7 +2,7 @@
   "name": "video-archives",
   "version": "0.6.0",
   "private": true,
-  "homepage": "http://s10n.github.io/video-archives",
+  "homepage": "https://video.akaiv.link",
   "devDependencies": {
     "enzyme": "^2.9.1",
     "gh-pages": "^1.0.0",
