@@ -3,11 +3,15 @@
 	max-width: 140px;
 }
 
-.ListHeader .BtnTrash {
+.ListEdit {
+	padding: 10px 15px;
+}
+
+.ListEdit .BtnTrash {
 	display: none;
 	margin-left: 10px;
 }
 
-.ListHeader:hover .BtnTrash {
+.ListEdit:hover .BtnTrash {
 	display: inline-block;
 }

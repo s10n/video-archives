@@ -1,9 +1,22 @@
+.Video {
+	padding: 3px;
+}
+
 .Video a:hover {
 	text-decoration: underline;
 }
 
 .Video + .Video {
 	margin-top: 20px;
+}
+
+.VideoThumbnail {
+	background-color: silver;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 160px;
+	height: 90px;
 }
 
 .VideoTitle {
@@ -19,4 +32,10 @@
 
 .VideoMeta a {
 	color: gray;
+}
+
+.VideoMeta time:before,
+.VideoMeta span.VideoEdit:before {
+	content: '\002022';
+	margin: 0 5px;
 }

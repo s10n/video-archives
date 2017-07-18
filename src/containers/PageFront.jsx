@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { storageTest } from '../config/constants'
@@ -7,7 +7,7 @@ import './PageFront.css'
 import Page from '../components/Page'
 import Card from '../components/Card'
 
-class PageFront extends React.Component {
+class PageFront extends Component {
   constructor (props) {
     super(props)
 

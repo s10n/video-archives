@@ -5,13 +5,15 @@ import './Card.css'
 const propTypes = {
   header: PropTypes.element,
   footer: PropTypes.element,
+  variant: PropTypes.object,
+  canDrop: PropTypes.bool,
   children: PropTypes.node
 }
 
-const Card = ({ header, footer, children }) => {
+const Card = ({ header, footer, variant, canDrop, children }) => {
   return (
-    <article className="Card">
-      <header className="CardHeader">
+    <article className={canDrop ? 'Card canDrop' : 'Card'}>
+      <header className="CardHeader" style={variant}>
         {header}
       </header>
 

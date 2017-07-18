@@ -1,8 +1,8 @@
 {
   "name": "video-archives",
-  "version": "0.2.0",
+  "version": "0.6.0",
   "private": true,
-  "homepage": "http://s10n.github.io/video-archives",
+  "homepage": "https://video.akaiv.link",
   "devDependencies": {
     "enzyme": "^2.9.1",
     "gh-pages": "^1.0.0",
@@ -18,6 +18,8 @@
     "normalize.css": "^7.0.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
+    "react-dnd": "^2.4.0",
+    "react-dnd-html5-backend": "^2.4.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",

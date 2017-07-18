@@ -8,14 +8,10 @@
         ".write": "auth != null && auth.uid == $uid",
 
         "$board": {
-          ".validate": "newData.hasChildren(['title', 'slug']) &&
-                        newData.child('title').isString() &&
-                        newData.child('slug').isString()",
+          ".validate": "newData.hasChildren(['title', 'slug']) && newData.child('title').isString() && newData.child('slug').isString()",
           "lists": {
             "$list": {
-              ".validate": "newData.hasChildren(['name', 'slug']) &&
-                            newData.child('name').isString() &&
-                            newData.child('slug').isString()",
+              ".validate": "newData.hasChildren(['name', 'slug']) && newData.child('name').isString() && newData.child('slug').isString()"
             }
           }
         }
