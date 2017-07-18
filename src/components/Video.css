@@ -34,7 +34,8 @@
 	color: gray;
 }
 
-.VideoMeta time:before {
+.VideoMeta time:before,
+.VideoMeta span.VideoEdit:before {
 	content: '\002022';
 	margin: 0 5px;
 }

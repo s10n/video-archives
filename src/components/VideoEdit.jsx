@@ -55,11 +55,11 @@ class VideoEdit extends Component {
     locationString += video.list ? ` - ${boards[video.board].lists[video.list].name}` : ''
 
     return !video.deleted ? (
-      <section style={{ opacity }}>
+      <span className="VideoEdit" style={{ opacity }}>
         <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
-      </section>
+      </span>
     ) : (
-      <section style={{ opacity }}>
+      <section className="VideoEdit" style={{ opacity }}>
         <button className="btn-link" onClick={this.handleRecoverClick}>Recover {locationString}</button>
         &middot;
         <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
