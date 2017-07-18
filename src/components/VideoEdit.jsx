@@ -18,25 +18,9 @@ class VideoEdit extends Component {
   constructor(props) {
     super(props)
 
-    this.handleMoveClick = this.handleMoveClick.bind(this)
     this.handleTrashClick = this.handleTrashClick.bind(this)
     this.handleRecoverClick = this.handleRecoverClick.bind(this)
     this.handleDeleteClick = this.handleDeleteClick.bind(this)
-  }
-
-  handleMoveClick() {
-    const input = prompt(`Type a name or slug of list`)
-
-    if (input) {
-      const name = input.trim()
-      const slug = slugify(name)
-
-      if (name && slug) {
-        const { video, board, editVideo } = this.props
-        const newListKey = _.findKey(board.lists, ['slug', slug])
-        newListKey ? editVideo(video, { list: newListKey }) : alert('Error')
-      }
-    }
   }
 
   handleTrashClick() {
@@ -72,8 +56,6 @@ class VideoEdit extends Component {
 
     return !video.deleted ? (
       <section style={{ opacity }}>
-        <button className="btn-link" onClick={this.handleMoveClick}>Move</button>
-        &middot;
         <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
       </section>
     ) : (
