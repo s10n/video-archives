@@ -14,11 +14,11 @@ class Signout extends Component {
   render() {
     const { authenticated } = this.props
 
-    return authenticated ? (
-      <Page page="Signout" title="Goodbye">
-        <Card>It was great to meet you.</Card>
-      </Page>
-    ) : <Redirect to="/" />
+    return authenticated
+      ? <Page page="Signout" title="Goodbye">
+          <Card>It was great to meet you.</Card>
+        </Page>
+      : <Redirect to="/" />
   }
 }
 

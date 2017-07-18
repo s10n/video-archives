@@ -12,7 +12,8 @@ export function fetchVideos() {
     if (user) {
       dispatch({ type: types.APP_STATUS, status: 'App is fetching videos' })
 
-      db.ref(`/videos/${user.uid}`)
+      db
+        .ref(`/videos/${user.uid}`)
         .once('value', snap => {
           dispatch({ type: types.FETCH_VIDEOS, videos: snap.val() })
           dispatch({ type: types.APP_STATUS, status: null })
@@ -35,7 +36,9 @@ export function addVideo(video) {
     dispatch({ type: types.ADD_VIDEO, videoKey, video: !user ? video : syncingVideo })
 
     if (user) {
-      db.ref(`/videos/${user.uid}/${videoKey}`).set(video)
+      db
+        .ref(`/videos/${user.uid}/${videoKey}`)
+        .set(video)
         .then(() => {
           const syncedVideo = { ...video, isSyncing: false }
           dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
@@ -58,7 +61,9 @@ export function editVideo(oldVideo, newVideo) {
     dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: !user ? newVideo : syncingVideo })
 
     if (user) {
-      db.ref(`/videos/${user.uid}/${videoKey}`).update(newVideo)
+      db
+        .ref(`/videos/${user.uid}/${videoKey}`)
+        .update(newVideo)
         .then(() => {
           const syncedVideo = { ...newVideo, isSyncing: false }
           dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: syncedVideo })
@@ -82,7 +87,9 @@ export function deleteVideo(video) {
     if (user) {
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
 
-      db.ref(`/videos/${user.uid}/${videoKey}`).remove()
+      db
+        .ref(`/videos/${user.uid}/${videoKey}`)
+        .remove()
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
         })
@@ -112,7 +119,9 @@ export function emptyTrash(videos) {
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
 
-      db.ref().update(updates)
+      db
+        .ref()
+        .update(updates)
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
         })

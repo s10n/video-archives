@@ -69,9 +69,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
 }
 
-const enhance = _.flow(
-  DragDropContext(HTML5Backend),
-  connect(mapStateToProps, mapDispatchToProps)
-)
+const enhance = _.flow(DragDropContext(HTML5Backend), connect(mapStateToProps, mapDispatchToProps))
 
 export default enhance(App)

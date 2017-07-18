@@ -2,9 +2,7 @@
   "rules": {
     "boards": {
       "$uid": {
-        // ".read": "false",
         ".read": "auth != null && auth.uid == $uid",
-        // ".write": "false",
         ".write": "auth != null && auth.uid == $uid",
 
         "$board": {
@@ -19,9 +17,7 @@
     },
     "videos": {
       "$uid": {
-        // ".read": "false",
         ".read": "auth != null && auth.uid == $uid",
-        // ".write": "false",
         ".write": "auth != null && auth.uid == $uid"
       }
     }

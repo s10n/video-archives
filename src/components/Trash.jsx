@@ -33,7 +33,9 @@ class Trash extends Component {
 
     const header = (
       <div style={{ textAlign: 'right' }}>
-        <button className="btn-link btn-small" onClick={this.handleEmptyClick}>Empty</button>
+        <button className="btn-link btn-small" onClick={this.handleEmptyClick}>
+          Empty
+        </button>
       </div>
     )
 

@@ -13,12 +13,12 @@ const propTypes = {
 
 const AppHeader = ({ status, authenticated }) => {
   const AppNavNotAuthenticated = () => {
-    return appConfig.signupAllowed ? (
-      <nav className="AppNav">
-        <NavLink to="/signup">Sign up</NavLink>
-        <NavLink to="/signin">Sign in</NavLink>
-      </nav>
-    ) : null
+    return appConfig.signupAllowed
+      ? <nav className="AppNav">
+          <NavLink to="/signup">Sign up</NavLink>
+          <NavLink to="/signin">Sign in</NavLink>
+        </nav>
+      : null
   }
 
   const AppNavAuthenticated = () => {
@@ -26,8 +26,15 @@ const AppHeader = ({ status, authenticated }) => {
 
     return (
       <nav className="AppNav">
-        {status && <span>{status}</span>}
-        {user && <span>{user.email}</span>}
+        {status &&
+          <span>
+            {status}
+          </span>}
+
+        {user &&
+          <span>
+            {user.email}
+          </span>}
         <NavLink to="/signout">Sign out</NavLink>
       </nav>
     )
@@ -36,7 +43,9 @@ const AppHeader = ({ status, authenticated }) => {
   return (
     <header className="AppHeader">
       <h1 className="AppTitle">
-        <NavLink to="/">Video Archives <small>alpha</small></NavLink>
+        <NavLink to="/">
+          Video Archives <small>alpha</small>
+        </NavLink>
       </h1>
 
       {authenticated ? <AppNavAuthenticated /> : <AppNavNotAuthenticated />}

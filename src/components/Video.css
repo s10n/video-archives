@@ -1,41 +1,41 @@
 .Video {
-	padding: 3px;
+  padding: 3px;
 }
 
 .Video a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .Video + .Video {
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 .VideoThumbnail {
-	background-color: silver;
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	width: 160px;
-	height: 90px;
+  background-color: silver;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 160px;
+  height: 90px;
 }
 
 .VideoTitle {
-	font-size: 13px;
-	line-height: 1.3;
+  font-size: 13px;
+  line-height: 1.3;
 }
 
 .VideoMeta {
-	color: gray;
-	font-size: 11px;
-	line-height: 1.3;
+  color: gray;
+  font-size: 11px;
+  line-height: 1.3;
 }
 
 .VideoMeta a {
-	color: gray;
+  color: gray;
 }
 
 .VideoMeta time:before,
 .VideoMeta span.VideoEdit:before {
-	content: '\002022';
-	margin: 0 5px;
+  content: '\002022';
+  margin: 0 5px;
 }

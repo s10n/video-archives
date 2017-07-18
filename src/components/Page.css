@@ -1,31 +1,33 @@
 .Page {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .PageHeader {
-	flex: none;
-	height: 50px;
-	padding: 10px 24px;
+  flex: none;
+  height: 50px;
+  padding: 10px 24px;
 }
 
 .PageContent {
-	flex: 1;
-	position: relative;
+  flex: 1;
+  position: relative;
 }
 
 .PageContentInner {
-	position: absolute;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
-	overflow-x: hidden;
-	overflow-y: hidden;
-	padding-left: 24px;
-	padding-right: 24px;
-	padding-bottom: 24px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
 }
 
 .Paragraph {
-	line-height: 1.5;
+  line-height: 1.5;
 }

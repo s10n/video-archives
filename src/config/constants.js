@@ -42,8 +42,13 @@ export const reservedBoardSlug = ['trash', 'signup', 'signin', 'signout']
 export const ItemTypes = { VIDEO: 'video', LIST: 'list' }
 
 export const slugify = string => {
-  return string.trim().toString().toLowerCase().replace(/\s+/g, '-')
-    .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-').replace(/--+/g, '-')
+  return string
+    .trim()
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-')
+    .replace(/--+/g, '-')
 }
 
 export const storageTest = () => {
@@ -60,7 +65,7 @@ export const storageTest = () => {
 
 export const isIE = () => {
   const ua = window.navigator.userAgent
-  return (ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0)
+  return ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0
 }
 
 export const getParams = uri => {

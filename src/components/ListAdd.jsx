@@ -52,18 +52,19 @@ class ListAdd extends Component {
           type="text"
           className="borderless-input"
           onChange={event => this.handleInputChange(event.target.value)}
-          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
+          onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
           value={name}
           placeholder="Add a list..."
         />
 
-        {error && <small className="HelpBlock">{error}</small>}
+        {error &&
+          <small className="HelpBlock">
+            {error}
+          </small>}
       </div>
     )
 
-    return (
-      <Card header={header} />
-    )
+    return <Card header={header} />
   }
 }
 

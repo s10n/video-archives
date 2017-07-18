@@ -12,7 +12,9 @@ export function addList(boardKey, list) {
     dispatch({ type: types.ADD_LIST, boardKey, listKey, list: !user ? list : syncingList })
 
     if (user) {
-      db.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).set(list)
+      db
+        .ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`)
+        .set(list)
         .then(() => {
           const syncedList = { ...list, isSyncing: false }
           dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
@@ -35,7 +37,9 @@ export function editList(boardKey, oldList, newList) {
     dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: !user ? newList : syncingList })
 
     if (user) {
-      db.ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`).update(newList)
+      db
+        .ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`)
+        .update(newList)
         .then(() => {
           const syncedList = { ...newList, isSyncing: false }
           dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: syncedList })
@@ -73,16 +77,19 @@ export function deleteList(board, list, videos) {
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting ${list.name}` })
 
-      db.ref().update(updates)
+      db
+        .ref()
+        .update(updates)
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
         })
         .catch(error => {
           dispatch({ type: types.APP_STATUS, status: error.message })
           dispatch({ type: types.ADD_LIST, boardKey, listKey, list })
-          videos.forEach(video =>
-            dispatch({ type: types.EDIT_VIDEO, videoKey: video.key, newVideo: { ...video, deleted: null } })
-          )
+          videos.forEach(video => {
+            const videoKey = video.key
+            dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: { ...video, deleted: null } })
+          })
         })
     }
   }
