@@ -71,7 +71,7 @@ class ListEdit extends Component {
     const { isEditing, name, error } = this.state
 
     return !_.isEmpty(list) ? (
-      <div>
+      <div className="ListEdit">
         <input
           className="ListName borderless-input"
           type="text"
@@ -87,7 +87,11 @@ class ListEdit extends Component {
 
         {error && <small className="HelpBlock">{error}</small>}
       </div>
-    ) : <span role="img" aria-label="Inbox">📥</span>
+    ) : (
+      <div className="ListEdit">
+        <span role="img" aria-label="Inbox">📥</span>
+      </div>
+    )
   }
 }
 
