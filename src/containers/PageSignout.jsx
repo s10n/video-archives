@@ -12,7 +12,7 @@ const propTypes = {
   signoutUser: PropTypes.func.isRequired
 }
 
-class Signout extends Component {
+class PageSignout extends Component {
   componentWillMount() {
     this.props.authenticated && this.props.signoutUser()
   }
@@ -28,7 +28,7 @@ class Signout extends Component {
   }
 }
 
-Signout.propTypes = propTypes
+PageSignout.propTypes = propTypes
 
 function mapStateToProps({ auth }) {
   return { authenticated: auth.authenticated }
@@ -38,4 +38,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ signoutUser }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signout)
+export default connect(mapStateToProps, mapDispatchToProps)(PageSignout)
