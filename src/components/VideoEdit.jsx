@@ -14,6 +14,10 @@ const propTypes = {
   deleteVideo: PropTypes.func.isRequired
 }
 
+const defaultProps = {
+  board: {}
+}
+
 class VideoEdit extends Component {
   constructor(props) {
     super(props)
@@ -73,6 +77,7 @@ class VideoEdit extends Component {
 }
 
 VideoEdit.propTypes = propTypes
+VideoEdit.defaultProps = defaultProps
 
 function mapStateToProps({ boards }) {
   return { boards }

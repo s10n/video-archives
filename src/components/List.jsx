@@ -17,6 +17,10 @@ const propTypes = {
   canDrop: PropTypes.bool.isRequired
 }
 
+const defaultProps = {
+  list: {}
+}
+
 const listTarget = {
   canDrop(props, monitor) {
     const { list } = props
@@ -58,5 +62,6 @@ const List = ({ videos, board, list, connectDropTarget, isOver, canDrop }) => {
 }
 
 List.propTypes = propTypes
+List.defaultProps = defaultProps
 
 export default DropTarget(ItemTypes.VIDEO, listTarget, collect)(List)

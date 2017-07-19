@@ -20,6 +20,12 @@ const propTypes = {
   editVideo: PropTypes.func.isRequired
 }
 
+const defaultProps = {
+  board: {},
+  addingVideo: false,
+  appStatus: ''
+}
+
 const videoSource = {
   canDrag(props) {
     return !props.video.isSyncing && !props.appStatus
@@ -104,6 +110,7 @@ const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDrag
 }
 
 Video.propTypes = propTypes
+Video.defaultProps = defaultProps
 
 function mapStateToProps({ app }) {
   return { appStatus: app.status }

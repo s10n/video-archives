@@ -10,6 +10,14 @@ const propTypes = {
   children: PropTypes.node
 }
 
+const defaultProps = {
+  header: null,
+  footer: null,
+  variant: {},
+  canDrop: false,
+  children: null
+}
+
 const Card = ({ header, footer, variant, canDrop, children }) => {
   return (
     <article className={canDrop ? 'Card canDrop' : 'Card'}>
@@ -30,5 +38,6 @@ const Card = ({ header, footer, variant, canDrop, children }) => {
 }
 
 Card.propTypes = propTypes
+Card.defaultProps = defaultProps
 
 export default Card

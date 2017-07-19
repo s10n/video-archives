@@ -9,6 +9,12 @@ const propTypes = {
   children: PropTypes.node
 }
 
+const defaultProps = {
+  header: null,
+  title: '',
+  children: null
+}
+
 const Page = ({ page, header, title, children }) => {
   return (
     <article className={`Page Page${page}`}>
@@ -30,5 +36,6 @@ const Page = ({ page, header, title, children }) => {
 }
 
 Page.propTypes = propTypes
+Page.defaultProps = defaultProps
 
 export default Page

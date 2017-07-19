@@ -1,6 +1,18 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Field, reduxForm } from 'redux-form'
 import RenderField from './Field'
+
+const propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool,
+  errorMessage: PropTypes.string
+}
+
+const defaultProps = {
+  isSubmitting: false,
+  errorMessage: ''
+}
 
 const validate = values => {
   const errors = {}
@@ -52,6 +64,9 @@ const FormSignup = ({ handleSubmit, isSubmitting, errorMessage }) => {
     </form>
   )
 }
+
+FormSignup.propTypes = propTypes
+FormSignup.defaultProps = defaultProps
 
 const formConfig = { form: 'signup', validate }
 
