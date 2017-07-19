@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import { signoutUser } from '../actions/auth'
 import Page from '../components/Page'
 import Card from '../components/Card'
+
+const propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  signoutUser: PropTypes.func.isRequired
+}
 
 class Signout extends Component {
   componentWillMount() {
@@ -21,6 +27,8 @@ class Signout extends Component {
       : <Redirect to="/" />
   }
 }
+
+Signout.propTypes = propTypes
 
 function mapStateToProps({ auth }) {
   return { authenticated: auth.authenticated }
