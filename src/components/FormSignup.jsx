@@ -39,31 +39,28 @@ const validate = values => {
   return errors
 }
 
-const FormSignup = ({ handleSubmit, isSubmitting, errorMessage }) => {
-  return (
-    <form onSubmit={handleSubmit}>
-      <Field name="email" type="text" label="Email" component={RenderField} />
-      <Field name="password" type="password" label="Password" component={RenderField} />
-      <Field
-        name="passwordConfirm"
-        type="password"
-        label="Password Confirm"
-        component={RenderField}
-      />
+const FormSignup = ({ handleSubmit, isSubmitting, errorMessage }) =>
+  <form onSubmit={handleSubmit}>
+    <Field name="email" type="text" label="Email" component={RenderField} />
+    <Field name="password" type="password" label="Password" component={RenderField} />
+    <Field
+      name="passwordConfirm"
+      type="password"
+      label="Password Confirm"
+      component={RenderField}
+    />
 
-      <div>
-        <button action="submit" disabled={isSubmitting}>
-          Sign up
-        </button>
+    <div>
+      <button action="submit" disabled={isSubmitting}>
+        Sign up
+      </button>
 
-        {errorMessage &&
-          <span>
-            {errorMessage}
-          </span>}
-      </div>
-    </form>
-  )
-}
+      {errorMessage &&
+        <span>
+          {errorMessage}
+        </span>}
+    </div>
+  </form>
 
 FormSignup.propTypes = propTypes
 FormSignup.defaultProps = defaultProps
