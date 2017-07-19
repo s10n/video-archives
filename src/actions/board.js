@@ -12,7 +12,8 @@ export function fetchBoards() {
     if (user) {
       dispatch({ type: types.APP_STATUS, status: 'App is fetching boards' })
 
-      db.ref(`/boards/${user.uid}`)
+      db
+        .ref(`/boards/${user.uid}`)
         .once('value', snap => {
           dispatch({ type: types.FETCH_BOARDS, boards: snap.val() })
           dispatch({ type: types.APP_STATUS, status: null })
@@ -36,7 +37,9 @@ export function addBoard(board) {
     dispatch(push(board.slug))
 
     if (user) {
-      db.ref(`/boards/${user.uid}/${boardKey}`).set(board)
+      db
+        .ref(`/boards/${user.uid}/${boardKey}`)
+        .set(board)
         .then(() => {
           const syncedBoard = { ...board, isSyncing: false }
           dispatch({ type: types.EDIT_BOARD, boardKey: boardKey, newBoard: syncedBoard })
@@ -61,7 +64,10 @@ export function editBoard(oldBoard, newBoard) {
     dispatch(push(newBoard.slug))
 
     if (user) {
-      db.ref(`/boards/${user.uid}`).child(boardKey).update(newBoard)
+      db
+        .ref(`/boards/${user.uid}`)
+        .child(boardKey)
+        .update(newBoard)
         .then(() => {
           const syncedBoard = { ...newBoard, isSyncing: false }
           dispatch({ type: types.EDIT_BOARD, boardKey, newBoard: syncedBoard })
@@ -102,7 +108,9 @@ export function deleteBoard(board, videos) {
         updates[`/videos/${user.uid}/${video.key}/deleted`] = true
       })
 
-      db.ref().update(updates)
+      db
+        .ref()
+        .update(updates)
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
         })

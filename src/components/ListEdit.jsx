@@ -22,7 +22,7 @@ const propTypes = {
 const listSource = {
   canDrag(props) {
     const { list, appStatus } = props
-    return (list && !list.isSyncing && !appStatus)
+    return list && !list.isSyncing && !appStatus
   },
 
   beginDrag(props) {
@@ -37,7 +37,8 @@ const listSource = {
     const { trash } = dropResult
     const { deleteList, videos } = props
 
-    trash && (window.confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) &&
+    trash &&
+      window.confirm(`Delete ${list.name}?\nAll videos will be deleted.`) &&
       deleteList(props.board, list, videos)
   }
 }
@@ -104,28 +105,35 @@ class ListEdit extends Component {
     const { list, connectDragSource, isDragging } = this.props
     const { isEditing, name, error } = this.state
 
-    return !_.isEmpty(list) ? connectDragSource(
-      <div className="ListEdit" style={{ opacity: isDragging && .5 }}>
-        <input
-          className="ListName borderless-input"
-          type="text"
-          onFocus={this.handleNameClick}
-          onBlur={this.handleInputBlur}
-          onChange={event => this.handleInputChange(event.target.value)}
-          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
-          value={!isEditing ? list.name : name}
-          ref={input => this.listNameInput = input}
-        />
+    return !_.isEmpty(list)
+      ? connectDragSource(
+          <div className="ListEdit" style={{ opacity: isDragging && 0.5 }}>
+            <input
+              className="ListName borderless-input"
+              type="text"
+              onFocus={this.handleNameClick}
+              onBlur={this.handleInputBlur}
+              onChange={event => this.handleInputChange(event.target.value)}
+              onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
+              value={!isEditing ? list.name : name}
+              ref={input => (this.listNameInput = input)}
+            />
 
-        <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>🗑</button>
+            <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>
+              🗑
+            </button>
 
-        {error && <small className="HelpBlock">{error}</small>}
-      </div>
-    ) : (
-      <div className="ListEdit">
-        <span role="img" aria-label="Inbox">📥</span>
-      </div>
-    )
+            {error &&
+              <small className="HelpBlock">
+                {error}
+              </small>}
+          </div>
+        )
+      : <div className="ListEdit">
+          <span role="img" aria-label="Inbox">
+            📥
+          </span>
+        </div>
   }
 }
 

@@ -21,11 +21,10 @@ const Card = ({ header, footer, variant, canDrop, children }) => {
         {children}
       </main>
 
-      {footer && (
+      {footer &&
         <footer className="CardFooter">
           {footer}
-        </footer>
-      )}
+        </footer>}
     </article>
   )
 }

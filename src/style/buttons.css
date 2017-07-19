@@ -1,17 +1,17 @@
 .btn-link {
-	background-color: transparent;
-	border: 0;
-	color: gray;
-	cursor: pointer;
-	line-height: inherit;
-	outline: 0;
-	padding: 0;
+  background-color: transparent;
+  border: 0;
+  color: gray;
+  cursor: pointer;
+  line-height: inherit;
+  outline: 0;
+  padding: 0;
 }
 
 .btn-link:hover {
-	color: black;
+  color: black;
 }
 
 .btn-small {
-	font-size: 13px;
+  font-size: 13px;
 }

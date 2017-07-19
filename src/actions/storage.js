@@ -16,7 +16,9 @@ export function importStorage() {
 
       dispatch({ type: types.APP_STATUS, status: 'App is importing sample' })
 
-      db.ref().update(updates)
+      db
+        .ref()
+        .update(updates)
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
         })
@@ -42,7 +44,9 @@ export function emptyStorage() {
 
       dispatch({ type: types.APP_STATUS, status: 'App is emptying storage' })
 
-      db.ref().update(updates)
+      db
+        .ref()
+        .update(updates)
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
         })

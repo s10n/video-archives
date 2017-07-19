@@ -22,7 +22,7 @@ const propTypes = {
 
 const videoSource = {
   canDrag(props) {
-    return (!props.video.isSyncing && !props.appStatus)
+    return !props.video.isSyncing && !props.appStatus
   },
 
   beginDrag(props) {
@@ -62,21 +62,31 @@ const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDrag
 
     return (
       <h3 className="VideoTitle">
-        <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          {title}
+        </a>
       </h3>
     )
   }
 
   const ChannelTitle = () => {
     const channelUrl = `https://www.youtube.com/channel/${channelId}`
-    return <a href={channelUrl} target="_blank" rel="noopener noreferrer">{channelTitle}</a>
+    return (
+      <a href={channelUrl} target="_blank" rel="noopener noreferrer">
+        {channelTitle}
+      </a>
+    )
   }
 
   const PublishedDate = () => {
     const publishedAt = new Date(video.data.snippet.publishedAt)
     const dateTime = moment(publishedAt).format('YYYY-MM-DD')
     const year = moment(publishedAt).format('YYYY')
-    return <time dateTime={dateTime} title={dateTime}>{year}</time>
+    return (
+      <time dateTime={dateTime} title={dateTime}>
+        {year}
+      </time>
+    )
   }
 
   return (

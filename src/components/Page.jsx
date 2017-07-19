@@ -13,11 +13,17 @@ const Page = ({ page, header, title, children }) => {
   return (
     <article className={`Page Page${page}`}>
       <header className="PageHeader">
-        {title ? <h1 className="PageTitle">{title}</h1> : header}
+        {title
+          ? <h1 className="PageTitle">
+              {title}
+            </h1>
+          : header}
       </header>
 
       <main className="PageContent">
-        <div className="PageContentInner">{children}</div>
+        <div className="PageContentInner">
+          {children}
+        </div>
       </main>
     </article>
   )

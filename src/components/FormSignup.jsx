@@ -32,11 +32,22 @@ const FormSignup = ({ handleSubmit, isSubmitting, errorMessage }) => {
     <form onSubmit={handleSubmit}>
       <Field name="email" type="text" label="Email" component={RenderField} />
       <Field name="password" type="password" label="Password" component={RenderField} />
-      <Field name="passwordConfirm" type="password" label="Password Confirm" component={RenderField} />
+      <Field
+        name="passwordConfirm"
+        type="password"
+        label="Password Confirm"
+        component={RenderField}
+      />
 
       <div>
-        <button action="submit" disabled={isSubmitting}>Sign up</button>
-        {errorMessage && <span>{errorMessage}</span>}
+        <button action="submit" disabled={isSubmitting}>
+          Sign up
+        </button>
+
+        {errorMessage &&
+          <span>
+            {errorMessage}
+          </span>}
       </div>
     </form>
   )

@@ -82,13 +82,19 @@ class BoardEdit extends Component {
           onFocus={!board.isSyncing && this.handleTitleClick}
           onBlur={this.handleInputBlur}
           onChange={event => this.handleInputChange(event.target.value)}
-          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
+          onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
           value={!isEditing ? board.title : title}
-          ref={input => this.boardTitleInput = input}
+          ref={input => (this.boardTitleInput = input)}
         />
 
-        <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>🗑</button>
-        {error && <small>{error}</small>}
+        <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>
+          🗑
+        </button>
+
+        {error &&
+          <small>
+            {error}
+          </small>}
       </div>
     )
   }

@@ -1,17 +1,17 @@
 .ListName {
-	display: inline-block;
-	max-width: 140px;
+  display: inline-block;
+  max-width: 140px;
 }
 
 .ListEdit {
-	padding: 10px 15px;
+  padding: 10px 15px;
 }
 
 .ListEdit .BtnTrash {
-	display: none;
-	margin-left: 10px;
+  display: none;
+  margin-left: 10px;
 }
 
 .ListEdit:hover .BtnTrash {
-	display: inline-block;
+  display: inline-block;
 }

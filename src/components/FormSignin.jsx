@@ -23,8 +23,14 @@ const FormSignin = ({ handleSubmit, isSubmitting, errorMessage }) => {
       <Field name="password" type="password" label="Password" component={RenderField} />
 
       <div>
-        <button action="submit" disabled={isSubmitting}>Sign in</button>
-        {errorMessage && <span>{errorMessage}</span>}
+        <button action="submit" disabled={isSubmitting}>
+          Sign in
+        </button>
+
+        {errorMessage &&
+          <span>
+            {errorMessage}
+          </span>}
       </div>
     </form>
   )
