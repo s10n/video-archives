@@ -1,7 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
 import { appConfig } from '../config/config'
 import './AppHeader.css'
@@ -9,6 +9,10 @@ import './AppHeader.css'
 const propTypes = {
   status: PropTypes.string,
   authenticated: PropTypes.bool.isRequired
+}
+
+const defaultProps = {
+  status: ''
 }
 
 const AppHeader = ({ status, authenticated }) => {
@@ -54,6 +58,7 @@ const AppHeader = ({ status, authenticated }) => {
 }
 
 AppHeader.propTypes = propTypes
+AppHeader.defaultProps = defaultProps
 
 function mapStateToProps({ app, auth }) {
   return { status: app.status, authenticated: auth.authenticated }

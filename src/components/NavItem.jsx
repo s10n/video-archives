@@ -6,11 +6,16 @@ import './NavItem.css'
 
 const propTypes = {
   board: PropTypes.object,
-  count: PropTypes.number,
+  count: PropTypes.number.isRequired,
   trash: PropTypes.bool,
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired
+}
+
+const defaultProps = {
+  board: {},
+  trash: false
 }
 
 const boardTarget = {
@@ -33,8 +38,8 @@ const collect = (connect, monitor) => {
   }
 }
 
-const NavItem = ({ board, count, trash, connectDropTarget, isOver, canDrop }) => {
-  return connectDropTarget(
+const NavItem = ({ board, count, trash, connectDropTarget, isOver, canDrop }) =>
+  connectDropTarget(
     <div className={isOver && canDrop ? 'NavItem canDrop' : 'NavItem'}>
       {!trash
         ? <span>
@@ -47,8 +52,8 @@ const NavItem = ({ board, count, trash, connectDropTarget, isOver, canDrop }) =>
       </span>
     </div>
   )
-}
 
 NavItem.propTypes = propTypes
+NavItem.defaultProps = defaultProps
 
 export default DropTarget([ItemTypes.VIDEO, ItemTypes.LIST], boardTarget, collect)(NavItem)

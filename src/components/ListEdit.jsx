@@ -10,13 +10,17 @@ import './ListEdit.css'
 
 const propTypes = {
   board: PropTypes.object.isRequired,
-  list: PropTypes.object,
+  list: PropTypes.object.isRequired,
   videos: PropTypes.array.isRequired,
   appStatus: PropTypes.string,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
   editList: PropTypes.func.isRequired,
   deleteList: PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  appStatus: ''
 }
 
 const listSource = {
@@ -138,6 +142,7 @@ class ListEdit extends Component {
 }
 
 ListEdit.propTypes = propTypes
+ListEdit.defaultProps = defaultProps
 
 function mapStateToProps({ app }) {
   return { appStatus: app.status }
