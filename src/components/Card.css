@@ -8,51 +8,49 @@
 }
 
 .Card + .Card {
-  margin-top: 10px;
+  margin-top: .75rem;
 }
 
 .CardHeader {
   flex: 0 0 auto;
-  padding: 10px 15px;
+  padding: .5rem 1rem;
 }
 
 .CardScroll {
   flex: 1 1 auto;
   overflow-x: hidden;
   overflow-y: auto;
-  margin: 0 5px;
-  padding: 0 10px;
+  margin: 0 .5rem;
+  padding: 0 .5rem;
 }
 
 .CardScroll:first-child:not(:empty) {
-  margin-top: 15px;
+  margin-top: 1rem;
 }
 
 .CardScroll:last-child:not(:empty) {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .CardScroll:not(:empty) + .CardFooter {
-  margin-top: 10px;
+  margin-top: .5rem;
 }
 
 .CardScroll::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+  width: .375rem;
 }
 
 .CardScroll::-webkit-scrollbar-button {
   display: block;
-  height: 0px;
-  width: 0px;
+  height: 0;
 }
 
 .CardScroll::-webkit-scrollbar-thumb {
   background-color: hsl(0, 0%, 85%);
-  border-radius: 5px;
+  border-radius: calc(.375rem / 2);
 }
 
 .CardScroll::-webkit-scrollbar-track-piece {
   background-color: hsla(0, 0%, 0%, .07);
-  border-radius: 3px;
+  border-radius: calc(.375rem / 2);
 }

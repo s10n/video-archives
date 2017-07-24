@@ -28,7 +28,7 @@ body {
 
 .AppSidebar {
   flex: none;
-  width: 200px;
+  width: 12rem;
 }
 
 .AppMain {

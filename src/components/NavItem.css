@@ -2,8 +2,8 @@
 .BoardAdd input {
   color: black;
   display: flex;
-  line-height: 20px;
-  padding: 10px 24px;
+  line-height: 1.5rem;
+  padding: .5rem 1.5rem;
   width: 100%;
 }
 
@@ -19,7 +19,7 @@
 .NavItem .count {
   color: gray;
   flex: none;
-  font-size: 11px;
+  font-size: 0.625rem;
 }
 
 .active .NavItem,
