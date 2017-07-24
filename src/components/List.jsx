@@ -42,7 +42,8 @@ const collect = (connect, monitor) => {
 }
 
 const List = ({ videos, board, list, connectDropTarget, isOver, canDrop }) => {
-  const videosSorted = _.sortBy(videos, 'data.snippet.publishedAt').reverse()
+  const videosFiltered = _.filter(videos, video => !video.deleted)
+  const videosSorted = _.sortBy(videosFiltered, 'data.snippet.publishedAt').reverse()
   const header = <ListEdit board={board} list={list} videos={videos} />
   const footer = !_.isEmpty(list) && !list.isSyncing ? <VideoAdd board={board} list={list} /> : null
 
@@ -51,9 +52,8 @@ const List = ({ videos, board, list, connectDropTarget, isOver, canDrop }) => {
       <Card header={header} footer={footer} variant={{ padding: 0 }} canDrop={isOver && canDrop}>
         {!_.isEmpty(videosSorted) &&
           <div style={{ maxHeight: isIE() && window.innerHeight - 480 }}>
-            {videosSorted.map(
-              video =>
-                !video.deleted && <Video video={video} board={board} list={list} key={video.key} />
+            {videosSorted.map(video =>
+              <Video video={video} board={board} list={list} key={video.key} />
             )}
           </div>}
       </Card>
