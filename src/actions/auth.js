@@ -7,7 +7,8 @@ import { emptyStorage } from './storage'
 
 export function signupUser({ email, password }) {
   return dispatch => {
-    auth().createUserWithEmailAndPassword(email, password)
+    auth()
+      .createUserWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
         dispatch(push('/'))
@@ -20,7 +21,8 @@ export function signupUser({ email, password }) {
 
 export function signinUser({ email, password }) {
   return dispatch => {
-    auth().signInWithEmailAndPassword(email, password)
+    auth()
+      .signInWithEmailAndPassword(email, password)
       .then(response => {
         dispatch({ type: types.AUTH_USER })
         dispatch(push('/'))
@@ -35,7 +37,8 @@ export function signinUser({ email, password }) {
 
 export function signoutUser() {
   return dispatch => {
-    auth().signOut()
+    auth()
+      .signOut()
       .then(response => {
         dispatch({ type: types.UNAUTH_USER })
         dispatch(emptyStorage())

@@ -1,37 +1,35 @@
 .PageBoard .PageContentInner {
-	overflow-x: auto;
-	margin-bottom: 15px;
-	padding-left: calc(24px - 10px);
-	padding-right: calc(24px - 10px);
-	padding-bottom: 15px;
-	white-space: nowrap;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  padding-left: calc(1.5rem - .5rem);
+  padding-right: calc(1.5rem - .5rem);
+  padding-bottom: 1rem;
+  white-space: nowrap;
 }
 
 .PageBoard .PageContentInner::-webkit-scrollbar {
-	height: 10px;
-	width:  10px;
+  height: .5rem;
 }
 
 .PageBoard .PageContentInner::-webkit-scrollbar-button {
-	display: block;
-	height: 12px;
-	width:  12px;
+  display: block;
+  width: calc(1.5rem / 2);
 }
 
 .PageBoard .PageContentInner::-webkit-scrollbar-thumb {
-	background-color: silver;
-	border-radius: 5px;
+  background-color: silver;
+  border-radius: calc(.5rem / 2);
 }
 
 .PageBoard .PageContentInner::-webkit-scrollbar-track-piece {
-	background-color: hsla(0, 0%, 0%, .1);
-	border-radius: 5px;
+  background-color: hsla(0, 0%, 0%, .1);
+  border-radius: calc(.5rem / 2);
 }
 
 .ListContainer {
-	display: inline-block;
-	height: 100%;
-	margin: 0 10px;
-	vertical-align: top;
-	width: calc(160px + 30px + 6px);
+  display: inline-block;
+  height: 100%;
+  margin: 0 .5rem;
+  vertical-align: top;
+  width: calc(10rem + 2rem + .375rem);
 }

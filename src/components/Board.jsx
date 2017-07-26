@@ -12,7 +12,7 @@ import NotFound from './NotFound'
 const propTypes = {
   boards: PropTypes.object.isRequired,
   board: PropTypes.object.isRequired,
-  videos: PropTypes.array.isRequired,
+  videos: PropTypes.array.isRequired
 }
 
 const Board = ({ boards, board, videos }) => {
@@ -53,21 +53,16 @@ const Board = ({ boards, board, videos }) => {
     )
   }
 
-  return !_.isEmpty(board) ? (
-    <Page page="Board" header={<BoardEdit boards={boards} board={board} videos={videos} />}>
-      {!_.isEmpty(videosInbox) &&
-        <ListInbox />
-      }
+  return !_.isEmpty(board)
+    ? <Page page="Board" header={<BoardEdit boards={boards} board={board} videos={videos} />}>
+        {!_.isEmpty(videosInbox) && <ListInbox />}
 
-      {!_.isEmpty(listsSorted) && listsSorted.map(list =>
-        <ListWrapper list={list} key={list.key} />
-      )}
+        {!_.isEmpty(listsSorted) &&
+          listsSorted.map(list => <ListWrapper list={list} key={list.key} />)}
 
-      {!board.isSyncing &&
-        <ListAddContainer />
-      }
-    </Page>
-  ) : <NotFound />
+        {!board.isSyncing && <ListAddContainer />}
+      </Page>
+    : <NotFound />
 }
 
 Board.propTypes = propTypes

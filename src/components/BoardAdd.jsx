@@ -54,16 +54,17 @@ class BoardAdd extends Component {
           className="borderless-input"
           type="text"
           onChange={event => this.handleInputChange(event.target.value)}
-          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
+          onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
           value={title}
           placeholder="Create new board..."
         />
 
         {title.length > 0 &&
           <p className="HelpBlock">
-            <small>{error || errorMessages.board.valid}</small>
-          </p>
-        }
+            <small>
+              {error || errorMessages.board.valid}
+            </small>
+          </p>}
       </section>
     )
   }

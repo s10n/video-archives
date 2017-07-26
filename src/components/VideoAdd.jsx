@@ -23,7 +23,7 @@ const getVideoID = videoURI => {
     return { id: null, error: null }
   } else {
     let params = getParams(videoURI)
-    return (params.hasOwnProperty('v') && params.v.length === youtubeAPI.idLength)
+    return params.hasOwnProperty('v') && params.v.length === youtubeAPI.idLength
       ? { id: params.v, error: null }
       : { id: null, error: 'invalid' }
   }
@@ -66,9 +66,10 @@ class VideoAdd extends Component {
       this.setState({ error: 'fetching' })
       axios.get(youtubeAPI.url, { params }).then(({ data }) => {
         const { items } = data
-        this.setState(items.length ?
-          { error: 'success', video: { ...video, data: items[0] } } :
-          { error: 'noResults' }
+        this.setState(
+          items.length
+            ? { error: 'success', video: { ...video, data: items[0] } }
+            : { error: 'noResults' }
         )
       })
     }
@@ -91,7 +92,7 @@ class VideoAdd extends Component {
     const FetchResult = () => {
       const { boards } = this.props
       const { video, error, existVideo } = this.state
-      const className = `HelpBlock ${(error === 'success') ? 'success strong' : 'error'}`
+      const className = `HelpBlock ${error === 'success' ? 'success strong' : 'error'}`
       let additionalMessage = ''
 
       if (error === 'exists') {
@@ -103,14 +104,16 @@ class VideoAdd extends Component {
           : `: Trash`
       }
 
-      return error ? (
-        <section className="FetchResult">
-          <p className={className}>
-            <small>{errorMessages.video[error] + additionalMessage}</small>
-          </p>
-          {(error === 'success') && <Video video={video} addingVideo />}
-        </section>
-      ) : null
+      return error
+        ? <section className="FetchResult">
+            <p className={className}>
+              <small>
+                {errorMessages.video[error] + additionalMessage}
+              </small>
+            </p>
+            {error === 'success' && <Video video={video} addingVideo />}
+          </section>
+        : null
     }
 
     return (
@@ -121,7 +124,7 @@ class VideoAdd extends Component {
           className="borderless-input"
           type="text"
           onChange={event => this.handleInputChange(event.target.value)}
-          onKeyPress={event => (event.key === 'Enter') && this.handlePressEnter()}
+          onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
           value={this.state.videoURI}
           placeholder="Add a video..."
         />

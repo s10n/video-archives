@@ -1,24 +1,24 @@
 .VideoAdd {
-	flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .VideoAdd input {
-	line-height: 20px;
-	padding: 10px 15px;
-	width: 100%;
+  line-height: 1.5rem;
+  padding: .5rem 1rem;
+  width: 100%;
 }
 
 .VideoAdd input:hover {
-	background-color: hsl(0, 0%, 95%);
+  background-color: hsl(0, 0%, 95%);
 }
 
 .FetchResult {
-	background-color: hsl(0, 0%, 95%);
-	border-top:    1px solid hsl(0, 0%, 90%);
-	border-bottom: 1px solid hsl(0, 0%, 90%);
-	padding: 10px 15px;
+  background-color: hsl(0, 0%, 95%);
+  border-top: 1px solid hsl(0, 0%, 90%);
+  border-bottom: 1px solid hsl(0, 0%, 90%);
+  padding: .5rem 1rem;
 }
 
 .HelpBlock.error {
-	color: gray;
+  color: gray;
 }

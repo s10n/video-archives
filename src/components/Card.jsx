@@ -10,26 +10,31 @@ const propTypes = {
   children: PropTypes.node
 }
 
-const Card = ({ header, footer, variant, canDrop, children }) => {
-  return (
-    <article className={canDrop ? 'Card canDrop' : 'Card'}>
-      <header className="CardHeader" style={variant}>
-        {header}
-      </header>
-
-      <main className="CardScroll">
-        {children}
-      </main>
-
-      {footer && (
-        <footer className="CardFooter">
-          {footer}
-        </footer>
-      )}
-    </article>
-  )
+const defaultProps = {
+  header: null,
+  footer: null,
+  variant: {},
+  canDrop: false,
+  children: null
 }
 
+const Card = ({ header, footer, variant, canDrop, children }) =>
+  <article className={canDrop ? 'Card canDrop' : 'Card'}>
+    <header className="CardHeader" style={variant}>
+      {header}
+    </header>
+
+    <main className="CardScroll">
+      {children}
+    </main>
+
+    {footer &&
+      <footer className="CardFooter">
+        {footer}
+      </footer>}
+  </article>
+
 Card.propTypes = propTypes
+Card.defaultProps = defaultProps
 
 export default Card

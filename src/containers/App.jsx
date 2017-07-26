@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import createHistory from 'history/createHashHistory'
+import createHistory from 'history/createBrowserHistory'
 import { ConnectedRouter } from 'react-router-redux'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -69,9 +69,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
 }
 
-const enhance = _.flow(
-  DragDropContext(HTML5Backend),
-  connect(mapStateToProps, mapDispatchToProps)
-)
+const enhance = _.flow(DragDropContext(HTML5Backend), connect(mapStateToProps, mapDispatchToProps))
 
 export default enhance(App)

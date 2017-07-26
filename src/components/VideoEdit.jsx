@@ -11,7 +11,11 @@ const propTypes = {
   board: PropTypes.object,
   boards: PropTypes.object.isRequired,
   editVideo: PropTypes.func.isRequired,
-  deleteVideo: PropTypes.func.isRequired,
+  deleteVideo: PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  board: {}
 }
 
 class VideoEdit extends Component {
@@ -54,21 +58,26 @@ class VideoEdit extends Component {
     let locationString = video.board ? `to ${boards[video.board].title}` : ''
     locationString += video.list ? ` - ${boards[video.board].lists[video.list].name}` : ''
 
-    return !video.deleted ? (
-      <span className="VideoEdit" style={{ opacity }}>
-        <button className="btn-link" onClick={this.handleTrashClick}>🗑</button>
-      </span>
-    ) : (
-      <section className="VideoEdit" style={{ opacity }}>
-        <button className="btn-link" onClick={this.handleRecoverClick}>Recover {locationString}</button>
-        &middot;
-        <button className="btn-link" onClick={this.handleDeleteClick}>Delete</button>
-      </section>
-    )
+    return !video.deleted
+      ? <span className="VideoEdit" style={{ opacity }}>
+          <button className="btn-link" onClick={this.handleTrashClick}>
+            🗑
+          </button>
+        </span>
+      : <section className="VideoEdit" style={{ opacity }}>
+          <button className="btn-link" onClick={this.handleRecoverClick}>
+            Recover {locationString}
+          </button>
+          &middot;
+          <button className="btn-link" onClick={this.handleDeleteClick}>
+            Delete
+          </button>
+        </section>
   }
 }
 
 VideoEdit.propTypes = propTypes
+VideoEdit.defaultProps = defaultProps
 
 function mapStateToProps({ boards }) {
   return { boards }

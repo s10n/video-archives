@@ -17,22 +17,23 @@ const AppSidebar = ({ boards, videos, trash }) => {
 
   return (
     <nav className="AppSidebar">
-      {boardsSorted.map(board => {
-        const count = _.filter(videos, video => video.board === board.key && !video.deleted).length
-        return (
-          <NavLink to={'/' + board.slug} key={board.key}>
-            <NavItem board={board} count={count} />
-          </NavLink>
-        )
-      })}
+      <div className="AppSidebarInner">
+        {boardsSorted.map(board => {
+          const count = _.filter(videos, v => v.board === board.key && !v.deleted).length
+          return (
+            <NavLink to={'/' + board.slug} key={board.key}>
+              <NavItem board={board} count={count} />
+            </NavLink>
+          )
+        })}
 
-      {(trash > 0) && (
-        <NavLink to="/trash">
-          <NavItem trash count={trash} />
-        </NavLink>
-      )}
+        {trash > 0 &&
+          <NavLink to="/trash">
+            <NavItem trash count={trash} />
+          </NavLink>}
 
-      <BoardAdd boards={boards} />
+        <BoardAdd boards={boards} />
+      </div>
     </nav>
   )
 }

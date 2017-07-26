@@ -1,39 +1,36 @@
 .AppHeader {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	align-items: center;
-	justify-content: space-between;
-	border-bottom: 1px solid hsl(0, 0%, 90%);
-	height: 51px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid hsl(0, 0%, 90%);
+  overflow: hidden;
 }
 
 .AppTitle a,
 .AppNav a,
 .AppNav span {
-	display: inline-block;
-	line-height: 30px;
-	padding: 10px 24px;
+  display: block;
+  line-height: 1.875rem;
+  padding: .625rem 1.5rem;
 }
 
 .AppTitle a {
-	color: black;
+  color: black;
 }
 
 .AppTitle small {
-	color: silver;
+  color: silver;
+  vertical-align: bottom;
 }
 
 .AppNav {
-	display: flex;
-	flex-direction: row;
+  display: flex;
 }
 
 .AppNav a,
 .AppNav span {
-	color: hsl(0, 0%, 50%);
+  color: hsl(0, 0%, 50%);
 }
 
 .AppNav a:hover {
-	color: black;
+  color: black;
 }

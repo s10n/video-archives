@@ -1,38 +1,32 @@
 .NavItem,
 .BoardAdd input {
-	color: black;
-	display: flex;
-	line-height: 20px;
-	padding: 10px 24px;
-	width: 100%;
+  color: black;
+  display: flex;
+  line-height: 1.5rem;
+  padding: .5rem 1.5rem;
+  width: 100%;
 }
 
 .NavItem:hover,
 .BoardAdd input:hover {
-	background-color: hsl(0, 0%, 95%);
+  background-color: hsl(0, 0%, 95%);
 }
 
 .NavItem span {
-	flex: 1;
+  flex: 1;
 }
 
 .NavItem .count {
-	color: gray;
-	flex: none;
-	font-size: 11px;
+  color: gray;
+  flex: none;
+  font-size: 0.625rem;
+  margin-left: .25rem;
 }
 
 .active .NavItem,
 .active:hover .NavItem,
 .active .count,
 .active:hover .count {
-	background-color: hsl(358, 79%, 45%);
-	color: white;
-}
-
-@media (max-width: 480px) {
-	.NavItem {
-		display: inline-block;
-		width: auto;
-	}
+  background-color: hsl(358, 79%, 45%);
+  color: white;
 }

@@ -1,7 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
 import { appConfig } from '../config/config'
 import './AppHeader.css'
@@ -11,14 +11,21 @@ const propTypes = {
   authenticated: PropTypes.bool.isRequired
 }
 
+const defaultProps = {
+  status: ''
+}
+
 const AppHeader = ({ status, authenticated }) => {
   const AppNavNotAuthenticated = () => {
-    return appConfig.signupAllowed ? (
-      <nav className="AppNav">
-        <NavLink to="/signup">Sign up</NavLink>
-        <NavLink to="/signin">Sign in</NavLink>
-      </nav>
-    ) : null
+    return appConfig.signupAllowed
+      ? <nav className="AppNav">
+          <NavLink to="/signup" className="hidden-mobile">
+            Sign up
+          </NavLink>
+
+          <NavLink to="/signin">Sign in</NavLink>
+        </nav>
+      : null
   }
 
   const AppNavAuthenticated = () => {
@@ -26,8 +33,16 @@ const AppHeader = ({ status, authenticated }) => {
 
     return (
       <nav className="AppNav">
-        {status && <span>{status}</span>}
-        {user && <span>{user.email}</span>}
+        {status &&
+          <span className="hidden-mobile">
+            {status}
+          </span>}
+
+        {user &&
+          <span className="hidden-mobile">
+            {user.email}
+          </span>}
+
         <NavLink to="/signout">Sign out</NavLink>
       </nav>
     )
@@ -36,7 +51,9 @@ const AppHeader = ({ status, authenticated }) => {
   return (
     <header className="AppHeader">
       <h1 className="AppTitle">
-        <NavLink to="/">Video Archives <small>alpha</small></NavLink>
+        <NavLink to="/">
+          Video Archives <small className="hidden-mobile">alpha</small>
+        </NavLink>
       </h1>
 
       {authenticated ? <AppNavAuthenticated /> : <AppNavNotAuthenticated />}
@@ -45,6 +62,7 @@ const AppHeader = ({ status, authenticated }) => {
 }
 
 AppHeader.propTypes = propTypes
+AppHeader.defaultProps = defaultProps
 
 function mapStateToProps({ app, auth }) {
   return { status: app.status, authenticated: auth.authenticated }
