@@ -2,8 +2,8 @@
 .BoardAdd input {
   color: black;
   display: flex;
-  line-height: 20px;
-  padding: 10px 24px;
+  line-height: 1.5rem;
+  padding: .5rem 1.5rem;
   width: 100%;
 }
 
@@ -19,7 +19,8 @@
 .NavItem .count {
   color: gray;
   flex: none;
-  font-size: 11px;
+  font-size: 0.625rem;
+  margin-left: .25rem;
 }
 
 .active .NavItem,
@@ -28,11 +29,4 @@
 .active:hover .count {
   background-color: hsl(358, 79%, 45%);
   color: white;
-}
-
-@media (max-width: 480px) {
-  .NavItem {
-    display: inline-block;
-    width: auto;
-  }
 }
