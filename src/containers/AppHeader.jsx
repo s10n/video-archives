@@ -19,7 +19,10 @@ const AppHeader = ({ status, authenticated }) => {
   const AppNavNotAuthenticated = () => {
     return appConfig.signupAllowed
       ? <nav className="AppNav">
-          <NavLink to="/signup">Sign up</NavLink>
+          <NavLink to="/signup" className="hidden-mobile">
+            Sign up
+          </NavLink>
+
           <NavLink to="/signin">Sign in</NavLink>
         </nav>
       : null
@@ -31,14 +34,15 @@ const AppHeader = ({ status, authenticated }) => {
     return (
       <nav className="AppNav">
         {status &&
-          <span>
+          <span className="hidden-mobile">
             {status}
           </span>}
 
         {user &&
-          <span>
+          <span className="hidden-mobile">
             {user.email}
           </span>}
+
         <NavLink to="/signout">Sign out</NavLink>
       </nav>
     )
@@ -48,7 +52,7 @@ const AppHeader = ({ status, authenticated }) => {
     <header className="AppHeader">
       <h1 className="AppTitle">
         <NavLink to="/">
-          Video Archives <small>alpha</small>
+          Video Archives <small className="hidden-mobile">alpha</small>
         </NavLink>
       </h1>
 
