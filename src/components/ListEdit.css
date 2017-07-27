@@ -13,6 +13,7 @@
 
 .ListEdit .BtnTrash {
   display: none;
+  line-height: 1;
   margin-left: .5rem;
   width: 1rem;
 }
