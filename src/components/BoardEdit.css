@@ -4,9 +4,10 @@
 
 .BoardEdit .BtnTrash {
   display: none;
+  line-height: 1;
+  margin-left: .5rem;
 }
 
 .BoardEdit:hover .BtnTrash {
   display: inline-block;
-  margin-left: .5rem;
 }
