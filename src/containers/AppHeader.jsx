@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import * as firebase from 'firebase'
-import { appConfig } from '../config/config'
+import appConfig from '../config/app'
 import './AppHeader.css'
 
 const propTypes = {

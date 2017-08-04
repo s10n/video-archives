@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import { firebaseConfig, youtubeAPIKey } from './config'
+import firebaseConfig from './firebase'
 
 firebase.initializeApp(firebaseConfig)
 
@@ -13,7 +13,7 @@ export const youtubeAPI = {
   url: 'https://www.googleapis.com/youtube/v3/videos',
   idLength: 11,
   params: {
-    key: youtubeAPIKey,
+    key: firebaseConfig.apiKey,
     part: 'snippet,contentDetails',
     fields: `items(id,snippet(${snippetFields}),contentDetails(${contentDetailsFields}))`
   }
