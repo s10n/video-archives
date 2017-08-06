@@ -103,7 +103,7 @@ class BoardEdit extends Component {
 
 BoardEdit.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ editBoard, deleteBoard }, dispatch)
 }
 

@@ -105,11 +105,11 @@ const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDrag
 Video.propTypes = propTypes
 Video.defaultProps = defaultProps
 
-function mapStateToProps({ app }) {
+const mapStateToProps = ({ app }) => {
   return { appStatus: app.status }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ editVideo }, dispatch)
 }
 

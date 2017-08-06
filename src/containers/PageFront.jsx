@@ -140,7 +140,7 @@ class PageFront extends Component {
 
 PageFront.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ importStorage, emptyStorage }, dispatch)
 }
 

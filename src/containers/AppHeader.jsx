@@ -64,7 +64,7 @@ const AppHeader = ({ status, authenticated }) => {
 AppHeader.propTypes = propTypes
 AppHeader.defaultProps = defaultProps
 
-function mapStateToProps({ app, auth }) {
+const mapStateToProps = ({ app, auth }) => {
   return { status: app.status, authenticated: auth.authenticated }
 }
 

@@ -73,7 +73,7 @@ class BoardAdd extends Component {
 
 BoardAdd.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addBoard }, dispatch)
 }
 

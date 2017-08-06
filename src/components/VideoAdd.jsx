@@ -137,11 +137,11 @@ class VideoAdd extends Component {
 
 VideoAdd.propTypes = propTypes
 
-function mapStateToProps({ boards, videos }) {
+const mapStateToProps = ({ boards, videos }) => {
   return { boards, videos }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addVideo }, dispatch)
 }
 

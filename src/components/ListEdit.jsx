@@ -145,11 +145,11 @@ class ListEdit extends Component {
 ListEdit.propTypes = propTypes
 ListEdit.defaultProps = defaultProps
 
-function mapStateToProps({ app }) {
+const mapStateToProps = ({ app }) => {
   return { appStatus: app.status }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ editList, deleteList }, dispatch)
 }
 

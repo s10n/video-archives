@@ -79,11 +79,11 @@ class VideoEdit extends Component {
 VideoEdit.propTypes = propTypes
 VideoEdit.defaultProps = defaultProps
 
-function mapStateToProps({ boards }) {
+const mapStateToProps = ({ boards }) => {
   return { boards }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ editVideo, deleteVideo }, dispatch)
 }
 

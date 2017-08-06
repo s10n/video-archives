@@ -52,7 +52,7 @@ const Board = ({ boards, board, videos }) => {
 
 Board.propTypes = propTypes
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const { boards } = state
   const board = _.find(boards, ['slug', ownProps.match.params.boardSlug]) || {}
   const videos = _.filter(state.videos, ['board', board.key])

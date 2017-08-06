@@ -71,7 +71,7 @@ class ListAdd extends Component {
 
 ListAdd.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addList }, dispatch)
 }
 
