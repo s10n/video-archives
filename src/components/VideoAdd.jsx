@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { errorMessages } from '../constants/app'
 import { youtube as youtubeAPI } from '../constants/api'
-import { getParams } from '../constants/utils'
+import { getParam } from '../constants/utils'
 import './VideoAdd.css'
 import Video from './Video'
 
@@ -22,10 +22,8 @@ const getVideoID = videoURI => {
   } else if (!videoURI.length) {
     return { id: null, error: null }
   } else {
-    let params = getParams(videoURI)
-    return params.hasOwnProperty('v') && params.v.length === youtubeAPI.idLength
-      ? { id: params.v, error: null }
-      : { id: null, error: 'invalid' }
+    let id = getParam(videoURI)
+    return { id, error: id && id.length === youtubeAPI.idLength ? null : 'invalid' }
   }
 }
 

@@ -35,13 +35,12 @@ export const isIE = () => {
   return ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0
 }
 
-export const getParams = uri => {
-  let hashes = uri.slice(uri.indexOf('?') + 1).split('&')
-  let params = {}
-  hashes.map(hash => {
-    let [key, value] = hash.split('=')
-    params[key] = decodeURIComponent(value)
+export const getParam = uri => {
+  try {
+    const url = new URL(uri)
+    const searchParams = new URLSearchParams(url.search)
+    return searchParams.get('v')
+  } catch (error) {
     return null
-  })
-  return params
+  }
 }
