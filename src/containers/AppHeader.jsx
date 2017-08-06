@@ -16,19 +16,19 @@ const defaultProps = {
 }
 
 const AppHeader = ({ status, authenticated }) => {
-  const AppNavNotAuthenticated = () => {
-    return appConfig.signupAllowed
-      ? <nav className="AppNav">
-          <NavLink to="/signup" className="hidden-mobile">
-            Sign up
-          </NavLink>
+  const appNav = authenticated => {
+    if (!authenticated) {
+      return appConfig.signupAllowed
+        ? <nav className="AppNav">
+            <NavLink to="/signup" className="hidden-mobile">
+              Sign up
+            </NavLink>
 
-          <NavLink to="/signin">Sign in</NavLink>
-        </nav>
-      : null
-  }
+            <NavLink to="/signin">Sign in</NavLink>
+          </nav>
+        : null
+    }
 
-  const AppNavAuthenticated = () => {
     const user = firebase.auth().currentUser
 
     return (
@@ -56,7 +56,7 @@ const AppHeader = ({ status, authenticated }) => {
         </NavLink>
       </h1>
 
-      {authenticated ? <AppNavAuthenticated /> : <AppNavNotAuthenticated />}
+      {appNav(authenticated)}
     </header>
   )
 }

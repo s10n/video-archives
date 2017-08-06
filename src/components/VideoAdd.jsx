@@ -90,37 +90,37 @@ class VideoAdd extends Component {
     }
   }
 
-  render() {
-    const FetchResult = () => {
-      const { boards } = this.props
-      const { video, error, existVideo } = this.state
-      const className = `HelpBlock ${error === 'success' ? 'success strong' : 'error'}`
-      let additionalMessage = ''
+  renderFetchResult() {
+    const { boards } = this.props
+    const { video, error, existVideo } = this.state
+    const className = `HelpBlock ${error === 'success' ? 'success strong' : 'error'}`
+    let additionalMessage = ''
 
-      if (error === 'exists') {
-        // TODO: If existVideo is in Trash, just recover it to current list
-        const existVideoBoard = boards[existVideo.board]
-        const existVideoList = existVideoBoard && existVideoBoard.lists[existVideo.list]
-        additionalMessage = !existVideo.deleted
-          ? `: ${existVideoBoard.title}${existVideoList ? ' - ' + existVideoList.name : ''}`
-          : `: Trash`
-      }
-
-      return error
-        ? <section className="FetchResult">
-            <p className={className}>
-              <small>
-                {errorMessages.video[error] + additionalMessage}
-              </small>
-            </p>
-            {error === 'success' && <Video video={video} addingVideo />}
-          </section>
-        : null
+    if (error === 'exists') {
+      // TODO: If existVideo is in Trash, just recover it to current list
+      const existVideoBoard = boards[existVideo.board]
+      const existVideoList = existVideoBoard && existVideoBoard.lists[existVideo.list]
+      additionalMessage = !existVideo.deleted
+        ? `: ${existVideoBoard.title}${existVideoList ? ' - ' + existVideoList.name : ''}`
+        : `: Trash`
     }
 
+    return error
+      ? <section className="FetchResult">
+          <p className={className}>
+            <small>
+              {errorMessages.video[error] + additionalMessage}
+            </small>
+          </p>
+          {error === 'success' && <Video video={video} addingVideo />}
+        </section>
+      : null
+  }
+
+  render() {
     return (
       <section className="VideoAdd">
-        <FetchResult />
+        {this.renderFetchResult()}
 
         <input
           className="borderless-input"

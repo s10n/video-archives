@@ -57,52 +57,45 @@ const collect = (connect, monitor) => {
 
 const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDragging }) => {
   const { thumbnails, title, channelTitle, channelId } = video.data.snippet
+  const backgroundImage = `url(${thumbnails.high.url})`
+  const url = `https://www.youtube.com/watch?v=${video.data.id}`
+  const channelUrl = `https://www.youtube.com/channel/${channelId}`
+  const publishedAt = new Date(video.data.snippet.publishedAt)
+  const dateTime = moment(publishedAt).format('YYYY-MM-DD')
+  const year = moment(publishedAt).format('YYYY')
 
-  const Thumbnail = () => {
-    const backgroundImage = `url(${thumbnails.high.url})`
-    return connectDragSource(<section className="VideoThumbnail" style={{ backgroundImage }} />)
-  }
+  const thumbnail = connectDragSource(
+    <section className="VideoThumbnail" style={{ backgroundImage }} />
+  )
 
-  const Title = () => {
-    const url = `https://www.youtube.com/watch?v=${video.data.id}`
-
-    return (
-      <h3 className="VideoTitle">
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          {title}
-        </a>
-      </h3>
-    )
-  }
-
-  const ChannelTitle = () => {
-    const channelUrl = `https://www.youtube.com/channel/${channelId}`
-    return (
-      <a href={channelUrl} target="_blank" rel="noopener noreferrer">
-        {channelTitle}
+  const videoTitle = (
+    <h3 className="VideoTitle">
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        {title}
       </a>
-    )
-  }
+    </h3>
+  )
 
-  const PublishedDate = () => {
-    const publishedAt = new Date(video.data.snippet.publishedAt)
-    const dateTime = moment(publishedAt).format('YYYY-MM-DD')
-    const year = moment(publishedAt).format('YYYY')
-    return (
-      <time dateTime={dateTime} title={dateTime}>
-        {year}
-      </time>
-    )
-  }
+  const channel = (
+    <a href={channelUrl} target="_blank" rel="noopener noreferrer">
+      {channelTitle}
+    </a>
+  )
+
+  const publishedDate = (
+    <time dateTime={dateTime} title={dateTime}>
+      {year}
+    </time>
+  )
 
   return (
     <article className="Video" style={{ opacity: isDragging && 0.5 }}>
-      <Thumbnail />
-      <Title />
+      {thumbnail}
+      {videoTitle}
 
       <section className="VideoMeta">
-        <ChannelTitle />
-        <PublishedDate />
+        {channel}
+        {publishedDate}
         {!addingVideo && <VideoEdit video={video} board={board} />}
       </section>
     </article>
