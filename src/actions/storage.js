@@ -1,6 +1,6 @@
-import { auth, db } from '../config/constants'
+import { auth, db } from '../constants/api'
 import * as types from './types'
-import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../config/sample'
+import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../constants/sample'
 
 export function importStorage() {
   const user = auth().currentUser

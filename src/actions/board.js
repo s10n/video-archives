@@ -1,5 +1,5 @@
 import { push } from 'react-router-redux'
-import { auth, db } from '../config/constants'
+import { auth, db } from '../constants/api'
 import * as types from './types'
 
 export function fetchBoards() {

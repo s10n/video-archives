@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addList } from '../actions/list'
-import { errorMessages, slugify } from '../config/constants'
+import { errorMessages } from '../constants/app'
+import { slugify } from '../constants/utils'
 import Card from './Card'
 
 const propTypes = {

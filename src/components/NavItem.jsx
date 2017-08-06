@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { DropTarget } from 'react-dnd'
-import { ItemTypes } from '../config/constants'
+import { ItemTypes } from '../constants/app'
 import './NavItem.css'
 
 const propTypes = {

@@ -6,7 +6,7 @@ import reduxThunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
 import reducers from './reducers'
 import { AUTH_USER, UNAUTH_USER } from './actions/types'
-import { auth } from './config/constants'
+import { auth } from './constants/api'
 import App, { history } from './containers/App'
 
 const middleware = routerMiddleware(history)

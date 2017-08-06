@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editVideo, deleteVideo } from '../actions/video'
-import { slugify } from '../config/constants'
+import { slugify } from '../constants/utils'
 
 const propTypes = {
   video: PropTypes.object.isRequired,

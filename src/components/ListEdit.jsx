@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { DragSource } from 'react-dnd'
 import { editList, deleteList } from '../actions/list'
-import { ItemTypes, errorMessages, slugify } from '../config/constants'
+import { ItemTypes, errorMessages } from '../constants/app'
+import { slugify } from '../constants/utils'
 import './ListEdit.css'
 
 const propTypes = {

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { DragSource } from 'react-dnd'
 import { editVideo } from '../actions/video'
-import { ItemTypes } from '../config/constants'
+import { ItemTypes } from '../constants/app'
 import './Video.css'
 import VideoEdit from './VideoEdit'
 

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { editBoard, deleteBoard } from '../actions/board'
-import { errorMessages, reservedBoardSlug, slugify } from '../config/constants'
+import { errorMessages, reservedBoardSlug } from '../constants/app'
+import { slugify } from '../constants/utils'
 import './BoardEdit.css'
 
 const propTypes = {
