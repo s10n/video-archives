@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux'
 import { auth, db } from '../constants/api'
-import * as types from './types'
+import types from '../constants/types'
 
 export function fetchVideos() {
   const user = auth().currentUser

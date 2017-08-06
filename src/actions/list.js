@@ -1,5 +1,5 @@
 import { auth, db } from '../constants/api'
-import * as types from './types'
+import types from '../constants/types'
 
 export function addList(boardKey, list) {
   const user = auth().currentUser

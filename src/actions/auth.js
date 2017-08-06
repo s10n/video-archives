@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux'
 import { auth } from '../constants/api'
-import * as types from './types'
+import types from '../constants/types'
 import { fetchBoards } from './board'
 import { fetchVideos } from './video'
 import { emptyStorage } from './storage'
