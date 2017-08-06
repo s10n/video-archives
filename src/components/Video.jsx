@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { DragSource } from 'react-dnd'
-import { editVideo } from '../actions/video'
+import { editVideo, deleteVideo } from '../actions/video'
 import { ItemTypes } from '../constants/app'
 import './Video.css'
 import VideoEdit from './VideoEdit'
@@ -15,9 +15,11 @@ const propTypes = {
   board: PropTypes.object,
   addingVideo: PropTypes.bool,
   appStatus: PropTypes.string,
+  boards: PropTypes.object.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
-  editVideo: PropTypes.func.isRequired
+  editVideo: PropTypes.func.isRequired,
+  deleteVideo: PropTypes.func.isRequired
 }
 
 const defaultProps = {
@@ -55,7 +57,9 @@ const collect = (connect, monitor) => {
   }
 }
 
-const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDragging }) => {
+const Video = ({ video, board, addingVideo, appStatus, boards, ...props }) => {
+  const { editVideo, deleteVideo } = props
+  const { connectDragSource, isDragging } = props
   const { thumbnails, title, channelTitle, channelId } = video.data.snippet
   const backgroundImage = `url(${thumbnails.high.url})`
   const url = `https://www.youtube.com/watch?v=${video.data.id}`
@@ -88,6 +92,8 @@ const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDrag
     </time>
   )
 
+  const propsVideoEdit = { video, board, boards, onEdit: editVideo, onDelete: deleteVideo }
+
   return (
     <article className="Video" style={{ opacity: isDragging && 0.5 }}>
       {thumbnail}
@@ -96,7 +102,7 @@ const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDrag
       <section className="VideoMeta">
         {channel}
         {publishedDate}
-        {!addingVideo && <VideoEdit video={video} board={board} />}
+        {!addingVideo && <VideoEdit {...propsVideoEdit} />}
       </section>
     </article>
   )
@@ -105,12 +111,12 @@ const Video = ({ video, board, addingVideo, appStatus, connectDragSource, isDrag
 Video.propTypes = propTypes
 Video.defaultProps = defaultProps
 
-const mapStateToProps = ({ app }) => {
-  return { appStatus: app.status }
+const mapStateToProps = ({ app, boards }) => {
+  return { appStatus: app.status, boards }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ editVideo }, dispatch)
+  return bindActionCreators({ editVideo, deleteVideo }, dispatch)
 }
 
 const enhance = _.flow(

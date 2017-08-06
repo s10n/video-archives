@@ -1,16 +1,13 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { addBoard } from '../actions/board'
 import { errorMessages, reservedBoardSlug } from '../constants/app'
 import { slugify } from '../constants/utils'
 import './BoardAdd.css'
 
 const propTypes = {
   boards: PropTypes.object.isRequired,
-  addBoard: PropTypes.func.isRequired
+  onAdd: PropTypes.func.isRequired
 }
 
 class BoardAdd extends Component {
@@ -41,7 +38,7 @@ class BoardAdd extends Component {
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      this.props.addBoard({ title, slug })
+      this.props.onAdd({ title, slug })
       this.setState({ title: '', slug: '' })
     }
   }
@@ -73,8 +70,4 @@ class BoardAdd extends Component {
 
 BoardAdd.propTypes = propTypes
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ addBoard }, dispatch)
-}
-
-export default connect(null, mapDispatchToProps)(BoardAdd)
+export default BoardAdd

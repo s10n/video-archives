@@ -2,6 +2,9 @@ import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { editBoard, deleteBoard } from '../actions/board'
+import { addList } from '../actions/list'
 import './Board.css'
 import Page from './Page'
 import BoardEdit from './BoardEdit'
@@ -12,7 +15,10 @@ import NotFound from './NotFound'
 const propTypes = {
   boards: PropTypes.object.isRequired,
   board: PropTypes.object.isRequired,
-  videos: PropTypes.array.isRequired
+  videos: PropTypes.array.isRequired,
+  editBoard: PropTypes.func.isRequired,
+  deleteBoard: PropTypes.func.isRequired,
+  addList: PropTypes.func.isRequired
 }
 
 const ListContainer = ({ children }) =>
@@ -20,9 +26,11 @@ const ListContainer = ({ children }) =>
     {children}
   </div>
 
-const Board = ({ boards, board, videos }) => {
+const Board = ({ boards, board, videos, editBoard, deleteBoard, addList }) => {
   const videosInbox = _.filter(videos, video => !video.list && !video.deleted)
   const listsSorted = _.sortBy(board.lists, 'name')
+
+  const propsBoardEdit = { boards, board, videos, onEdit: editBoard, onDelete: deleteBoard }
 
   const listInbox = (
     <ListContainer>
@@ -37,12 +45,12 @@ const Board = ({ boards, board, videos }) => {
 
   const listAddContainer = (
     <ListContainer>
-      <ListAdd board={board} />
+      <ListAdd board={board} onAdd={addList} />
     </ListContainer>
   )
 
   return !_.isEmpty(board)
-    ? <Page page="Board" header={<BoardEdit boards={boards} board={board} videos={videos} />}>
+    ? <Page page="Board" header={<BoardEdit {...propsBoardEdit} />}>
         {!_.isEmpty(videosInbox) && listInbox}
         {!_.isEmpty(listsSorted) && listsSorted.map(list => listWrapper(list))}
         {!board.isSyncing && listAddContainer}
@@ -59,4 +67,8 @@ const mapStateToProps = (state, ownProps) => {
   return { boards, board, videos }
 }
 
-export default connect(mapStateToProps)(Board)
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ editBoard, deleteBoard, addList }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board)

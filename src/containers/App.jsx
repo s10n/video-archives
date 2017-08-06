@@ -23,6 +23,8 @@ import AppMain from './AppMain'
 export const history = createHistory()
 
 const propTypes = {
+  app: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   boards: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
   fetchBoards: PropTypes.func.isRequired,
@@ -40,13 +42,13 @@ class App extends Component {
   }
 
   render() {
-    const { boards, videos } = this.props
+    const { app, auth, boards, videos } = this.props
     const trash = _.filter(videos, 'deleted').length
 
     return (
       <ConnectedRouter history={history}>
         <div className="App">
-          <AppHeader />
+          <AppHeader status={app.status} authenticated={auth.authenticated} />
 
           <section className="AppContainer">
             <AppSidebar boards={boards} videos={videos} trash={trash} />
@@ -60,8 +62,8 @@ class App extends Component {
 
 App.propTypes = propTypes
 
-const mapStateToProps = ({ boards, videos }) => {
-  return { boards, videos }
+const mapStateToProps = ({ app, auth, boards, videos }) => {
+  return { app, auth, boards, videos }
 }
 
 const mapDispatchToProps = dispatch => {

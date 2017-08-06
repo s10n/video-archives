@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import * as firebase from 'firebase'
+import { auth } from '../constants/api'
 import appConfig from '../config/app'
 import './AppHeader.css'
 
@@ -29,7 +28,7 @@ const AppHeader = ({ status, authenticated }) => {
         : null
     }
 
-    const user = firebase.auth().currentUser
+    const user = auth().currentUser
 
     return (
       <nav className="AppNav">
@@ -64,8 +63,4 @@ const AppHeader = ({ status, authenticated }) => {
 AppHeader.propTypes = propTypes
 AppHeader.defaultProps = defaultProps
 
-const mapStateToProps = ({ app, auth }) => {
-  return { status: app.status, authenticated: auth.authenticated }
-}
-
-export default connect(mapStateToProps)(AppHeader)
+export default AppHeader

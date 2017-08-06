@@ -1,7 +1,11 @@
 import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { DropTarget } from 'react-dnd'
+import { editList, deleteList } from '../actions/list'
+import { addVideo } from '../actions/video'
 import { ItemTypes } from '../constants/app'
 import { isIE } from '../constants/utils'
 import Card from './Card'
@@ -10,9 +14,14 @@ import Video from './Video'
 import VideoAdd from './VideoAdd'
 
 const propTypes = {
+  app: PropTypes.object.isRequired,
   videos: PropTypes.array.isRequired,
+  boards: PropTypes.object.isRequired,
   board: PropTypes.object.isRequired,
   list: PropTypes.object,
+  editList: PropTypes.func.isRequired,
+  deleteList: PropTypes.func.isRequired,
+  addVideo: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired
@@ -42,11 +51,24 @@ const collect = (connect, monitor) => {
   }
 }
 
-const List = ({ videos, board, list, connectDropTarget, isOver, canDrop }) => {
+const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo, ...props }) => {
+  const { connectDropTarget, isOver, canDrop } = props
   const videosFiltered = _.filter(videos, video => !video.deleted)
   const videosSorted = _.sortBy(videosFiltered, 'data.snippet.publishedAt').reverse()
-  const header = <ListEdit board={board} list={list} videos={videos} />
-  const footer = !_.isEmpty(list) && !list.isSyncing ? <VideoAdd board={board} list={list} /> : null
+
+  const propsListEdit = {
+    board,
+    list,
+    videos,
+    appStatus: app.status,
+    onEdit: editList,
+    onDelete: deleteList
+  }
+
+  const propsVideoAdd = { board, list, boards, onAdd: addVideo }
+
+  const header = <ListEdit {...propsListEdit} />
+  const footer = !_.isEmpty(list) && !list.isSyncing ? <VideoAdd {...propsVideoAdd} /> : null
 
   return connectDropTarget(
     <div style={{ height: '100%' }}>
@@ -65,4 +87,17 @@ const List = ({ videos, board, list, connectDropTarget, isOver, canDrop }) => {
 List.propTypes = propTypes
 List.defaultProps = defaultProps
 
-export default DropTarget(ItemTypes.VIDEO, listTarget, collect)(List)
+const mapStateToProps = ({ app, boards }) => {
+  return { app, boards }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ editList, deleteList, addVideo }, dispatch)
+}
+
+const enhance = _.flow(
+  DropTarget(ItemTypes.VIDEO, listTarget, collect),
+  connect(mapStateToProps, mapDispatchToProps)
+)
+
+export default enhance(List)

@@ -1,9 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { editBoard, deleteBoard } from '../actions/board'
 import { errorMessages, reservedBoardSlug } from '../constants/app'
 import { slugify } from '../constants/utils'
 import './BoardEdit.css'
@@ -12,8 +9,8 @@ const propTypes = {
   boards: PropTypes.object.isRequired,
   board: PropTypes.object.isRequired,
   videos: PropTypes.array.isRequired,
-  editBoard: PropTypes.func.isRequired,
-  deleteBoard: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 }
 
 class BoardEdit extends Component {
@@ -57,17 +54,17 @@ class BoardEdit extends Component {
     const { slug, error } = this.state
 
     if (title && slug && !error) {
-      const { board, editBoard } = this.props
-      editBoard(board, { title, slug })
+      const { board, onEdit } = this.props
+      onEdit(board, { title, slug })
       this.boardTitleInput.blur()
     }
   }
 
   handleDeleteClick() {
-    const { board, videos, deleteBoard } = this.props
+    const { board, videos, onDelete } = this.props
 
     if (window.confirm(`Delete ${board.title}?\nAll lists and videos will be deleted.`)) {
-      deleteBoard(board, videos)
+      onDelete(board, videos)
     }
   }
 
@@ -103,8 +100,4 @@ class BoardEdit extends Component {
 
 BoardEdit.propTypes = propTypes
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ editBoard, deleteBoard }, dispatch)
-}
-
-export default connect(null, mapDispatchToProps)(BoardEdit)
+export default BoardEdit

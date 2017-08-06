@@ -2,9 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import axios from 'axios'
-import { addVideo } from '../actions/video'
 import { errorMessages } from '../constants/app'
 import { youtube as youtubeAPI } from '../constants/api'
 import { getParams } from '../constants/utils'
@@ -15,7 +13,7 @@ const propTypes = {
   boards: PropTypes.object.isRequired,
   board: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
-  addVideo: PropTypes.func.isRequired
+  onAdd: PropTypes.func.isRequired
 }
 
 const getVideoID = videoURI => {
@@ -81,7 +79,7 @@ class VideoAdd extends Component {
     const { video, error } = this.state
 
     if (error === 'success') {
-      this.props.addVideo(video)
+      this.props.onAdd(video)
       this.setState({
         videoURI: '',
         error: null,
@@ -137,12 +135,8 @@ class VideoAdd extends Component {
 
 VideoAdd.propTypes = propTypes
 
-const mapStateToProps = ({ boards, videos }) => {
-  return { boards, videos }
+const mapStateToProps = ({ videos }) => {
+  return { videos }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ addVideo }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideoAdd)
+export default connect(mapStateToProps)(VideoAdd)
