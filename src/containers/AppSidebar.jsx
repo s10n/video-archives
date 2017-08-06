@@ -1,10 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { NavLink } from 'react-router-dom'
-import { addBoard } from '../actions/board'
 import './AppSidebar.css'
 import NavItem from '../components/NavItem'
 import BoardAdd from '../components/BoardAdd'
@@ -12,11 +9,10 @@ import BoardAdd from '../components/BoardAdd'
 const propTypes = {
   boards: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
-  trash: PropTypes.number.isRequired,
-  addBoard: PropTypes.func.isRequired
+  trash: PropTypes.number.isRequired
 }
 
-const AppSidebar = ({ boards, videos, trash, addBoard }) => {
+const AppSidebar = ({ boards, videos, trash }) => {
   const boardsSorted = _.sortBy(boards, 'title')
 
   return (
@@ -36,7 +32,7 @@ const AppSidebar = ({ boards, videos, trash, addBoard }) => {
             <NavItem trash count={trash} />
           </NavLink>}
 
-        <BoardAdd boards={boards} onAdd={addBoard} />
+        <BoardAdd boards={boards} />
       </div>
     </nav>
   )
@@ -44,8 +40,4 @@ const AppSidebar = ({ boards, videos, trash, addBoard }) => {
 
 AppSidebar.propTypes = propTypes
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ addBoard }, dispatch)
-}
-
-export default connect(null, mapDispatchToProps)(AppSidebar)
+export default AppSidebar
