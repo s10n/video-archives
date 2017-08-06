@@ -6,6 +6,4 @@ import auth from './authReducer'
 import boards from './boardsReducer'
 import videos from './videosReducer'
 
-const rootReducer = combineReducers({ app, auth, boards, videos, router, form })
-
-export default rootReducer
+export default combineReducers({ app, auth, boards, videos, router, form })
