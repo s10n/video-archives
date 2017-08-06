@@ -9,7 +9,7 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { fetchBoards } from '../actions/board'
 import { fetchVideos } from '../actions/video'
-import { pushStorage } from '../actions/storage'
+import { setStorage } from '../constants/utils'
 import '../style/reboot.css'
 import '../style/type.css'
 import '../style/forms.css'
@@ -23,10 +23,12 @@ import AppMain from './AppMain'
 export const history = createHistory()
 
 const propTypes = {
+  app: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   boards: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
   fetchBoards: PropTypes.func.isRequired,
-  pushStorage: PropTypes.func.isRequired
+  fetchVideos: PropTypes.func.isRequired
 }
 
 class App extends Component {
@@ -36,17 +38,17 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.pushStorage(this.props, prevProps)
+    setStorage(this.props, prevProps)
   }
 
   render() {
-    const { boards, videos } = this.props
+    const { app, auth, boards, videos } = this.props
     const trash = _.filter(videos, 'deleted').length
 
     return (
       <ConnectedRouter history={history}>
         <div className="App">
-          <AppHeader />
+          <AppHeader status={app.status} authenticated={auth.authenticated} />
 
           <section className="AppContainer">
             <AppSidebar boards={boards} videos={videos} trash={trash} />
@@ -60,12 +62,12 @@ class App extends Component {
 
 App.propTypes = propTypes
 
-function mapStateToProps({ boards, videos }) {
-  return { boards, videos }
+const mapStateToProps = ({ app, auth, boards, videos }) => {
+  return { app, auth, boards, videos }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ fetchBoards, fetchVideos }, dispatch)
 }
 
 const enhance = _.flow(DragDropContext(HTML5Backend), connect(mapStateToProps, mapDispatchToProps))

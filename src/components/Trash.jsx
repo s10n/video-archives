@@ -51,12 +51,12 @@ class Trash extends Component {
 
 Trash.propTypes = propTypes
 
-function mapStateToProps({ boards, videos }) {
+const mapStateToProps = ({ boards, videos }) => {
   videos = _.filter(videos, 'deleted')
   return { boards, videos }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ emptyTrash }, dispatch)
 }
 

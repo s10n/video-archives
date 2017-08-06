@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addBoard } from '../actions/board'
-import { errorMessages, reservedBoardSlug, slugify } from '../config/constants'
+import { errorMessages, reservedBoardSlug } from '../constants/app'
+import { slugify } from '../constants/utils'
 import './BoardAdd.css'
 
 const propTypes = {
@@ -72,7 +73,7 @@ class BoardAdd extends Component {
 
 BoardAdd.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addBoard }, dispatch)
 }
 

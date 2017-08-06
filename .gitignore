@@ -7,10 +7,14 @@ node_modules
 coverage
 
 # production
-config.js
+src/config/firebase.js
 build
 
 # misc
 .DS_Store
-.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 npm-debug.log

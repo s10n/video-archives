@@ -1,19 +1,19 @@
-import { auth, db } from '../config/constants'
-import * as types from './types'
+import { db } from '../constants/api'
+import types from '../constants/types'
 
 export function addList(boardKey, list) {
-  const user = auth().currentUser
-  const listKey = user ? db.ref(`/boards/${user.uid}/${boardKey}/lists`).push().key : Date.now()
-
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
+    const listKey = auth ? db.ref(`/boards/${uid}/${boardKey}/lists`).push().key : Date.now()
     list = { ...list, key: listKey }
     const syncingList = { ...list, isSyncing: true }
 
-    dispatch({ type: types.ADD_LIST, boardKey, listKey, list: !user ? list : syncingList })
+    dispatch({ type: types.ADD_LIST, boardKey, listKey, list: !auth ? list : syncingList })
 
-    if (user) {
+    if (auth) {
       db
-        .ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`)
+        .ref(`/boards/${uid}/${boardKey}/lists/${listKey}`)
         .set(list)
         .then(() => {
           const syncedList = { ...list, isSyncing: false }
@@ -28,17 +28,18 @@ export function addList(boardKey, list) {
 }
 
 export function editList(boardKey, oldList, newList) {
-  const user = auth().currentUser
   const listKey = oldList.key
 
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const syncingList = { ...newList, isSyncing: true }
 
-    dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: !user ? newList : syncingList })
+    dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: !auth ? newList : syncingList })
 
-    if (user) {
+    if (auth) {
       db
-        .ref(`/boards/${user.uid}/${boardKey}/lists/${listKey}`)
+        .ref(`/boards/${uid}/${boardKey}/lists/${listKey}`)
         .update(newList)
         .then(() => {
           const syncedList = { ...newList, isSyncing: false }
@@ -54,11 +55,12 @@ export function editList(boardKey, oldList, newList) {
 }
 
 export function deleteList(board, list, videos) {
-  const user = auth().currentUser
   const boardKey = board.key
   const listKey = list.key
 
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const deletedVideo = { list: null, deleted: true }
 
     videos.forEach(video => {
@@ -67,12 +69,12 @@ export function deleteList(board, list, videos) {
 
     dispatch({ type: types.DELETE_LIST, boardKey, listKey })
 
-    if (user) {
-      let updates = { [`/boards/${user.uid}/${boardKey}/lists/${listKey}`]: null }
+    if (auth) {
+      let updates = { [`/boards/${uid}/${boardKey}/lists/${listKey}`]: null }
 
       videos.forEach(video => {
-        updates[`/videos/${user.uid}/${video.key}/list`] = null
-        updates[`/videos/${user.uid}/${video.key}/deleted`] = true
+        updates[`/videos/${uid}/${video.key}/list`] = null
+        updates[`/videos/${uid}/${video.key}/deleted`] = true
       })
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting ${list.name}` })

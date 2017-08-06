@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import { signupUser } from '../actions/auth'
-import { appConfig } from '../config/config'
+import appConfig from '../config/app'
 import Page from '../components/Page'
 import Card from '../components/Card'
 import FormSignup from '../components/FormSignup'
@@ -55,11 +55,11 @@ class PageSignup extends Component {
 PageSignup.propTypes = propTypes
 PageSignup.defaultProps = defaultProps
 
-function mapStateToProps({ auth }) {
+const mapStateToProps = ({ auth }) => {
   return { authenticated: auth.authenticated, errorMessage: auth.error }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ signupUser }, dispatch)
 }
 

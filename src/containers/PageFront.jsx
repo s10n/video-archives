@@ -1,14 +1,16 @@
+import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { storageTest } from '../config/constants'
+import { storageTest } from '../constants/utils'
 import { importStorage, emptyStorage } from '../actions/storage'
 import './PageFront.css'
 import Page from '../components/Page'
 import Card from '../components/Card'
 
 const propTypes = {
+  hideButtons: PropTypes.bool.isRequired,
   importStorage: PropTypes.func.isRequired,
   emptyStorage: PropTypes.func.isRequired
 }
@@ -41,14 +43,19 @@ class PageFront extends Component {
               </a>{' '}
               videos you like
             </h2>
-            <ol>
-              <li>Create a new board to start</li>
-              <li>
-                Or just import sample data to look around<br />
-                <button onClick={this.handleImportClick}>Import sample</button>
-                <button onClick={this.handleEmptyClick}>Empty storage</button>
-              </li>
-            </ol>
+
+            {this.props.hideButtons
+              ? <ul>
+                  <li>Create a new board to start</li>
+                </ul>
+              : <ol>
+                  <li>Create a new board to start</li>
+                  <li>
+                    Or just import sample data to look around<br />
+                    <button onClick={this.handleImportClick}>Import sample</button>
+                    <button onClick={this.handleEmptyClick}>Empty storage</button>
+                  </li>
+                </ol>}
           </section>
 
           <section className="Paragraph">
@@ -140,8 +147,13 @@ class PageFront extends Component {
 
 PageFront.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapStateToProps = ({ auth, boards }) => {
+  const isProduction = process.env.REACT_APP_ENV === 'production'
+  return { hideButtons: isProduction && auth.authenticated && !_.isEmpty(boards) }
+}
+
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ importStorage, emptyStorage }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(PageFront)
+export default connect(mapStateToProps, mapDispatchToProps)(PageFront)

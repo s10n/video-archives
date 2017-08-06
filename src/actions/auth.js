@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux'
-import { auth } from '../config/constants'
-import * as types from './types'
+import { auth } from '../constants/api'
+import types from '../constants/types'
 import { fetchBoards } from './board'
 import { fetchVideos } from './video'
 import { emptyStorage } from './storage'
@@ -10,7 +10,7 @@ export function signupUser({ email, password }) {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(response => {
-        dispatch({ type: types.AUTH_USER })
+        dispatch({ type: types.AUTH_USER, uid: response.uid })
         dispatch(push('/'))
       })
       .catch(error => {
@@ -24,7 +24,7 @@ export function signinUser({ email, password }) {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(response => {
-        dispatch({ type: types.AUTH_USER })
+        dispatch({ type: types.AUTH_USER, uid: response.uid })
         dispatch(push('/'))
         dispatch(fetchBoards())
         dispatch(fetchVideos())

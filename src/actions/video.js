@@ -1,19 +1,20 @@
 import { push } from 'react-router-redux'
-import { auth, db } from '../config/constants'
-import * as types from './types'
+import { db } from '../constants/api'
+import types from '../constants/types'
 
 export function fetchVideos() {
-  const user = auth().currentUser
   const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
 
-    if (user) {
+    if (auth) {
       dispatch({ type: types.APP_STATUS, status: 'App is fetching videos' })
 
       db
-        .ref(`/videos/${user.uid}`)
+        .ref(`/videos/${uid}`)
         .once('value', snap => {
           dispatch({ type: types.FETCH_VIDEOS, videos: snap.val() })
           dispatch({ type: types.APP_STATUS, status: null })
@@ -26,18 +27,18 @@ export function fetchVideos() {
 }
 
 export function addVideo(video) {
-  const user = auth().currentUser
-  const videoKey = user ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
-
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
+    const videoKey = auth ? db.ref(`/videos/${uid}`).push().key : Date.now()
     video = { ...video, key: videoKey }
     const syncingVideo = { ...video, isSyncing: true }
 
-    dispatch({ type: types.ADD_VIDEO, videoKey, video: !user ? video : syncingVideo })
+    dispatch({ type: types.ADD_VIDEO, videoKey, video: !auth ? video : syncingVideo })
 
-    if (user) {
+    if (auth) {
       db
-        .ref(`/videos/${user.uid}/${videoKey}`)
+        .ref(`/videos/${uid}/${videoKey}`)
         .set(video)
         .then(() => {
           const syncedVideo = { ...video, isSyncing: false }
@@ -52,17 +53,18 @@ export function addVideo(video) {
 }
 
 export function editVideo(oldVideo, newVideo) {
-  const user = auth().currentUser
   const videoKey = oldVideo.key
 
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const syncingVideo = { ...newVideo, isSyncing: true }
 
-    dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: !user ? newVideo : syncingVideo })
+    dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: !auth ? newVideo : syncingVideo })
 
-    if (user) {
+    if (auth) {
       db
-        .ref(`/videos/${user.uid}/${videoKey}`)
+        .ref(`/videos/${uid}/${videoKey}`)
         .update(newVideo)
         .then(() => {
           const syncedVideo = { ...newVideo, isSyncing: false }
@@ -78,17 +80,18 @@ export function editVideo(oldVideo, newVideo) {
 }
 
 export function deleteVideo(video) {
-  const user = auth().currentUser
   const videoKey = video.key
 
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch({ type: types.DELETE_VIDEO, videoKey })
 
-    if (user) {
+    if (auth) {
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
 
       db
-        .ref(`/videos/${user.uid}/${videoKey}`)
+        .ref(`/videos/${uid}/${videoKey}`)
         .remove()
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
@@ -102,19 +105,19 @@ export function deleteVideo(video) {
 }
 
 export function emptyTrash(videos) {
-  const user = auth().currentUser
-
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch(push('/'))
     videos.forEach(video => {
       dispatch({ type: types.DELETE_VIDEO, videoKey: video.key })
     })
 
-    if (user) {
+    if (auth) {
       let updates = {}
 
       videos.forEach(video => {
-        updates[`/videos/${user.uid}/${video.key}`] = null
+        updates[`/videos/${uid}/${video.key}`] = null
       })
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
