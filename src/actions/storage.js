@@ -56,15 +56,3 @@ export function emptyStorage() {
     }
   }
 }
-
-export function pushStorage(props, prevProps) {
-  if (JSON.stringify(prevProps.boards) !== JSON.stringify(props.boards)) {
-    localStorage.boards = JSON.stringify(props.boards)
-  }
-
-  if (JSON.stringify(prevProps.videos) !== JSON.stringify(props.videos)) {
-    localStorage.videos = JSON.stringify(props.videos)
-  }
-
-  return { type: types.PUSH_STORAGE }
-}

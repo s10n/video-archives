@@ -10,7 +10,6 @@ export default keyMirror({
   FETCH_VIDEOS: null,
   IMPORT_STORAGE: null,
   EMPTY_STORAGE: null,
-  PUSH_STORAGE: null,
 
   ADD_BOARD: null,
   EDIT_BOARD: null,

@@ -1,3 +1,13 @@
+export const setStorage = (props, prevProps) => {
+  const prevBoards = JSON.stringify(prevProps.boards)
+  const nextBoards = JSON.stringify(props.boards)
+  const prevVideos = JSON.stringify(prevProps.videos)
+  const nextVideos = JSON.stringify(props.videos)
+
+  if (prevBoards !== nextBoards) localStorage.boards = nextBoards
+  if (prevVideos !== nextVideos) localStorage.videos = nextVideos
+}
+
 export const slugify = string => {
   return string
     .trim()

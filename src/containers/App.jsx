@@ -9,7 +9,7 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { fetchBoards } from '../actions/board'
 import { fetchVideos } from '../actions/video'
-import { pushStorage } from '../actions/storage'
+import { setStorage } from '../constants/utils'
 import '../style/reboot.css'
 import '../style/type.css'
 import '../style/forms.css'
@@ -28,7 +28,7 @@ const propTypes = {
   boards: PropTypes.object.isRequired,
   videos: PropTypes.object.isRequired,
   fetchBoards: PropTypes.func.isRequired,
-  pushStorage: PropTypes.func.isRequired
+  fetchVideos: PropTypes.func.isRequired
 }
 
 class App extends Component {
@@ -38,7 +38,7 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.pushStorage(this.props, prevProps)
+    setStorage(this.props, prevProps)
   }
 
   render() {
@@ -67,7 +67,7 @@ const mapStateToProps = ({ app, auth, boards, videos }) => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchBoards, fetchVideos, pushStorage }, dispatch)
+  return bindActionCreators({ fetchBoards, fetchVideos }, dispatch)
 }
 
 const enhance = _.flow(DragDropContext(HTML5Backend), connect(mapStateToProps, mapDispatchToProps))
