@@ -1,11 +1,9 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { DragSource } from 'react-dnd'
-import { editList, deleteList } from '../actions/list'
-import { ItemTypes, errorMessages, slugify } from '../config/constants'
+import { ItemTypes, errorMessages } from '../constants/app'
+import { slugify } from '../constants/utils'
 import './ListEdit.css'
 
 const propTypes = {
@@ -13,10 +11,10 @@ const propTypes = {
   list: PropTypes.object.isRequired,
   videos: PropTypes.array.isRequired,
   appStatus: PropTypes.string,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  editList: PropTypes.func.isRequired,
-  deleteList: PropTypes.func.isRequired
+  isDragging: PropTypes.bool.isRequired
 }
 
 const defaultProps = {
@@ -39,11 +37,11 @@ const listSource = {
     const dropResult = monitor.getDropResult()
     const { list } = item
     const { trash } = dropResult
-    const { deleteList, videos } = props
+    const { onDelete, videos } = props
 
     trash &&
       window.confirm(`Delete ${list.name}?\nAll videos will be deleted.`) &&
-      deleteList(props.board, list, videos)
+      onDelete(props.board, list, videos)
   }
 }
 
@@ -91,17 +89,17 @@ class ListEdit extends Component {
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      const { board, list, editList } = this.props
-      editList(board.key, list, { name, slug })
+      const { board, list, onEdit } = this.props
+      onEdit(board.key, list, { name, slug })
       this.listNameInput.blur()
     }
   }
 
   handleDeleteClick() {
-    const { board, list, videos, deleteList } = this.props
+    const { board, list, videos, onDelete } = this.props
 
     if (window.confirm(`Delete ${list.name}?\nAll videos will be deleted.`)) {
-      deleteList(board, list, videos)
+      onDelete(board, list, videos)
     }
   }
 
@@ -144,17 +142,4 @@ class ListEdit extends Component {
 ListEdit.propTypes = propTypes
 ListEdit.defaultProps = defaultProps
 
-function mapStateToProps({ app }) {
-  return { appStatus: app.status }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ editList, deleteList }, dispatch)
-}
-
-const enhance = _.flow(
-  DragSource(ItemTypes.LIST, listSource, collect),
-  connect(mapStateToProps, mapDispatchToProps)
-)
-
-export default enhance(ListEdit)
+export default DragSource(ItemTypes.LIST, listSource, collect)(ListEdit)

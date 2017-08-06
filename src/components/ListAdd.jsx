@@ -1,15 +1,13 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { addList } from '../actions/list'
-import { errorMessages, slugify } from '../config/constants'
+import { errorMessages } from '../constants/app'
+import { slugify } from '../constants/utils'
 import Card from './Card'
 
 const propTypes = {
   board: PropTypes.object.isRequired,
-  addList: PropTypes.func.isRequired
+  onAdd: PropTypes.func.isRequired
 }
 
 class ListAdd extends Component {
@@ -36,9 +34,9 @@ class ListAdd extends Component {
     const { slug, error } = this.state
 
     if (name && slug && !error) {
-      const { board, addList } = this.props
+      const { board, onAdd } = this.props
       const list = { name, slug }
-      addList(board.key, list)
+      onAdd(board.key, list)
       this.setState({ name: '', slug: '', error: null })
     }
   }
@@ -70,8 +68,4 @@ class ListAdd extends Component {
 
 ListAdd.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addList }, dispatch)
-}
-
-export default connect(null, mapDispatchToProps)(ListAdd)
+export default ListAdd

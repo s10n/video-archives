@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { storageTest } from '../config/constants'
+import { storageTest } from '../constants/utils'
 import { importStorage, emptyStorage } from '../actions/storage'
 import './PageFront.css'
 import Page from '../components/Page'
@@ -140,7 +140,7 @@ class PageFront extends Component {
 
 PageFront.propTypes = propTypes
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ importStorage, emptyStorage }, dispatch)
 }
 

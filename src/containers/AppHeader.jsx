@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import * as firebase from 'firebase'
-import { appConfig } from '../config/config'
+import { auth } from '../constants/api'
+import appConfig from '../config/app'
 import './AppHeader.css'
 
 const propTypes = {
@@ -16,20 +15,20 @@ const defaultProps = {
 }
 
 const AppHeader = ({ status, authenticated }) => {
-  const AppNavNotAuthenticated = () => {
-    return appConfig.signupAllowed
-      ? <nav className="AppNav">
-          <NavLink to="/signup" className="hidden-mobile">
-            Sign up
-          </NavLink>
+  const appNav = authenticated => {
+    if (!authenticated) {
+      return appConfig.signupAllowed
+        ? <nav className="AppNav">
+            <NavLink to="/signup" className="hidden-mobile">
+              Sign up
+            </NavLink>
 
-          <NavLink to="/signin">Sign in</NavLink>
-        </nav>
-      : null
-  }
+            <NavLink to="/signin">Sign in</NavLink>
+          </nav>
+        : null
+    }
 
-  const AppNavAuthenticated = () => {
-    const user = firebase.auth().currentUser
+    const user = auth().currentUser
 
     return (
       <nav className="AppNav">
@@ -56,7 +55,7 @@ const AppHeader = ({ status, authenticated }) => {
         </NavLink>
       </h1>
 
-      {authenticated ? <AppNavAuthenticated /> : <AppNavNotAuthenticated />}
+      {appNav(authenticated)}
     </header>
   )
 }
@@ -64,8 +63,4 @@ const AppHeader = ({ status, authenticated }) => {
 AppHeader.propTypes = propTypes
 AppHeader.defaultProps = defaultProps
 
-function mapStateToProps({ app, auth }) {
-  return { status: app.status, authenticated: auth.authenticated }
-}
-
-export default connect(mapStateToProps)(AppHeader)
+export default AppHeader

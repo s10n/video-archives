@@ -4,6 +4,7 @@
   display: flex;
   line-height: 1.5rem;
   padding: .5rem 1.5rem;
+  width: 100%;
 }
 
 .NavItem:hover,
@@ -28,4 +29,11 @@
 .active:hover .count {
   background-color: hsl(358, 79%, 45%);
   color: white;
+}
+
+@media (max-width: 480px) {
+  .NavItem,
+  .BoardAdd input {
+    width: auto;
+  }
 }

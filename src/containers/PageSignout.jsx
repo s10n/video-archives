@@ -30,11 +30,11 @@ class PageSignout extends Component {
 
 PageSignout.propTypes = propTypes
 
-function mapStateToProps({ auth }) {
+const mapStateToProps = ({ auth }) => {
   return { authenticated: auth.authenticated }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators({ signoutUser }, dispatch)
 }
 

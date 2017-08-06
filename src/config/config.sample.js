@@ -1,14 +1,4 @@
-export const youtubeAPIKey = ''
+const dev = {}
+const production = {}
 
-export const firebaseConfig = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: ''
-}
-
-export const appConfig = {
-  signupAllowed: true
-}
+export default (process.env.REACT_APP_ENV !== 'production' ? dev : production)

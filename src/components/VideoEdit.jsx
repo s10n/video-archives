@@ -1,17 +1,14 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { editVideo, deleteVideo } from '../actions/video'
-import { slugify } from '../config/constants'
+import { slugify } from '../constants/utils'
 
 const propTypes = {
   video: PropTypes.object.isRequired,
   board: PropTypes.object,
   boards: PropTypes.object.isRequired,
-  editVideo: PropTypes.func.isRequired,
-  deleteVideo: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 }
 
 const defaultProps = {
@@ -28,12 +25,12 @@ class VideoEdit extends Component {
   }
 
   handleTrashClick() {
-    const { video, editVideo } = this.props
-    editVideo({ ...video, deleted: null }, { deleted: true })
+    const { video, onEdit } = this.props
+    onEdit({ ...video, deleted: null }, { deleted: true })
   }
 
   handleRecoverClick() {
-    const { video, boards, editVideo } = this.props
+    const { video, boards, onEdit } = this.props
     const input = video.board ? boards[video.board].title : prompt(`Type a name or slug of board`)
 
     if (input) {
@@ -42,14 +39,14 @@ class VideoEdit extends Component {
 
       if (title && slug) {
         const newBoardKey = _.findKey(boards, ['slug', slug])
-        newBoardKey ? editVideo(video, { board: newBoardKey, deleted: null }) : alert('Error')
+        newBoardKey ? onEdit(video, { board: newBoardKey, deleted: null }) : alert('Error')
       }
     }
   }
 
   handleDeleteClick() {
-    const { video, deleteVideo } = this.props
-    window.confirm(`Delete?`) && deleteVideo(video)
+    const { video, onDelete } = this.props
+    window.confirm(`Delete?`) && onDelete(video)
   }
 
   render() {
@@ -79,12 +76,4 @@ class VideoEdit extends Component {
 VideoEdit.propTypes = propTypes
 VideoEdit.defaultProps = defaultProps
 
-function mapStateToProps({ boards }) {
-  return { boards }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ editVideo, deleteVideo }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideoEdit)
+export default VideoEdit
