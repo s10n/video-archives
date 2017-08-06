@@ -45,7 +45,7 @@ class ListAdd extends Component {
     const { name, error } = this.state
 
     const header = (
-      <div>
+      <div className="ListEdit">
         <input
           type="text"
           className="borderless-input"
@@ -62,7 +62,7 @@ class ListAdd extends Component {
       </div>
     )
 
-    return <Card header={header} />
+    return <Card header={header} variant={{ padding: 0 }} />
   }
 }
 
