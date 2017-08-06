@@ -1,17 +1,16 @@
-import { auth, db } from '../constants/api'
+import { db } from '../constants/api'
 import types from '../constants/types'
 import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../constants/sample'
 
 export function importStorage() {
-  const user = auth().currentUser
-
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
     dispatch({ type: types.IMPORT_STORAGE, boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
 
-    if (user) {
+    if (authenticated) {
       const updates = {
-        [`/boards/${user.uid}`]: SAMPLE_BOARDS,
-        [`/videos/${user.uid}`]: SAMPLE_VIDEOS
+        [`/boards/${uid}`]: SAMPLE_BOARDS,
+        [`/videos/${uid}`]: SAMPLE_VIDEOS
       }
 
       dispatch({ type: types.APP_STATUS, status: 'App is importing sample' })
@@ -31,15 +30,14 @@ export function importStorage() {
 }
 
 export function emptyStorage() {
-  const user = auth().currentUser
-
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { authenticated, uid } = getState().auth
     dispatch({ type: types.EMPTY_STORAGE })
 
-    if (user) {
+    if (authenticated) {
       const updates = {
-        [`/boards/${user.uid}`]: null,
-        [`/videos/${user.uid}`]: null
+        [`/boards/${uid}`]: null,
+        [`/videos/${uid}`]: null
       }
 
       dispatch({ type: types.APP_STATUS, status: 'App is emptying storage' })

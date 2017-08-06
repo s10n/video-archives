@@ -14,7 +14,9 @@ const createStoreWithMiddleware = applyMiddleware(reduxThunk, middleware)(create
 const store = createStoreWithMiddleware(reducers)
 
 auth().onAuthStateChanged(user => {
-  user ? store.dispatch({ type: types.AUTH_USER }) : store.dispatch({ type: types.UNAUTH_USER })
+  user
+    ? store.dispatch({ type: types.AUTH_USER, uid: user.uid })
+    : store.dispatch({ type: types.UNAUTH_USER })
 
   ReactDOM.render(
     <Provider store={store}>

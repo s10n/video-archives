@@ -10,7 +10,7 @@ export function signupUser({ email, password }) {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(response => {
-        dispatch({ type: types.AUTH_USER })
+        dispatch({ type: types.AUTH_USER, uid: response.uid })
         dispatch(push('/'))
       })
       .catch(error => {
@@ -24,7 +24,7 @@ export function signinUser({ email, password }) {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(response => {
-        dispatch({ type: types.AUTH_USER })
+        dispatch({ type: types.AUTH_USER, uid: response.uid })
         dispatch(push('/'))
         dispatch(fetchBoards())
         dispatch(fetchVideos())
