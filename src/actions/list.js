@@ -3,7 +3,8 @@ import types from '../constants/types'
 
 export function addList(boardKey, list) {
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const listKey = auth ? db.ref(`/boards/${uid}/${boardKey}/lists`).push().key : Date.now()
     list = { ...list, key: listKey }
     const syncingList = { ...list, isSyncing: true }
@@ -30,7 +31,8 @@ export function editList(boardKey, oldList, newList) {
   const listKey = oldList.key
 
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const syncingList = { ...newList, isSyncing: true }
 
     dispatch({ type: types.EDIT_LIST, boardKey, listKey, newList: !auth ? newList : syncingList })
@@ -57,7 +59,8 @@ export function deleteList(board, list, videos) {
   const listKey = list.key
 
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const deletedVideo = { list: null, deleted: true }
 
     videos.forEach(video => {

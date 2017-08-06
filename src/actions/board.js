@@ -6,7 +6,8 @@ export function fetchBoards() {
   const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch({ type: types.FETCH_BOARDS, boards: localBoards })
 
     if (auth) {
@@ -27,7 +28,8 @@ export function fetchBoards() {
 
 export function addBoard(board) {
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const boardKey = auth ? db.ref(`/boards/${uid}`).push().key : Date.now()
     board = { ...board, key: boardKey }
     const syncingBoard = { ...board, isSyncing: true }
@@ -54,7 +56,8 @@ export function addBoard(board) {
 
 export function editBoard(oldBoard, newBoard) {
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const boardKey = oldBoard.key
     const syncingBoard = { ...newBoard, isSyncing: true }
 
@@ -82,7 +85,8 @@ export function editBoard(oldBoard, newBoard) {
 
 export function deleteBoard(board, videos) {
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const boardKey = board.key
     const deletedVideo = { board: null, list: null, deleted: true }
 

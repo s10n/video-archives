@@ -6,7 +6,8 @@ export function fetchVideos() {
   const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
 
     if (auth) {
@@ -27,7 +28,8 @@ export function fetchVideos() {
 
 export function addVideo(video) {
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const videoKey = auth ? db.ref(`/videos/${uid}`).push().key : Date.now()
     video = { ...video, key: videoKey }
     const syncingVideo = { ...video, isSyncing: true }
@@ -54,7 +56,8 @@ export function editVideo(oldVideo, newVideo) {
   const videoKey = oldVideo.key
 
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     const syncingVideo = { ...newVideo, isSyncing: true }
 
     dispatch({ type: types.EDIT_VIDEO, videoKey, newVideo: !auth ? newVideo : syncingVideo })
@@ -80,7 +83,8 @@ export function deleteVideo(video) {
   const videoKey = video.key
 
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch({ type: types.DELETE_VIDEO, videoKey })
 
     if (auth) {
@@ -102,7 +106,8 @@ export function deleteVideo(video) {
 
 export function emptyTrash(videos) {
   return (dispatch, getState) => {
-    const { auth, uid } = getState().auth
+    const { authenticated, uid } = getState().auth
+    const auth = authenticated
     dispatch(push('/'))
     videos.forEach(video => {
       dispatch({ type: types.DELETE_VIDEO, videoKey: video.key })
