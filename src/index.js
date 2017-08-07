@@ -1,10 +1,10 @@
-/* global Raven */
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import reduxThunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
+import Raven from 'raven-js'
 import reducers from './reducers'
 import types from './constants/types'
 import { auth } from './constants/api'
