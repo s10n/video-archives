@@ -5,14 +5,14 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reduxThunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
 import Raven from 'raven-js'
-import reducers from './reducers'
+import reducer from './reducers'
 import types from './constants/types'
 import { auth } from './constants/api'
 import App, { history } from './containers/App'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
-  reducers,
+  reducer,
   composeEnhancers(applyMiddleware(reduxThunk, routerMiddleware(history)))
 )
 
