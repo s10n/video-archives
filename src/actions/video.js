@@ -6,7 +6,7 @@ export function fetchVideos() {
   const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     const auth = authenticated
     dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })
 
@@ -14,7 +14,7 @@ export function fetchVideos() {
       dispatch({ type: types.APP_STATUS, status: 'App is fetching videos' })
 
       db
-        .ref(`/videos/${uid}`)
+        .ref(`/videos/${user.uid}`)
         .once('value', snap => {
           dispatch({ type: types.FETCH_VIDEOS, videos: snap.val() })
           dispatch({ type: types.APP_STATUS, status: null })
@@ -28,9 +28,9 @@ export function fetchVideos() {
 
 export function addVideo(video) {
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     const auth = authenticated
-    const videoKey = auth ? db.ref(`/videos/${uid}`).push().key : Date.now()
+    const videoKey = auth ? db.ref(`/videos/${user.uid}`).push().key : Date.now()
     video = { ...video, key: videoKey }
     const syncingVideo = { ...video, isSyncing: true }
 
@@ -38,7 +38,7 @@ export function addVideo(video) {
 
     if (auth) {
       db
-        .ref(`/videos/${uid}/${videoKey}`)
+        .ref(`/videos/${user.uid}/${videoKey}`)
         .set(video)
         .then(() => {
           const syncedVideo = { ...video, isSyncing: false }
@@ -56,7 +56,7 @@ export function editVideo(oldVideo, newVideo) {
   const videoKey = oldVideo.key
 
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     const auth = authenticated
     const syncingVideo = { ...newVideo, isSyncing: true }
 
@@ -64,7 +64,7 @@ export function editVideo(oldVideo, newVideo) {
 
     if (auth) {
       db
-        .ref(`/videos/${uid}/${videoKey}`)
+        .ref(`/videos/${user.uid}/${videoKey}`)
         .update(newVideo)
         .then(() => {
           const syncedVideo = { ...newVideo, isSyncing: false }
@@ -83,7 +83,7 @@ export function deleteVideo(video) {
   const videoKey = video.key
 
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     const auth = authenticated
     dispatch({ type: types.DELETE_VIDEO, videoKey })
 
@@ -91,7 +91,7 @@ export function deleteVideo(video) {
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })
 
       db
-        .ref(`/videos/${uid}/${videoKey}`)
+        .ref(`/videos/${user.uid}/${videoKey}`)
         .remove()
         .then(() => {
           dispatch({ type: types.APP_STATUS, status: null })
@@ -106,7 +106,7 @@ export function deleteVideo(video) {
 
 export function emptyTrash(videos) {
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     const auth = authenticated
     dispatch(push('/'))
     videos.forEach(video => {
@@ -117,7 +117,7 @@ export function emptyTrash(videos) {
       let updates = {}
 
       videos.forEach(video => {
-        updates[`/videos/${uid}/${video.key}`] = null
+        updates[`/videos/${user.uid}/${video.key}`] = null
       })
 
       dispatch({ type: types.APP_STATUS, status: `App is deleting video` })

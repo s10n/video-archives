@@ -15,7 +15,7 @@ const store = createStoreWithMiddleware(reducers)
 
 auth().onAuthStateChanged(user => {
   user
-    ? store.dispatch({ type: types.AUTH_USER, uid: user.uid })
+    ? store.dispatch({ type: types.AUTH_USER, user })
     : store.dispatch({ type: types.UNAUTH_USER })
 
   ReactDOM.render(

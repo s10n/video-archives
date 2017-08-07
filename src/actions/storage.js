@@ -4,13 +4,13 @@ import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../constants/sample'
 
 export function importStorage() {
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     dispatch({ type: types.IMPORT_STORAGE, boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
 
     if (authenticated) {
       const updates = {
-        [`/boards/${uid}`]: SAMPLE_BOARDS,
-        [`/videos/${uid}`]: SAMPLE_VIDEOS
+        [`/boards/${user.uid}`]: SAMPLE_BOARDS,
+        [`/videos/${user.uid}`]: SAMPLE_VIDEOS
       }
 
       dispatch({ type: types.APP_STATUS, status: 'App is importing sample' })
@@ -31,13 +31,13 @@ export function importStorage() {
 
 export function emptyStorage() {
   return (dispatch, getState) => {
-    const { authenticated, uid } = getState().auth
+    const { authenticated, user } = getState().auth
     dispatch({ type: types.EMPTY_STORAGE })
 
     if (authenticated) {
       const updates = {
-        [`/boards/${uid}`]: null,
-        [`/videos/${uid}`]: null
+        [`/boards/${user.uid}`]: null,
+        [`/videos/${user.uid}`]: null
       }
 
       dispatch({ type: types.APP_STATUS, status: 'App is emptying storage' })

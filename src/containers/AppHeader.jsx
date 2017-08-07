@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
-import { auth } from '../constants/api'
 import appConfig from '../config/app'
 import './AppHeader.css'
 
@@ -14,7 +13,7 @@ const defaultProps = {
   status: ''
 }
 
-const AppHeader = ({ status, authenticated }) => {
+const AppHeader = ({ status, authenticated, user }) => {
   const appNav = authenticated => {
     if (!authenticated) {
       return appConfig.signupAllowed
@@ -27,8 +26,6 @@ const AppHeader = ({ status, authenticated }) => {
           </nav>
         : null
     }
-
-    const user = auth().currentUser
 
     return (
       <nav className="AppNav">

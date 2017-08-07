@@ -9,8 +9,8 @@ export function signupUser({ email, password }) {
   return dispatch => {
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        dispatch({ type: types.AUTH_USER, uid: response.uid })
+      .then(user => {
+        dispatch({ type: types.AUTH_USER, user })
         dispatch(push('/'))
       })
       .catch(error => {
@@ -23,8 +23,8 @@ export function signinUser({ email, password }) {
   return dispatch => {
     auth()
       .signInWithEmailAndPassword(email, password)
-      .then(response => {
-        dispatch({ type: types.AUTH_USER, uid: response.uid })
+      .then(user => {
+        dispatch({ type: types.AUTH_USER, user })
         dispatch(push('/'))
         dispatch(fetchBoards())
         dispatch(fetchVideos())
@@ -39,7 +39,7 @@ export function signoutUser() {
   return dispatch => {
     auth()
       .signOut()
-      .then(response => {
+      .then(user => {
         dispatch({ type: types.UNAUTH_USER })
         dispatch(emptyStorage())
       })

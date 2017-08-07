@@ -48,7 +48,7 @@ class App extends Component {
     return (
       <ConnectedRouter history={history}>
         <div className="App">
-          <AppHeader status={app.status} authenticated={auth.authenticated} />
+          <AppHeader status={app.status} authenticated={auth.authenticated} user={auth.user} />
 
           <section className="AppContainer">
             <AppSidebar boards={boards} videos={videos} trash={trash} />
