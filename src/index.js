@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import reduxThunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
 import Raven from 'raven-js'
@@ -10,9 +10,11 @@ import types from './constants/types'
 import { auth } from './constants/api'
 import App, { history } from './containers/App'
 
-const middleware = routerMiddleware(history)
-const createStoreWithMiddleware = applyMiddleware(reduxThunk, middleware)(createStore)
-const store = createStoreWithMiddleware(reducers)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+  reducers,
+  composeEnhancers(applyMiddleware(reduxThunk, routerMiddleware(history)))
+)
 
 process.env.REACT_APP_ENV === 'production' &&
   Raven.config('https://6e6f68aaf3a14526aa3880cf5353b7b1@sentry.io/200634').install()
