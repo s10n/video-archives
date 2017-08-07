@@ -10,7 +10,11 @@ import types from './constants/types'
 import { auth } from './constants/api'
 import App, { history } from './containers/App'
 
-const store = createStore(reducers, compose(applyMiddleware(reduxThunk, routerMiddleware(history))))
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+  reducers,
+  composeEnhancers(applyMiddleware(reduxThunk, routerMiddleware(history)))
+)
 
 process.env.REACT_APP_ENV === 'production' &&
   Raven.config('https://6e6f68aaf3a14526aa3880cf5353b7b1@sentry.io/200634').install()
