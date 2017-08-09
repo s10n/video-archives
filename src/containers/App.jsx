@@ -62,13 +62,8 @@ class App extends Component {
 
 App.propTypes = propTypes
 
-const mapStateToProps = ({ app, auth, boards, videos }) => {
-  return { app, auth, boards, videos }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchBoards, fetchVideos }, dispatch)
-}
+const mapStateToProps = ({ app, auth, boards, videos }) => ({ app, auth, boards, videos })
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchBoards, fetchVideos }, dispatch)
 
 const enhance = _.flow(DragDropContext(HTML5Backend), connect(mapStateToProps, mapDispatchToProps))
 

@@ -51,13 +51,7 @@ class Trash extends Component {
 
 Trash.propTypes = propTypes
 
-const mapStateToProps = ({ boards, videos }) => {
-  videos = _.filter(videos, 'deleted')
-  return { boards, videos }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ emptyTrash }, dispatch)
-}
+const mapStateToProps = ({ boards, videos }) => ({ boards, videos: _.filter(videos, 'deleted') })
+const mapDispatchToProps = dispatch => bindActionCreators({ emptyTrash }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trash)

@@ -56,12 +56,11 @@ class PageSignin extends Component {
 PageSignin.propTypes = propTypes
 PageSignin.defaultProps = defaultProps
 
-const mapStateToProps = ({ auth }) => {
-  return { authenticated: auth.authenticated, errorMessage: auth.error }
-}
+const mapStateToProps = ({ auth }) => ({
+  authenticated: auth.authenticated,
+  errorMessage: auth.error
+})
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ signinUser }, dispatch)
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ signinUser }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageSignin)

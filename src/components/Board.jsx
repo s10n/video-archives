@@ -67,8 +67,7 @@ const mapStateToProps = (state, ownProps) => {
   return { boards, board, videos }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ editBoard, deleteBoard, addList }, dispatch)
-}
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ editBoard, deleteBoard, addList }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board)

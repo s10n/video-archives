@@ -43,13 +43,11 @@ const listTarget = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  }
-}
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+})
 
 const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo, ...props }) => {
   const { connectDropTarget, isOver, canDrop } = props
@@ -87,13 +85,10 @@ const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo
 List.propTypes = propTypes
 List.defaultProps = defaultProps
 
-const mapStateToProps = ({ app, boards }) => {
-  return { app, boards }
-}
+const mapStateToProps = ({ app, boards }) => ({ app, boards })
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ editList, deleteList, addVideo }, dispatch)
-}
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ editList, deleteList, addVideo }, dispatch)
 
 const enhance = _.flow(
   DropTarget(ItemTypes.VIDEO, listTarget, collect),

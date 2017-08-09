@@ -8,15 +8,14 @@ export const setStorage = (props, prevProps) => {
   if (prevVideos !== nextVideos) localStorage.videos = nextVideos
 }
 
-export const slugify = string => {
-  return string
+export const slugify = string =>
+  string
     .trim()
     .toString()
     .toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/:|\/|\?|#|\[|\]|@|!|\$|&|'|\(|\)|\*|\+|,|;|=|%|\./g, '-')
     .replace(/--+/g, '-')
-}
 
 export const storageTest = () => {
   // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js

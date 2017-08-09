@@ -147,13 +147,11 @@ class PageFront extends Component {
 
 PageFront.propTypes = propTypes
 
-const mapStateToProps = ({ auth, boards }) => {
-  const isProduction = process.env.REACT_APP_ENV === 'production'
-  return { hideButtons: isProduction && auth.authenticated && !_.isEmpty(boards) }
-}
+const mapStateToProps = ({ auth, boards }) => ({
+  hideButtons:
+    process.env.REACT_APP_ENV === 'production' && auth.authenticated && !_.isEmpty(boards)
+})
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ importStorage, emptyStorage }, dispatch)
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ importStorage, emptyStorage }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageFront)

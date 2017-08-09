@@ -50,12 +50,10 @@ const videoSource = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+})
 
 const Video = ({ video, board, addingVideo, appStatus, boards, ...props }) => {
   const { editVideo, deleteVideo } = props
@@ -111,13 +109,8 @@ const Video = ({ video, board, addingVideo, appStatus, boards, ...props }) => {
 Video.propTypes = propTypes
 Video.defaultProps = defaultProps
 
-const mapStateToProps = ({ app, boards }) => {
-  return { appStatus: app.status, boards }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ editVideo, deleteVideo }, dispatch)
-}
+const mapStateToProps = ({ app, boards }) => ({ appStatus: app.status, boards })
+const mapDispatchToProps = dispatch => bindActionCreators({ editVideo, deleteVideo }, dispatch)
 
 const enhance = _.flow(
   DragSource(ItemTypes.VIDEO, videoSource, collect),
