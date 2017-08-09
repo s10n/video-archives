@@ -2,7 +2,7 @@ import { db } from '../constants/api'
 import types from '../constants/types'
 import { SAMPLE_BOARDS, SAMPLE_VIDEOS } from '../constants/sample'
 
-export function importStorage() {
+export const importStorage = () => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     dispatch({ type: types.IMPORT_STORAGE, boards: SAMPLE_BOARDS, videos: SAMPLE_VIDEOS })
@@ -29,7 +29,7 @@ export function importStorage() {
   }
 }
 
-export function emptyStorage() {
+export const emptyStorage = () => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     dispatch({ type: types.EMPTY_STORAGE })

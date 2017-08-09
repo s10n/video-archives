@@ -2,7 +2,7 @@ import { push } from 'react-router-redux'
 import { db } from '../constants/api'
 import types from '../constants/types'
 
-export function fetchBoards() {
+export const fetchBoards = () => {
   const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
 
   return (dispatch, getState) => {
@@ -26,7 +26,7 @@ export function fetchBoards() {
   }
 }
 
-export function addBoard(board) {
+export const addBoard = board => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     const auth = authenticated
@@ -54,7 +54,7 @@ export function addBoard(board) {
   }
 }
 
-export function editBoard(oldBoard, newBoard) {
+export const editBoard = (oldBoard, newBoard) => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     const auth = authenticated
@@ -83,7 +83,7 @@ export function editBoard(oldBoard, newBoard) {
   }
 }
 
-export function deleteBoard(board, videos) {
+export const deleteBoard = (board, videos) => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     const auth = authenticated

@@ -2,7 +2,7 @@ import { push } from 'react-router-redux'
 import { db } from '../constants/api'
 import types from '../constants/types'
 
-export function fetchVideos() {
+export const fetchVideos = () => {
   const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
 
   return (dispatch, getState) => {
@@ -26,7 +26,7 @@ export function fetchVideos() {
   }
 }
 
-export function addVideo(video) {
+export const addVideo = video => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     const auth = authenticated
@@ -52,7 +52,7 @@ export function addVideo(video) {
   }
 }
 
-export function editVideo(oldVideo, newVideo) {
+export const editVideo = (oldVideo, newVideo) => {
   const videoKey = oldVideo.key
 
   return (dispatch, getState) => {
@@ -79,7 +79,7 @@ export function editVideo(oldVideo, newVideo) {
   }
 }
 
-export function deleteVideo(video) {
+export const deleteVideo = video => {
   const videoKey = video.key
 
   return (dispatch, getState) => {
@@ -104,7 +104,7 @@ export function deleteVideo(video) {
   }
 }
 
-export function emptyTrash(videos) {
+export const emptyTrash = videos => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     const auth = authenticated

@@ -1,7 +1,7 @@
 import { db } from '../constants/api'
 import types from '../constants/types'
 
-export function addList(boardKey, list) {
+export const addList = (boardKey, list) => {
   return (dispatch, getState) => {
     const { authenticated, user } = getState().auth
     const auth = authenticated
@@ -27,7 +27,7 @@ export function addList(boardKey, list) {
   }
 }
 
-export function editList(boardKey, oldList, newList) {
+export const editList = (boardKey, oldList, newList) => {
   const listKey = oldList.key
 
   return (dispatch, getState) => {
@@ -54,7 +54,7 @@ export function editList(boardKey, oldList, newList) {
   }
 }
 
-export function deleteList(board, list, videos) {
+export const deleteList = (board, list, videos) => {
   const boardKey = board.key
   const listKey = list.key
 
