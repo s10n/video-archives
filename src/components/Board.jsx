@@ -52,7 +52,7 @@ const Board = ({ boards, board, videos, editBoard, deleteBoard, addList }) => {
   return !_.isEmpty(board)
     ? <Page page="Board" header={<BoardEdit {...propsBoardEdit} />}>
         {!_.isEmpty(videosInbox) && listInbox}
-        {!_.isEmpty(listsSorted) && listsSorted.map(list => listWrapper(list))}
+        {!_.isEmpty(listsSorted) && listsSorted.map(listWrapper)}
         {!board.isSyncing && listAddContainer}
       </Page>
     : <NotFound />
