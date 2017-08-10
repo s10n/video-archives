@@ -3,7 +3,7 @@ import { db } from '../constants/api'
 import types from '../constants/types'
 
 export const fetchVideos = () => (dispatch, getState) => {
-  const localVideos = localStorage.videos && JSON.parse(localStorage.videos)
+  const localVideos = JSON.parse(localStorage.getItem('videos'))
   const { authenticated, user } = getState().auth
   const auth = authenticated
   dispatch({ type: types.FETCH_VIDEOS, videos: localVideos })

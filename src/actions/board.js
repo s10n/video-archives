@@ -3,7 +3,7 @@ import { db } from '../constants/api'
 import types from '../constants/types'
 
 export const fetchBoards = () => (dispatch, getState) => {
-  const localBoards = localStorage.boards && JSON.parse(localStorage.boards)
+  const localBoards = JSON.parse(localStorage.getItem('boards'))
   const { authenticated, user } = getState().auth
   const auth = authenticated
   dispatch({ type: types.FETCH_BOARDS, boards: localBoards })

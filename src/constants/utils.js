@@ -4,8 +4,8 @@ export const setStorage = (props, prevProps) => {
   const prevVideos = JSON.stringify(prevProps.videos)
   const nextVideos = JSON.stringify(props.videos)
 
-  if (prevBoards !== nextBoards) localStorage.boards = nextBoards
-  if (prevVideos !== nextVideos) localStorage.videos = nextVideos
+  if (prevBoards !== nextBoards) localStorage.setItem('boards', nextBoards)
+  if (prevVideos !== nextVideos) localStorage.setItem('videos', nextVideos)
 }
 
 export const slugify = string =>
