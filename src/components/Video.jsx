@@ -55,9 +55,9 @@ const collect = (connect, monitor) => ({
   isDragging: monitor.isDragging()
 })
 
-const Video = ({ video, board, addingVideo, appStatus, boards, ...props }) => {
-  const { editVideo, deleteVideo } = props
-  const { connectDragSource, isDragging } = props
+const Video = ({ video, board, addingVideo, appStatus, boards, ...rest }) => {
+  const { editVideo, deleteVideo } = rest
+  const { connectDragSource, isDragging } = rest
   const { thumbnails, title, channelTitle, channelId } = video.data.snippet
   const backgroundImage = `url(${thumbnails.high.url})`
   const url = `https://www.youtube.com/watch?v=${video.data.id}`

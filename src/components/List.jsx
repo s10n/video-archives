@@ -49,8 +49,8 @@ const collect = (connect, monitor) => ({
   canDrop: monitor.canDrop()
 })
 
-const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo, ...props }) => {
-  const { connectDropTarget, isOver, canDrop } = props
+const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo, ...rest }) => {
+  const { connectDropTarget, isOver, canDrop } = rest
   const videosFiltered = _.filter(videos, video => !video.deleted)
   const videosSorted = _.sortBy(videosFiltered, 'data.snippet.publishedAt').reverse()
 
