@@ -30,12 +30,7 @@ class PageSignout extends Component {
 
 PageSignout.propTypes = propTypes
 
-const mapStateToProps = ({ auth }) => {
-  return { authenticated: auth.authenticated }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ signoutUser }, dispatch)
-}
+const mapStateToProps = ({ auth }) => ({ authenticated: auth.authenticated })
+const mapDispatchToProps = dispatch => bindActionCreators({ signoutUser }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageSignout)

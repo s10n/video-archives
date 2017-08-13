@@ -133,8 +133,6 @@ class VideoAdd extends Component {
 
 VideoAdd.propTypes = propTypes
 
-const mapStateToProps = ({ videos }) => {
-  return { videos }
-}
+const mapStateToProps = ({ videos }) => ({ videos })
 
 export default connect(mapStateToProps)(VideoAdd)

@@ -30,13 +30,11 @@ const boardTarget = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  }
-}
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+})
 
 const NavItem = ({ board, count, trash, connectDropTarget, isOver, canDrop }) =>
   connectDropTarget(

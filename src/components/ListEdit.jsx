@@ -45,12 +45,10 @@ const listSource = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+})
 
 class ListEdit extends Component {
   constructor(props) {
