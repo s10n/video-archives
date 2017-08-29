@@ -37,19 +37,21 @@ class PageSignin extends Component {
     const { authenticated, errorMessage } = this.props
     const { isSubmitting } = this.state
 
-    return !authenticated
-      ? <Page page="Signin" title="Sign in">
-          <Card>
-            <FormSignin
-              onSubmit={this.submit}
-              isSubmitting={isSubmitting}
-              errorMessage={errorMessage}
-            />
+    return !authenticated ? (
+      <Page page="Signin" title="Sign in">
+        <Card>
+          <FormSignin
+            onSubmit={this.submit}
+            isSubmitting={isSubmitting}
+            errorMessage={errorMessage}
+          />
 
-            <Link to="/signup">Create account</Link>
-          </Card>
-        </Page>
-      : <Redirect to="/" />
+          <Link to="/signup">Create account</Link>
+        </Card>
+      </Page>
+    ) : (
+      <Redirect to="/" />
+    )
   }
 }
 

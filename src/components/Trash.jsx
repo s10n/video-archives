@@ -41,9 +41,7 @@ class Trash extends Component {
 
     return (
       <Page page="Trash" title="Trash">
-        <Card header={header}>
-          {videos.map(video => <Video video={video} key={video.key} />)}
-        </Card>
+        <Card header={header}>{videos.map(video => <Video video={video} key={video.key} />)}</Card>
       </Page>
     )
   }

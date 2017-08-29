@@ -21,10 +21,7 @@ const propTypes = {
   addList: PropTypes.func.isRequired
 }
 
-const ListContainer = ({ children }) =>
-  <div className="ListContainer">
-    {children}
-  </div>
+const ListContainer = ({ children }) => <div className="ListContainer">{children}</div>
 
 const Board = ({ boards, board, videos, editBoard, deleteBoard, addList }) => {
   const videosInbox = _.filter(videos, video => !video.list && !video.deleted)
@@ -38,10 +35,11 @@ const Board = ({ boards, board, videos, editBoard, deleteBoard, addList }) => {
     </ListContainer>
   )
 
-  const listWrapper = list =>
+  const listWrapper = list => (
     <ListContainer key={list.key}>
       <List videos={_.filter(videos, video => video.list === list.key)} board={board} list={list} />
     </ListContainer>
+  )
 
   const listAddContainer = (
     <ListContainer>
@@ -49,13 +47,15 @@ const Board = ({ boards, board, videos, editBoard, deleteBoard, addList }) => {
     </ListContainer>
   )
 
-  return !_.isEmpty(board)
-    ? <Page page="Board" header={<BoardEdit {...propsBoardEdit} />}>
-        {!_.isEmpty(videosInbox) && listInbox}
-        {!_.isEmpty(listsSorted) && listsSorted.map(listWrapper)}
-        {!board.isSyncing && listAddContainer}
-      </Page>
-    : <NotFound />
+  return !_.isEmpty(board) ? (
+    <Page page="Board" header={<BoardEdit {...propsBoardEdit} />}>
+      {!_.isEmpty(videosInbox) && listInbox}
+      {!_.isEmpty(listsSorted) && listsSorted.map(listWrapper)}
+      {!board.isSyncing && listAddContainer}
+    </Page>
+  ) : (
+    <NotFound />
+  )
 }
 
 Board.propTypes = propTypes

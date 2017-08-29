@@ -27,10 +27,11 @@ const AppSidebar = ({ boards, videos, trash }) => {
           )
         })}
 
-        {trash > 0 &&
+        {trash > 0 && (
           <NavLink to="/trash">
             <NavItem trash count={trash} />
-          </NavLink>}
+          </NavLink>
+        )}
 
         <BoardAdd boards={boards} />
       </div>

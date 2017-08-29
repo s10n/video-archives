@@ -44,18 +44,20 @@ class PageFront extends Component {
               videos you like
             </h2>
 
-            {this.props.hideButtons
-              ? <ul>
-                  <li>Create a new board to start</li>
-                </ul>
-              : <ol>
-                  <li>Create a new board to start</li>
-                  <li>
-                    Or just import sample data to look around<br />
-                    <button onClick={this.handleImportClick}>Import sample</button>
-                    <button onClick={this.handleEmptyClick}>Empty storage</button>
-                  </li>
-                </ol>}
+            {this.props.hideButtons ? (
+              <ul>
+                <li>Create a new board to start</li>
+              </ul>
+            ) : (
+              <ol>
+                <li>Create a new board to start</li>
+                <li>
+                  Or just import sample data to look around<br />
+                  <button onClick={this.handleImportClick}>Import sample</button>
+                  <button onClick={this.handleEmptyClick}>Empty storage</button>
+                </li>
+              </ol>
+            )}
           </section>
 
           <section className="Paragraph">
@@ -71,9 +73,11 @@ class PageFront extends Component {
                   localStorage
                 </a>{' '}
                 to store videos. (
-                {storageTest()
-                  ? `And your browser supports localStorage.`
-                  : `But your browser doesn't support localStorage.`})<br />
+                {storageTest() ? (
+                  `And your browser supports localStorage.`
+                ) : (
+                  `But your browser doesn't support localStorage.`
+                )})<br />
                 So you don't need to sign up. But if you change your browser or empty your browser
                 storage, you will not be able to access videos you stored.
               </li>
