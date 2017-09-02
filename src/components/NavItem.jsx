@@ -39,15 +39,9 @@ const collect = (connect, monitor) => ({
 const NavItem = ({ board, count, trash, connectDropTarget, isOver, canDrop }) =>
   connectDropTarget(
     <div className={isOver && canDrop ? 'NavItem canDrop' : 'NavItem'}>
-      {!trash
-        ? <span>
-            {board.title}
-          </span>
-        : <span>Trash</span>}
+      {!trash ? <span>{board.title}</span> : <span>Trash</span>}
 
-      <span className="count">
-        {count}
-      </span>
+      <span className="count">{count}</span>
     </div>
   )
 

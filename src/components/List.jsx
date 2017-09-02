@@ -71,12 +71,13 @@ const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo
   return connectDropTarget(
     <div style={{ height: '100%' }}>
       <Card header={header} footer={footer} variant={{ padding: 0 }} canDrop={isOver && canDrop}>
-        {!_.isEmpty(videosSorted) &&
+        {!_.isEmpty(videosSorted) && (
           <div style={{ maxHeight: isIE() && window.innerHeight - 480 }}>
-            {videosSorted.map(video =>
+            {videosSorted.map(video => (
               <Video video={video} board={board} list={list} key={video.key} />
-            )}
-          </div>}
+            ))}
+          </div>
+        )}
       </Card>
     </div>
   )

@@ -60,12 +60,11 @@ class BoardAdd extends Component {
           placeholder="Create new board..."
         />
 
-        {title.length > 0 &&
+        {title.length > 0 && (
           <p className="HelpBlock">
-            <small>
-              {error || errorMessages.board.valid}
-            </small>
-          </p>}
+            <small>{error || errorMessages.board.valid}</small>
+          </p>
+        )}
       </section>
     )
   }

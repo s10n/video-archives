@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import { signupUser } from '../actions/auth'
 import appConfig from '../config/app'
-import Page from '../components/Page'
-import Card from '../components/Card'
-import FormSignup from '../components/FormSignup'
+import Page from './Page'
+import Card from './Card'
+import FormSignup from './FormSignup'
 
 const propTypes = {
   authenticated: PropTypes.bool.isRequired,
@@ -38,17 +38,19 @@ class PageSignup extends Component {
     const { authenticated, errorMessage } = this.props
     const { isSubmitting } = this.state
 
-    return !authenticated && appConfig.signupAllowed
-      ? <Page page="Signup" title="Create your account">
-          <Card>
-            <FormSignup
-              onSubmit={this.submit}
-              isSubmitting={isSubmitting}
-              errorMessage={errorMessage}
-            />
-          </Card>
-        </Page>
-      : <Redirect to="/" />
+    return !authenticated && appConfig.signupAllowed ? (
+      <Page page="Signup" title="Create your account">
+        <Card>
+          <FormSignup
+            onSubmit={this.submit}
+            isSubmitting={isSubmitting}
+            errorMessage={errorMessage}
+          />
+        </Card>
+      </Page>
+    ) : (
+      <Redirect to="/" />
+    )
   }
 }
 

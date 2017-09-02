@@ -2,26 +2,26 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  box-shadow: 0 1px 2px hsla(0, 0%, 0%, .1);
+  box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.1);
   max-height: 100%;
   white-space: normal;
 }
 
 .Card + .Card {
-  margin-top: .75rem;
+  margin-top: 0.75rem;
 }
 
 .CardHeader {
   flex: 0 0 auto;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .CardScroll {
   flex: 1 1 auto;
   overflow-x: hidden;
   overflow-y: auto;
-  margin: 0 .5rem;
-  padding: 0 .5rem;
+  margin: 0 0.5rem;
+  padding: 0 0.5rem;
 }
 
 .CardScroll:first-child:not(:empty) {
@@ -33,11 +33,11 @@
 }
 
 .CardScroll:not(:empty) + .CardFooter {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .CardScroll::-webkit-scrollbar {
-  width: .375rem;
+  width: 0.375rem;
 }
 
 .CardScroll::-webkit-scrollbar-button {
@@ -47,10 +47,10 @@
 
 .CardScroll::-webkit-scrollbar-thumb {
   background-color: hsl(0, 0%, 85%);
-  border-radius: calc(.375rem / 2);
+  border-radius: calc(0.375rem / 2);
 }
 
 .CardScroll::-webkit-scrollbar-track-piece {
-  background-color: hsla(0, 0%, 0%, .07);
-  border-radius: calc(.375rem / 2);
+  background-color: hsla(0, 0%, 0%, 0.07);
+  border-radius: calc(0.375rem / 2);
 }

@@ -101,16 +101,14 @@ class VideoAdd extends Component {
         : `: Trash`
     }
 
-    return error
-      ? <section className="FetchResult">
-          <p className={className}>
-            <small>
-              {errorMessages.video[error] + additionalMessage}
-            </small>
-          </p>
-          {error === 'success' && <Video video={video} addingVideo />}
-        </section>
-      : null
+    return error ? (
+      <section className="FetchResult">
+        <p className={className}>
+          <small>{errorMessages.video[error] + additionalMessage}</small>
+        </p>
+        {error === 'success' && <Video video={video} addingVideo />}
+      </section>
+    ) : null
   }
 
   render() {

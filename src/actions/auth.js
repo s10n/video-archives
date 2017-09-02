@@ -5,8 +5,8 @@ import { fetchBoards } from './board'
 import { fetchVideos } from './video'
 import { emptyStorage } from './storage'
 
-export const signupUser = ({ email, password }) => dispatch => {
-  auth()
+export const signupUser = ({ email, password }) => dispatch =>
+  auth
     .createUserWithEmailAndPassword(email, password)
     .then(user => {
       dispatch({ type: types.AUTH_USER, user })
@@ -15,10 +15,9 @@ export const signupUser = ({ email, password }) => dispatch => {
     .catch(error => {
       dispatch(authError(error.message))
     })
-}
 
-export const signinUser = ({ email, password }) => dispatch => {
-  auth()
+export const signinUser = ({ email, password }) => dispatch =>
+  auth
     .signInWithEmailAndPassword(email, password)
     .then(user => {
       dispatch({ type: types.AUTH_USER, user })
@@ -29,18 +28,16 @@ export const signinUser = ({ email, password }) => dispatch => {
     .catch(error => {
       dispatch(authError(error.message))
     })
-}
 
-export const signoutUser = () => dispatch => {
-  auth()
+export const signoutUser = () => dispatch =>
+  auth
     .signOut()
-    .then(user => {
+    .then(() => {
       dispatch({ type: types.UNAUTH_USER })
       dispatch(emptyStorage())
     })
     .catch(error => {
       dispatch(authError(error.message))
     })
-}
 
 const authError = error => ({ type: types.AUTH_ERROR, error })

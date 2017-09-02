@@ -16,28 +16,22 @@ const defaultProps = {
 const AppHeader = ({ status, authenticated, user }) => {
   const appNav = authenticated => {
     if (!authenticated) {
-      return appConfig.signupAllowed
-        ? <nav className="AppNav">
-            <NavLink to="/signup" className="hidden-mobile">
-              Sign up
-            </NavLink>
+      return appConfig.signupAllowed ? (
+        <nav className="AppNav">
+          <NavLink to="/signup" className="hidden-mobile">
+            Sign up
+          </NavLink>
 
-            <NavLink to="/signin">Sign in</NavLink>
-          </nav>
-        : null
+          <NavLink to="/signin">Sign in</NavLink>
+        </nav>
+      ) : null
     }
 
     return (
       <nav className="AppNav">
-        {status &&
-          <span className="hidden-mobile">
-            {status}
-          </span>}
+        {status && <span className="hidden-mobile">{status}</span>}
 
-        {user &&
-          <span className="hidden-mobile">
-            {user.email}
-          </span>}
+        {user && <span className="hidden-mobile">{user.email}</span>}
 
         <NavLink to="/signout">Sign out</NavLink>
       </nav>

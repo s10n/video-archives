@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import { signoutUser } from '../actions/auth'
-import Page from '../components/Page'
-import Card from '../components/Card'
+import Page from './Page'
+import Card from './Card'
 
 const propTypes = {
   authenticated: PropTypes.bool.isRequired,
@@ -20,11 +20,13 @@ class PageSignout extends Component {
   render() {
     const { authenticated } = this.props
 
-    return authenticated
-      ? <Page page="Signout" title="Goodbye">
-          <Card>It was great to meet you.</Card>
-        </Page>
-      : <Redirect to="/" />
+    return authenticated ? (
+      <Page page="Signout" title="Goodbye">
+        <Card>It was great to meet you.</Card>
+      </Page>
+    ) : (
+      <Redirect to="/" />
+    )
   }
 }
 

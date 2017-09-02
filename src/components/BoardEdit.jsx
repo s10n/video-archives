@@ -89,10 +89,7 @@ class BoardEdit extends Component {
           🗑
         </button>
 
-        {error &&
-          <small>
-            {error}
-          </small>}
+        {error && <small>{error}</small>}
       </div>
     )
   }

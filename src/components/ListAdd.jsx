@@ -55,10 +55,7 @@ class ListAdd extends Component {
           placeholder="Add a list..."
         />
 
-        {error &&
-          <small className="HelpBlock">
-            {error}
-          </small>}
+        {error && <small className="HelpBlock">{error}</small>}
       </div>
     )
 

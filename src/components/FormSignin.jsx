@@ -28,7 +28,7 @@ const validate = values => {
   return errors
 }
 
-const FormSignin = ({ handleSubmit, isSubmitting, errorMessage }) =>
+const FormSignin = ({ handleSubmit, isSubmitting, errorMessage }) => (
   <form onSubmit={handleSubmit}>
     <Field name="email" type="text" label="Email" component={RenderField} />
     <Field name="password" type="password" label="Password" component={RenderField} />
@@ -38,12 +38,10 @@ const FormSignin = ({ handleSubmit, isSubmitting, errorMessage }) =>
         Sign in
       </button>
 
-      {errorMessage &&
-        <span>
-          {errorMessage}
-        </span>}
+      {errorMessage && <span>{errorMessage}</span>}
     </div>
   </form>
+)
 
 FormSignin.propTypes = propTypes
 FormSignin.defaultProps = defaultProps

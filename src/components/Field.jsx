@@ -14,23 +14,17 @@ const defaultProps = {
   meta: {}
 }
 
-const Field = ({ label, type, input, meta }) =>
+const Field = ({ label, type, input, meta }) => (
   <div className="form-element">
-    {label &&
-      <label>
-        {label}
-      </label>}
+    {label && <label>{label}</label>}
 
     <div>
       <input type={type} {...input} />
 
-      {meta.touched &&
-        meta.error &&
-        <small>
-          {meta.error}
-        </small>}
+      {meta.touched && meta.error && <small>{meta.error}</small>}
     </div>
   </div>
+)
 
 Field.propTypes = propTypes
 Field.defaultProps = defaultProps
