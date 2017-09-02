@@ -1,9 +1,9 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import PageFront from './containers/PageFront'
-import PageSignup from './containers/PageSignup'
-import PageSignin from './containers/PageSignin'
-import PageSignout from './containers/PageSignout'
+import PageFront from './components/PageFront'
+import PageSignup from './components/PageSignup'
+import PageSignin from './components/PageSignin'
+import PageSignout from './components/PageSignout'
 import Trash from './components/Trash'
 import Board from './components/Board'
 

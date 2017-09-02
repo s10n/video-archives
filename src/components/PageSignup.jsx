@@ -2,23 +2,24 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Redirect, Link } from 'react-router-dom'
-import { signinUser } from '../actions/auth'
-import Page from '../components/Page'
-import Card from '../components/Card'
-import FormSignin from '../components/FormSignin'
+import { Redirect } from 'react-router-dom'
+import { signupUser } from '../actions/auth'
+import appConfig from '../config/app'
+import Page from './Page'
+import Card from './Card'
+import FormSignup from './FormSignup'
 
 const propTypes = {
   authenticated: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
-  signinUser: PropTypes.func.isRequired
+  signupUser: PropTypes.func.isRequired
 }
 
 const defaultProps = {
   errorMessage: ''
 }
 
-class PageSignin extends Component {
+class PageSignup extends Component {
   constructor(props) {
     super(props)
 
@@ -29,7 +30,7 @@ class PageSignin extends Component {
 
   submit(values) {
     this.setState({ isSubmitting: true })
-    this.props.signinUser(values)
+    this.props.signupUser(values)
     this.setState({ isSubmitting: false })
   }
 
@@ -37,16 +38,14 @@ class PageSignin extends Component {
     const { authenticated, errorMessage } = this.props
     const { isSubmitting } = this.state
 
-    return !authenticated ? (
-      <Page page="Signin" title="Sign in">
+    return !authenticated && appConfig.signupAllowed ? (
+      <Page page="Signup" title="Create your account">
         <Card>
-          <FormSignin
+          <FormSignup
             onSubmit={this.submit}
             isSubmitting={isSubmitting}
             errorMessage={errorMessage}
           />
-
-          <Link to="/signup">Create account</Link>
         </Card>
       </Page>
     ) : (
@@ -55,14 +54,14 @@ class PageSignin extends Component {
   }
 }
 
-PageSignin.propTypes = propTypes
-PageSignin.defaultProps = defaultProps
+PageSignup.propTypes = propTypes
+PageSignup.defaultProps = defaultProps
 
 const mapStateToProps = ({ auth }) => ({
   authenticated: auth.authenticated,
   errorMessage: auth.error
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ signinUser }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ signupUser }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageSignin)
+export default connect(mapStateToProps, mapDispatchToProps)(PageSignup)

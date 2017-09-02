@@ -3,8 +3,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import './AppSidebar.css'
-import NavItem from '../components/NavItem'
-import BoardAdd from '../components/BoardAdd'
+import NavItem from './NavItem'
+import BoardAdd from './BoardAdd'
 
 const propTypes = {
   boards: PropTypes.object.isRequired,

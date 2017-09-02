@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import { signoutUser } from '../actions/auth'
-import Page from '../components/Page'
-import Card from '../components/Card'
+import Page from './Page'
+import Card from './Card'
 
 const propTypes = {
   authenticated: PropTypes.bool.isRequired,

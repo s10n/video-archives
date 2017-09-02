@@ -6,8 +6,8 @@ import { bindActionCreators } from 'redux'
 import { storageTest } from '../constants/utils'
 import { importStorage, emptyStorage } from '../actions/storage'
 import './PageFront.css'
-import Page from '../components/Page'
-import Card from '../components/Card'
+import Page from './Page'
+import Card from './Card'
 
 const propTypes = {
   hideButtons: PropTypes.bool.isRequired,
