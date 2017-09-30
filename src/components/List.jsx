@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -49,38 +49,41 @@ const collect = (connect, monitor) => ({
   canDrop: monitor.canDrop()
 })
 
-const List = ({ app, videos, boards, board, list, editList, deleteList, addVideo, ...rest }) => {
-  const { connectDropTarget, isOver, canDrop } = rest
-  const videosFiltered = _.filter(videos, video => !video.deleted)
-  const videosSorted = _.sortBy(videosFiltered, 'data.snippet.publishedAt').reverse()
+class List extends Component {
+  render() {
+    const { app, videos, boards, board, list, editList, deleteList, addVideo, ...rest } = this.props
+    const { connectDropTarget, isOver, canDrop } = rest
+    const videosFiltered = _.filter(videos, video => !video.deleted)
+    const videosSorted = _.sortBy(videosFiltered, 'data.snippet.publishedAt').reverse()
 
-  const propsListEdit = {
-    board,
-    list,
-    videos,
-    appStatus: app.status,
-    onEdit: editList,
-    onDelete: deleteList
+    const propsListEdit = {
+      board,
+      list,
+      videos,
+      appStatus: app.status,
+      onEdit: editList,
+      onDelete: deleteList
+    }
+
+    const propsVideoAdd = { board, list, boards, onAdd: addVideo }
+
+    const header = <ListEdit {...propsListEdit} />
+    const footer = !_.isEmpty(list) && !list.isSyncing ? <VideoAdd {...propsVideoAdd} /> : null
+
+    return connectDropTarget(
+      <div style={{ height: '100%' }}>
+        <Card header={header} footer={footer} variant={{ padding: 0 }} canDrop={isOver && canDrop}>
+          {!_.isEmpty(videosSorted) && (
+            <div style={{ maxHeight: isIE() && window.innerHeight - 480 }}>
+              {videosSorted.map(video => (
+                <Video video={video} board={board} list={list} key={video.key} />
+              ))}
+            </div>
+          )}
+        </Card>
+      </div>
+    )
   }
-
-  const propsVideoAdd = { board, list, boards, onAdd: addVideo }
-
-  const header = <ListEdit {...propsListEdit} />
-  const footer = !_.isEmpty(list) && !list.isSyncing ? <VideoAdd {...propsVideoAdd} /> : null
-
-  return connectDropTarget(
-    <div style={{ height: '100%' }}>
-      <Card header={header} footer={footer} variant={{ padding: 0 }} canDrop={isOver && canDrop}>
-        {!_.isEmpty(videosSorted) && (
-          <div style={{ maxHeight: isIE() && window.innerHeight - 480 }}>
-            {videosSorted.map(video => (
-              <Video video={video} board={board} list={list} key={video.key} />
-            ))}
-          </div>
-        )}
-      </Card>
-    </div>
-  )
 }
 
 List.propTypes = propTypes
