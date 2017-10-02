@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import createHistory from 'history/createBrowserHistory'
 import { ConnectedRouter } from 'react-router-redux'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import { history } from '../store'
 import { fetchBoards } from '../actions/board'
 import { fetchVideos } from '../actions/video'
 import { setStorage } from '../constants/utils'
@@ -19,8 +19,6 @@ import './App.css'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
 import AppMain from './AppMain'
-
-export const history = createHistory()
 
 const propTypes = {
   app: PropTypes.object.isRequired,
@@ -62,13 +60,8 @@ class App extends Component {
 
 App.propTypes = propTypes
 
-const mapStateToProps = ({ app, auth, boards, videos }) => {
-  return { app, auth, boards, videos }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchBoards, fetchVideos }, dispatch)
-}
+const mapStateToProps = ({ app, auth, boards, videos }) => ({ app, auth, boards, videos })
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchBoards, fetchVideos }, dispatch)
 
 const enhance = _.flow(DragDropContext(HTML5Backend), connect(mapStateToProps, mapDispatchToProps))
 

@@ -18,21 +18,17 @@ const defaultProps = {
   children: null
 }
 
-const Card = ({ header, footer, variant, canDrop, children }) =>
+const Card = ({ header, footer, variant, canDrop, children }) => (
   <article className={canDrop ? 'Card canDrop' : 'Card'}>
     <header className="CardHeader" style={variant}>
       {header}
     </header>
 
-    <main className="CardScroll">
-      {children}
-    </main>
+    <main className="CardScroll">{children}</main>
 
-    {footer &&
-      <footer className="CardFooter">
-        {footer}
-      </footer>}
+    {footer && <footer className="CardFooter">{footer}</footer>}
   </article>
+)
 
 Card.propTypes = propTypes
 Card.defaultProps = defaultProps

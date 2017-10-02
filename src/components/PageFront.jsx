@@ -6,8 +6,8 @@ import { bindActionCreators } from 'redux'
 import { storageTest } from '../constants/utils'
 import { importStorage, emptyStorage } from '../actions/storage'
 import './PageFront.css'
-import Page from '../components/Page'
-import Card from '../components/Card'
+import Page from './Page'
+import Card from './Card'
 
 const propTypes = {
   hideButtons: PropTypes.bool.isRequired,
@@ -44,18 +44,20 @@ class PageFront extends Component {
               videos you like
             </h2>
 
-            {this.props.hideButtons
-              ? <ul>
-                  <li>Create a new board to start</li>
-                </ul>
-              : <ol>
-                  <li>Create a new board to start</li>
-                  <li>
-                    Or just import sample data to look around<br />
-                    <button onClick={this.handleImportClick}>Import sample</button>
-                    <button onClick={this.handleEmptyClick}>Empty storage</button>
-                  </li>
-                </ol>}
+            {this.props.hideButtons ? (
+              <ul>
+                <li>Create a new board to start</li>
+              </ul>
+            ) : (
+              <ol>
+                <li>Create a new board to start</li>
+                <li>
+                  Or just import sample data to look around<br />
+                  <button onClick={this.handleImportClick}>Import sample</button>
+                  <button onClick={this.handleEmptyClick}>Empty storage</button>
+                </li>
+              </ol>
+            )}
           </section>
 
           <section className="Paragraph">
@@ -71,9 +73,11 @@ class PageFront extends Component {
                   localStorage
                 </a>{' '}
                 to store videos. (
-                {storageTest()
-                  ? `And your browser supports localStorage.`
-                  : `But your browser doesn't support localStorage.`})<br />
+                {storageTest() ? (
+                  `And your browser supports localStorage.`
+                ) : (
+                  `But your browser doesn't support localStorage.`
+                )})<br />
                 So you don't need to sign up. But if you change your browser or empty your browser
                 storage, you will not be able to access videos you stored.
               </li>
@@ -147,13 +151,11 @@ class PageFront extends Component {
 
 PageFront.propTypes = propTypes
 
-const mapStateToProps = ({ auth, boards }) => {
-  const isProduction = process.env.REACT_APP_ENV === 'production'
-  return { hideButtons: isProduction && auth.authenticated && !_.isEmpty(boards) }
-}
+const mapStateToProps = ({ auth, boards }) => ({
+  hideButtons:
+    process.env.REACT_APP_ENV === 'production' && auth.authenticated && !_.isEmpty(boards)
+})
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ importStorage, emptyStorage }, dispatch)
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ importStorage, emptyStorage }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageFront)

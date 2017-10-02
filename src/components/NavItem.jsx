@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DropTarget } from 'react-dnd'
 import { ItemTypes } from '../constants/app'
@@ -30,28 +30,24 @@ const boardTarget = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+})
+
+class NavItem extends Component {
+  render() {
+    const { board, count, trash, connectDropTarget, isOver, canDrop } = this.props
+
+    return connectDropTarget(
+      <div className={isOver && canDrop ? 'NavItem canDrop' : 'NavItem'}>
+        {!trash ? <span>{board.title}</span> : <span>Trash</span>}
+        <span className="count">{count}</span>
+      </div>
+    )
   }
 }
-
-const NavItem = ({ board, count, trash, connectDropTarget, isOver, canDrop }) =>
-  connectDropTarget(
-    <div className={isOver && canDrop ? 'NavItem canDrop' : 'NavItem'}>
-      {!trash
-        ? <span>
-            {board.title}
-          </span>
-        : <span>Trash</span>}
-
-      <span className="count">
-        {count}
-      </span>
-    </div>
-  )
 
 NavItem.propTypes = propTypes
 NavItem.defaultProps = defaultProps

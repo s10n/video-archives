@@ -1,6 +1,8 @@
 import types from '../constants/types'
 
-export default function(state = {}, action) {
+const initialState = { status: '' }
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case types.APP_STATUS:
       return { status: action.status }

@@ -1,6 +1,8 @@
 import types from '../constants/types'
 
-export default function(state = {}, action) {
+const initialState = { authenticated: false, user: {}, error: '' }
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case types.AUTH_USER:
       return { ...state, authenticated: true, user: action.user, error: '' }

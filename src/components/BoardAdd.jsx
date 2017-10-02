@@ -60,12 +60,11 @@ class BoardAdd extends Component {
           placeholder="Create new board..."
         />
 
-        {title.length > 0 &&
+        {title.length > 0 && (
           <p className="HelpBlock">
-            <small>
-              {error || errorMessages.board.valid}
-            </small>
-          </p>}
+            <small>{error || errorMessages.board.valid}</small>
+          </p>
+        )}
       </section>
     )
   }
@@ -73,8 +72,6 @@ class BoardAdd extends Component {
 
 BoardAdd.propTypes = propTypes
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ addBoard }, dispatch)
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ addBoard }, dispatch)
 
 export default connect(null, mapDispatchToProps)(BoardAdd)

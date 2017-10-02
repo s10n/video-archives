@@ -45,12 +45,10 @@ const listSource = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+})
 
 class ListEdit extends Component {
   constructor(props) {
@@ -107,35 +105,34 @@ class ListEdit extends Component {
     const { list, connectDragSource, isDragging } = this.props
     const { isEditing, name, error } = this.state
 
-    return !_.isEmpty(list)
-      ? connectDragSource(
-          <div className="ListEdit" style={{ opacity: isDragging && 0.5 }}>
-            <input
-              className="ListName borderless-input"
-              type="text"
-              onFocus={this.handleNameClick}
-              onBlur={this.handleInputBlur}
-              onChange={event => this.handleInputChange(event.target.value)}
-              onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
-              value={!isEditing ? list.name : name}
-              ref={input => (this.listNameInput = input)}
-            />
+    return !_.isEmpty(list) ? (
+      connectDragSource(
+        <div className="ListEdit" style={{ opacity: isDragging && 0.5 }}>
+          <input
+            className="ListName borderless-input"
+            type="text"
+            onFocus={this.handleNameClick}
+            onBlur={this.handleInputBlur}
+            onChange={event => this.handleInputChange(event.target.value)}
+            onKeyPress={event => event.key === 'Enter' && this.handlePressEnter()}
+            value={!isEditing ? list.name : name}
+            ref={input => (this.listNameInput = input)}
+          />
 
-            <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>
-              🗑
-            </button>
+          <button className="BtnTrash btn-link" onClick={this.handleDeleteClick}>
+            🗑
+          </button>
 
-            {error &&
-              <small className="HelpBlock">
-                {error}
-              </small>}
-          </div>
-        )
-      : <div className="ListEdit">
-          <span role="img" aria-label="Inbox">
-            📥
-          </span>
+          {error && <small className="HelpBlock">{error}</small>}
         </div>
+      )
+    ) : (
+      <div className="ListEdit">
+        <span role="img" aria-label="Inbox">
+          📥
+        </span>
+      </div>
+    )
   }
 }
 

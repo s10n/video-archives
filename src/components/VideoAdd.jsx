@@ -101,16 +101,14 @@ class VideoAdd extends Component {
         : `: Trash`
     }
 
-    return error
-      ? <section className="FetchResult">
-          <p className={className}>
-            <small>
-              {errorMessages.video[error] + additionalMessage}
-            </small>
-          </p>
-          {error === 'success' && <Video video={video} addingVideo />}
-        </section>
-      : null
+    return error ? (
+      <section className="FetchResult">
+        <p className={className}>
+          <small>{errorMessages.video[error] + additionalMessage}</small>
+        </p>
+        {error === 'success' && <Video video={video} addingVideo />}
+      </section>
+    ) : null
   }
 
   render() {
@@ -133,8 +131,6 @@ class VideoAdd extends Component {
 
 VideoAdd.propTypes = propTypes
 
-const mapStateToProps = ({ videos }) => {
-  return { videos }
-}
+const mapStateToProps = ({ videos }) => ({ videos })
 
 export default connect(mapStateToProps)(VideoAdd)

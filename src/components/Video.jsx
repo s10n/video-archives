@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -50,74 +50,70 @@ const videoSource = {
   }
 }
 
-const collect = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+})
 
-const Video = ({ video, board, addingVideo, appStatus, boards, ...props }) => {
-  const { editVideo, deleteVideo } = props
-  const { connectDragSource, isDragging } = props
-  const { thumbnails, title, channelTitle, channelId } = video.data.snippet
-  const backgroundImage = `url(${thumbnails.high.url})`
-  const url = `https://www.youtube.com/watch?v=${video.data.id}`
-  const channelUrl = `https://www.youtube.com/channel/${channelId}`
-  const publishedAt = new Date(video.data.snippet.publishedAt)
-  const dateTime = moment(publishedAt).format('YYYY-MM-DD')
-  const year = moment(publishedAt).format('YYYY')
+class Video extends Component {
+  render() {
+    const { video, board, addingVideo, appStatus, boards, ...rest } = this.props
+    const { editVideo, deleteVideo } = rest
+    const { connectDragSource, isDragging } = rest
+    const { thumbnails, title, channelTitle, channelId } = video.data.snippet
+    const backgroundImage = `url(${thumbnails.high.url})`
+    const url = `https://www.youtube.com/watch?v=${video.data.id}`
+    const channelUrl = `https://www.youtube.com/channel/${channelId}`
+    const publishedAt = new Date(video.data.snippet.publishedAt)
+    const dateTime = moment(publishedAt).format('YYYY-MM-DD')
+    const year = moment(publishedAt).format('YYYY')
 
-  const thumbnail = connectDragSource(
-    <section className="VideoThumbnail" style={{ backgroundImage }} />
-  )
+    const thumbnail = connectDragSource(
+      <section className="VideoThumbnail" style={{ backgroundImage }} />
+    )
 
-  const videoTitle = (
-    <h3 className="VideoTitle">
-      <a href={url} target="_blank" rel="noopener noreferrer">
-        {title}
+    const videoTitle = (
+      <h3 className="VideoTitle">
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          {title}
+        </a>
+      </h3>
+    )
+
+    const channel = (
+      <a href={channelUrl} target="_blank" rel="noopener noreferrer">
+        {channelTitle}
       </a>
-    </h3>
-  )
+    )
 
-  const channel = (
-    <a href={channelUrl} target="_blank" rel="noopener noreferrer">
-      {channelTitle}
-    </a>
-  )
+    const publishedDate = (
+      <time dateTime={dateTime} title={dateTime}>
+        {year}
+      </time>
+    )
 
-  const publishedDate = (
-    <time dateTime={dateTime} title={dateTime}>
-      {year}
-    </time>
-  )
+    const propsVideoEdit = { video, board, boards, onEdit: editVideo, onDelete: deleteVideo }
 
-  const propsVideoEdit = { video, board, boards, onEdit: editVideo, onDelete: deleteVideo }
+    return (
+      <article className="Video" style={{ opacity: isDragging && 0.5 }}>
+        {thumbnail}
+        {videoTitle}
 
-  return (
-    <article className="Video" style={{ opacity: isDragging && 0.5 }}>
-      {thumbnail}
-      {videoTitle}
-
-      <section className="VideoMeta">
-        {channel}
-        {publishedDate}
-        {!addingVideo && <VideoEdit {...propsVideoEdit} />}
-      </section>
-    </article>
-  )
+        <section className="VideoMeta">
+          {channel}
+          {publishedDate}
+          {!addingVideo && <VideoEdit {...propsVideoEdit} />}
+        </section>
+      </article>
+    )
+  }
 }
 
 Video.propTypes = propTypes
 Video.defaultProps = defaultProps
 
-const mapStateToProps = ({ app, boards }) => {
-  return { appStatus: app.status, boards }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ editVideo, deleteVideo }, dispatch)
-}
+const mapStateToProps = ({ app, boards }) => ({ appStatus: app.status, boards })
+const mapDispatchToProps = dispatch => bindActionCreators({ editVideo, deleteVideo }, dispatch)
 
 const enhance = _.flow(
   DragSource(ItemTypes.VIDEO, videoSource, collect),

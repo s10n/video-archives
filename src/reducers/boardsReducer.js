@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop-immutable'
 import types from '../constants/types'
 
-export default function(state = {}, action) {
+export default (state = {}, action) => {
   switch (action.type) {
     case types.FETCH_BOARDS:
       return action.boards || {}
