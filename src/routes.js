@@ -5,6 +5,7 @@ import PageSignup from './components/PageSignup'
 import PageSignin from './components/PageSignin'
 import PageSignout from './components/PageSignout'
 import Trash from './components/Trash'
+import All from './components/All'
 import Board from './components/Board'
 
 export default (
@@ -14,6 +15,7 @@ export default (
     <Route exact path="/signin" component={PageSignin} />
     <Route exact path="/signout" component={PageSignout} />
     <Route exact path="/trash" component={Trash} />
+    <Route exact path="/all" component={All} />
     <Route exact path="/:boardSlug" component={Board} />
   </Switch>
 )

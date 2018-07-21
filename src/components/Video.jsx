@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -19,13 +19,15 @@ const propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
   editVideo: PropTypes.func.isRequired,
-  deleteVideo: PropTypes.func.isRequired
+  deleteVideo: PropTypes.func.isRequired,
+  flex: PropTypes.bool
 }
 
 const defaultProps = {
   board: {},
   addingVideo: false,
-  appStatus: ''
+  appStatus: '',
+  flex: false
 }
 
 const videoSource = {
@@ -55,48 +57,48 @@ const collect = (connect, monitor) => ({
   isDragging: monitor.isDragging()
 })
 
-class Video extends Component {
-  render() {
-    const { video, board, addingVideo, appStatus, boards, ...rest } = this.props
-    const { editVideo, deleteVideo } = rest
-    const { connectDragSource, isDragging } = rest
-    const { thumbnails, title, channelTitle, channelId } = video.data.snippet
-    const backgroundImage = `url(${thumbnails.high.url})`
-    const url = `https://www.youtube.com/watch?v=${video.data.id}`
-    const channelUrl = `https://www.youtube.com/channel/${channelId}`
-    const publishedAt = new Date(video.data.snippet.publishedAt)
-    const dateTime = moment(publishedAt).format('YYYY-MM-DD')
-    const year = moment(publishedAt).format('YYYY')
+const Video = ({ video, board, addingVideo, appStatus, boards, flex, ...rest }) => {
+  const { editVideo, deleteVideo } = rest
+  const { connectDragSource, isDragging } = rest
+  const { thumbnails, title, channelTitle, channelId } = video.data.snippet
+  const backgroundImage = `url(${thumbnails.high.url})`
+  const url = `https://www.youtube.com/watch?v=${video.data.id}`
+  const channelUrl = `https://www.youtube.com/channel/${channelId}`
+  const publishedAt = new Date(video.data.snippet.publishedAt)
+  const dateTime = moment(publishedAt).format('YYYY-MM-DD')
+  const year = moment(publishedAt).format('YYYY')
 
-    const thumbnail = connectDragSource(
-      <section className="VideoThumbnail" style={{ backgroundImage }} />
-    )
+  const thumbnail = connectDragSource(
+    <section className="VideoThumbnail" style={{ backgroundImage }} />
+  )
 
-    const videoTitle = (
-      <h3 className="VideoTitle">
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          {title}
-        </a>
-      </h3>
-    )
-
-    const channel = (
-      <a href={channelUrl} target="_blank" rel="noopener noreferrer">
-        {channelTitle}
+  const videoTitle = (
+    <h3 className="VideoTitle">
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        {title}
       </a>
-    )
+    </h3>
+  )
 
-    const publishedDate = (
-      <time dateTime={dateTime} title={dateTime}>
-        {year}
-      </time>
-    )
+  const channel = (
+    <a href={channelUrl} target="_blank" rel="noopener noreferrer">
+      {channelTitle}
+    </a>
+  )
 
-    const propsVideoEdit = { video, board, boards, onEdit: editVideo, onDelete: deleteVideo }
+  const publishedDate = (
+    <time dateTime={dateTime} title={dateTime}>
+      {year}
+    </time>
+  )
 
-    return (
-      <article className="Video" style={{ opacity: isDragging && 0.5 }}>
-        {thumbnail}
+  const propsVideoEdit = { video, board, boards, onEdit: editVideo, onDelete: deleteVideo }
+
+  return (
+    <article className="Video" style={{ opacity: isDragging && 0.5, display: flex && 'flex' }}>
+      {thumbnail}
+
+      <div style={{ marginLeft: flex && '1rem' }}>
         {videoTitle}
 
         <section className="VideoMeta">
@@ -104,9 +106,9 @@ class Video extends Component {
           {publishedDate}
           {!addingVideo && <VideoEdit {...propsVideoEdit} />}
         </section>
-      </article>
-    )
-  }
+      </div>
+    </article>
+  )
 }
 
 Video.propTypes = propTypes
@@ -117,7 +119,10 @@ const mapDispatchToProps = dispatch => bindActionCreators({ editVideo, deleteVid
 
 const enhance = _.flow(
   DragSource(ItemTypes.VIDEO, videoSource, collect),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )
 
 export default enhance(Video)

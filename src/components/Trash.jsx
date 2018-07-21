@@ -41,7 +41,9 @@ class Trash extends Component {
 
     return (
       <Page page="Trash" title="Trash">
-        <Card header={header}>{videos.map(video => <Video video={video} key={video.key} />)}</Card>
+        <Card header={header}>
+          {videos.map(video => <Video video={video} flex key={video.key} />)}
+        </Card>
       </Page>
     )
   }
@@ -52,4 +54,7 @@ Trash.propTypes = propTypes
 const mapStateToProps = ({ boards, videos }) => ({ boards, videos: _.filter(videos, 'deleted') })
 const mapDispatchToProps = dispatch => bindActionCreators({ emptyTrash }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(Trash)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Trash)
